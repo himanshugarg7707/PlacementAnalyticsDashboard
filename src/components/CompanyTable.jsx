@@ -1,152 +1,159 @@
 import { useState, useMemo } from 'react';
 import { companies } from '../data/placementData';
 
-// Color map for company logo avatars
-const sectorColors = {
-  Technology: '#4f46e5',
-  'IT Services': '#0284c7',
-  Finance: '#059669',
-  Consulting: '#d97706',
-  Automobile: '#dc2626',
-  Semiconductor: '#7c3aed',
-  'Oil & Gas': '#ea580c',
-  'Power & Energy': '#ca8a04',
-  Construction: '#64748b',
-  Defence: '#475569',
-  FMCG: '#db2777',
-  'E-Commerce': '#9333ea',
-  Fintech: '#0d9488',
-  Others: '#6b7280',
+const TYPE_COLORS = {
+  'Super Dream': '#a855f7',
+  Dream: '#6366f1',
+  Normal: '#64748b',
+};
+
+const SECTOR_COLORS = {
+  Technology: '#6366f1',
+  'IT Services': '#06b6d4',
+  Finance: '#f59e0b',
+  Consulting: '#a855f7',
+  'E-Commerce': '#f97316',
+  Semiconductor: '#10b981',
+  Automobile: '#ef4444',
+  'Oil & Gas': '#eab308',
+  'Power & Energy': '#14b8a6',
+  Fintech: '#8b5cf6',
+  Defence: '#64748b',
+  Engineering: '#0ea5e9',
+  Construction: '#78716c',
+  FMCG: '#ec4899',
+  Logistics: '#84cc16',
+  EdTech: '#f43f5e',
+  'Space & Research': '#2563eb',
+  'Mining & Metals': '#a3a3a3',
+  Conglomerate: '#c084fc',
 };
 
 export default function CompanyTable() {
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedType, setSelectedType] = useState('All');
+  const [filterType, setFilterType] = useState('All');
   const [sortField, setSortField] = useState('ctc');
-  const [sortOrder, setSortOrder] = useState('desc'); // 'asc' | 'desc'
-
-  const filterTypes = ['All', 'Super Dream', 'Dream', 'Normal'];
+  const [sortDir, setSortDir] = useState('desc');
 
   const handleSort = (field) => {
     if (sortField === field) {
-      setSortOrder((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+      setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'));
     } else {
       setSortField(field);
-      setSortOrder('desc');
+      setSortDir('desc');
     }
   };
 
   const filteredCompanies = useMemo(() => {
-    return companies
-      .filter((company) => {
-        const matchesSearch =
-          company.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          company.sector.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          company.branches.some((b) =>
-            b.toLowerCase().includes(searchTerm.toLowerCase())
-          );
+    let result = [...companies];
 
-        const matchesType =
-          selectedType === 'All' || company.type === selectedType;
-
-        return matchesSearch && matchesType;
-      })
-      .sort((a, b) => {
-        let valA = a[sortField];
-        let valB = b[sortField];
-
-        if (typeof valA === 'string') {
-          valA = valA.toLowerCase();
-          valB = valB.toLowerCase();
-        }
-
-        if (valA < valB) return sortOrder === 'asc' ? -1 : 1;
-        if (valA > valB) return sortOrder === 'asc' ? 1 : -1;
-        return 0;
-      });
-  }, [searchTerm, selectedType, sortField, sortOrder]);
-
-  const getTypeBadgeClass = (type) => {
-    switch (type) {
-      case 'Super Dream':
-        return 'super-dream';
-      case 'Dream':
-        return 'dream';
-      default:
-        return 'normal';
+    // Search
+    if (searchTerm) {
+      const term = searchTerm.toLowerCase();
+      result = result.filter(
+        (c) =>
+          c.name.toLowerCase().includes(term) ||
+          c.sector.toLowerCase().includes(term) ||
+          c.branches.some((b) => b.toLowerCase().includes(term))
+      );
     }
+
+    // Filter by type
+    if (filterType !== 'All') {
+      result = result.filter((c) => c.type === filterType);
+    }
+
+    // Sort
+    result.sort((a, b) => {
+      let valA = a[sortField];
+      let valB = b[sortField];
+      if (typeof valA === 'string') {
+        valA = valA.toLowerCase();
+        valB = valB.toLowerCase();
+        return sortDir === 'asc'
+          ? valA.localeCompare(valB)
+          : valB.localeCompare(valA);
+      }
+      return sortDir === 'asc' ? valA - valB : valB - valA;
+    });
+
+    return result;
+  }, [searchTerm, filterType, sortField, sortDir]);
+
+  const getSortIcon = (field) => {
+    if (sortField !== field) return '↕';
+    return sortDir === 'asc' ? '↑' : '↓';
   };
 
   return (
     <section className="animate-in" aria-labelledby="companies-heading">
       <div className="section-header">
         <div>
-          <h3 id="companies-heading">Visiting Companies & Recruitment</h3>
+          <h3 id="companies-heading">Recruiting Companies</h3>
           <p className="section-desc">
-            Explore participating organizations, salary packages, hired count, and eligible branches
+            {companies.length} companies on campus · {filteredCompanies.length} shown
           </p>
         </div>
-
         <div className="filter-bar">
           <input
             type="text"
             className="search-input"
-            placeholder="Search by company, sector, branch..."
+            placeholder="Search company, sector..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             aria-label="Search companies"
+            id="company-search"
           />
-
-          <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-            {filterTypes.map((type) => (
-              <button
-                key={type}
-                type="button"
-                className={`filter-btn ${selectedType === type ? 'active' : ''}`}
-                onClick={() => setSelectedType(type)}
-              >
-                {type}
-              </button>
-            ))}
-          </div>
+          {['All', 'Super Dream', 'Dream', 'Normal'].map((type) => (
+            <button
+              key={type}
+              className={`filter-btn ${filterType === type ? 'active' : ''}`}
+              onClick={() => setFilterType(type)}
+            >
+              {type}
+            </button>
+          ))}
         </div>
       </div>
 
       <div className="table-container">
-        <table className="data-table" aria-label="Company placement records">
+        <table className="data-table" aria-label="Company recruitment data">
           <thead>
             <tr>
               <th
                 onClick={() => handleSort('name')}
                 className={sortField === 'name' ? 'sorted' : ''}
               >
-                Company {sortField === 'name' && (
-                  <span className="sort-icon">{sortOrder === 'asc' ? '▲' : '▼'}</span>
-                )}
+                Company <span className="sort-icon">{getSortIcon('name')}</span>
               </th>
               <th
                 onClick={() => handleSort('ctc')}
                 className={sortField === 'ctc' ? 'sorted' : ''}
               >
-                CTC (LPA) {sortField === 'ctc' && (
-                  <span className="sort-icon">{sortOrder === 'asc' ? '▲' : '▼'}</span>
-                )}
+                CTC (LPA) <span className="sort-icon">{getSortIcon('ctc')}</span>
               </th>
               <th
                 onClick={() => handleSort('studentsHired')}
                 className={sortField === 'studentsHired' ? 'sorted' : ''}
               >
-                Hired {sortField === 'studentsHired' && (
-                  <span className="sort-icon">{sortOrder === 'asc' ? '▲' : '▼'}</span>
-                )}
+                Hired <span className="sort-icon">{getSortIcon('studentsHired')}</span>
               </th>
-              <th>Category</th>
-              <th>Eligible Branches</th>
+              <th>Type</th>
+              <th>Branches</th>
               <th>Status</th>
             </tr>
           </thead>
           <tbody>
-            {filteredCompanies.length > 0 ? (
+            {filteredCompanies.length === 0 ? (
+              <tr>
+                <td colSpan="6">
+                  <div className="empty-state">
+                    <div className="empty-icon">🔍</div>
+                    <p>No companies match your search criteria</p>
+                  </div>
+                </td>
+              </tr>
+            ) : (
               filteredCompanies.map((company) => (
                 <tr key={company.id}>
                   <td>
@@ -154,11 +161,12 @@ export default function CompanyTable() {
                       <div
                         className="company-logo"
                         style={{
-                          backgroundColor:
-                            sectorColors[company.sector] || '#4f46e5',
+                          background:
+                            SECTOR_COLORS[company.sector] || '#6366f1',
                         }}
+                        aria-hidden="true"
                       >
-                        {company.logo || company.name.charAt(0)}
+                        {company.logo}
                       </div>
                       <div>
                         <div className="company-name">{company.name}</div>
@@ -166,39 +174,41 @@ export default function CompanyTable() {
                       </div>
                     </div>
                   </td>
-                  <td className="ctc-value">₹{company.ctc} LPA</td>
-                  <td className="hired-count">{company.studentsHired}</td>
                   <td>
-                    <span className={`type-badge ${getTypeBadgeClass(company.type)}`}>
+                    <span className="ctc-value">₹{company.ctc.toFixed(1)}L</span>
+                  </td>
+                  <td>
+                    <span className="hired-count">{company.studentsHired}</span>
+                  </td>
+                  <td>
+                    <span
+                      className={`type-badge ${company.type
+                        .toLowerCase()
+                        .replace(' ', '-')}`}
+                    >
                       {company.type}
                     </span>
                   </td>
                   <td>
                     <div className="branch-tags">
                       {company.branches.map((b) => (
-                        <span key={b} className="branch-tag">
+                        <span className="branch-tag" key={b}>
                           {b}
                         </span>
                       ))}
                     </div>
                   </td>
                   <td>
-                    <div className="campus-status">
-                      <span className="status-dot completed"></span>
-                      <span>{company.status}</span>
-                    </div>
+                    <span className="campus-status completed">
+                      <span
+                        className="status-dot completed"
+                        aria-hidden="true"
+                      ></span>
+                      {company.status}
+                    </span>
                   </td>
                 </tr>
               ))
-            ) : (
-              <tr>
-                <td colSpan={6}>
-                  <div className="empty-state">
-                    <div className="empty-icon">🔍</div>
-                    <p>No companies found matching your search or filters.</p>
-                  </div>
-                </td>
-              </tr>
             )}
           </tbody>
         </table>

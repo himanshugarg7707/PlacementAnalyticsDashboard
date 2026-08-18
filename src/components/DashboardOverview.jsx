@@ -1,4 +1,4 @@
-import { collegeInfo, companies, branches } from '../data/placementData';
+import { collegeInfo, companies, branches, sectorWiseData } from '../data/placementData';
 
 export default function DashboardOverview() {
   // Top 10 companies by CTC
@@ -10,6 +10,8 @@ export default function DashboardOverview() {
   const topHiring = [...companies]
     .sort((a, b) => b.studentsHired - a.studentsHired)
     .slice(0, 8);
+
+  const maxHired = topHiring[0]?.studentsHired || 1;
 
   // Summary cards
   const quickStats = [

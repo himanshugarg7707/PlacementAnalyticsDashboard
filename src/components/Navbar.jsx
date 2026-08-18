@@ -1,60 +1,52 @@
 import { useState } from 'react';
 
-export default function Navbar({ activeTab = 'dashboard', setActiveTab = () => {} }) {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+export default function Navbar({ activeTab, setActiveTab }) {
+  const [menuOpen, setMenuOpen] = useState(false);
 
-  const navItems = [
+  const tabs = [
     { id: 'dashboard', label: 'Dashboard' },
     { id: 'companies', label: 'Companies' },
+    { id: 'branches', label: 'Branch Wise' },
   ];
 
   const handleTabClick = (tabId) => {
     setActiveTab(tabId);
-    setMobileMenuOpen(false);
+    setMenuOpen(false);
   };
 
   return (
     <nav className="navbar" role="navigation" aria-label="Main navigation">
       <div className="navbar-inner">
-        <div
-          className="navbar-brand"
-          style={{ cursor: 'pointer' }}
-          onClick={() => handleTabClick('dashboard')}
-          role="button"
-          tabIndex={0}
-          onKeyDown={(e) => e.key === 'Enter' && handleTabClick('dashboard')}
-        >
-          <div className="navbar-logo" aria-hidden="true">
-            NK
-          </div>
+        <div className="navbar-brand">
+          <div className="navbar-logo" aria-hidden="true">NK</div>
           <div className="navbar-title">
             <h1>NIT Kurukshetra</h1>
             <span>Campus Placement Cell</span>
           </div>
         </div>
 
-        <button
-          className="mobile-menu-btn"
-          onClick={() => setMobileMenuOpen((prev) => !prev)}
-          aria-label="Toggle navigation menu"
-          aria-expanded={mobileMenuOpen}
-        >
-          {mobileMenuOpen ? '✕' : '☰'}
-        </button>
-
-        <ul className={`navbar-links ${mobileMenuOpen ? 'open' : ''}`}>
-          {navItems.map((item) => (
-            <li key={item.id}>
+        <ul className={`navbar-links ${menuOpen ? 'open' : ''}`}>
+          {tabs.map((tab) => (
+            <li key={tab.id}>
               <button
-                type="button"
-                className={`nav-link ${activeTab === item.id ? 'active' : ''}`}
-                onClick={() => handleTabClick(item.id)}
+                className={`nav-link ${activeTab === tab.id ? 'active' : ''}`}
+                onClick={() => handleTabClick(tab.id)}
+                aria-current={activeTab === tab.id ? 'page' : undefined}
               >
-                {item.label}
+                {tab.label}
               </button>
             </li>
           ))}
         </ul>
+
+        <button
+          className="mobile-menu-btn"
+          onClick={() => setMenuOpen(!menuOpen)}
+          aria-label="Toggle navigation menu"
+          aria-expanded={menuOpen}
+        >
+          {menuOpen ? '✕' : '☰'}
+        </button>
       </div>
     </nav>
   );
