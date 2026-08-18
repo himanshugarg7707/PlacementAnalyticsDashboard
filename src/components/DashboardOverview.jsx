@@ -1,24 +1,24 @@
-import { collegeInfo, companies, branches, sectorWiseData } from '../data/placementData';
+import { collegeInfo, companies, branches, sectorWiseData, yearWiseTrend } from '../data/placementData';
 
 export default function DashboardOverview() {
   // Top 10 companies by CTC
   const topCompanies = [...companies]
     .sort((a, b) => b.ctc - a.ctc)
-    .slice(0, 10);
+    .slice(0, 8);
+  const maxCTC = topCompanies[0]?.ctc || 1;
 
   // Top hiring companies by students hired
   const topHiring = [...companies]
     .sort((a, b) => b.studentsHired - a.studentsHired)
     .slice(0, 8);
-
   const maxHired = topHiring[0]?.studentsHired || 1;
 
-  // Summary cards
+  // Summary quick stats
   const quickStats = [
-    { label: 'Total Offers', value: collegeInfo.totalOffers, color: '#6366f1' },
-    { label: 'Super Dream', value: collegeInfo.superDreamOffers, color: '#a855f7' },
-    { label: 'Dream Offers', value: collegeInfo.dreamOffers, color: '#06b6d4' },
-    { label: 'Median CTC', value: `₹${collegeInfo.medianPackage}L`, color: '#f59e0b' },
+    { label: 'Total Offers', value: collegeInfo.totalOffers, color: 'var(--blue-dark)' },
+    { label: 'Super Dream (>20L)', value: collegeInfo.superDreamOffers, color: '#a855f7' },
+    { label: 'Dream Offers (10-20L)', value: collegeInfo.dreamOffers, color: '#00b4d8' },
+    { label: 'Median CTC', value: `₹${collegeInfo.medianPackage}L`, color: 'var(--warning)' },
   ];
 
   return (
@@ -38,35 +38,120 @@ export default function DashboardOverview() {
         ))}
       </div>
 
+      {/* Visual Bar Charts Row */}
       <div className="charts-row">
-        {/* Top Packages */}
+        {/* Top Packages Bar Chart */}
         <div className="chart-card">
-          <h4>🏆 Top 10 Packages Offered</h4>
-          <ol style={{ marginTop: '16px', paddingLeft: '20px' }}>
-            {topCompanies.map((c) => (
-              <li key={c.id} style={{ marginBottom: '8px' }}>
-                {c.name} - <strong>₹{c.ctc}L</strong>
-              </li>
-            ))}
-          </ol>
+          <h4>🏆 Top Packages Offered (LPA)</h4>
+          <div className="bar-chart">
+            {topCompanies.map((c) => {
+              const widthPct = Math.max(12, Math.round((c.ctc / maxCTC) * 100));
+              return (
+                <div className="bar-item" key={c.id}>
+                  <span className="bar-label">{c.name}</span>
+                  <div className="bar-track">
+                    <div className="bar-fill" style={{ width: `${widthPct}%` }}>
+                      ₹{c.ctc}L
+                    </div>
+                  </div>
+                  <span className="bar-value">₹{c.ctc}L</span>
+                </div>
+              );
+            })}
+          </div>
         </div>
 
-        {/* Top Hiring Volume */}
+        {/* Top Hiring Volume Bar Chart */}
         <div className="chart-card">
           <h4>📈 Highest Hiring Volume</h4>
-          <ul style={{ marginTop: '16px', paddingLeft: '20px' }}>
-            {topHiring.map((c) => (
-              <li key={c.id} style={{ marginBottom: '8px' }}>
-                {c.name}: <strong>{c.studentsHired} students</strong>
-              </li>
-            ))}
-          </ul>
+          <div className="bar-chart">
+            {topHiring.map((c) => {
+              const widthPct = Math.max(12, Math.round((c.studentsHired / maxHired) * 100));
+              return (
+                <div className="bar-item" key={c.id}>
+                  <span className="bar-label">{c.name}</span>
+                  <div className="bar-track">
+                    <div
+                      className="bar-fill"
+                      style={{
+                        width: `${widthPct}%`,
+                        background: 'linear-gradient(90deg, #00b4d8, #90e0ef)',
+                      }}
+                    >
+                      {c.studentsHired}
+                    </div>
+                  </div>
+                  <span className="bar-value">{c.studentsHired} hires</span>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
 
+      {/* 5-Year Historical Placement Trend */}
+      {yearWiseTrend && yearWiseTrend.length > 0 && (
+        <>
+          <div className="section-header" style={{ marginTop: 24 }}>
+            <div>
+              <h3>5-Year Placement Growth Trend</h3>
+              <p className="section-desc">Consistent year-on-year growth in offers and packages</p>
+            </div>
+          </div>
+          <div className="trend-grid">
+            {yearWiseTrend.map((t) => (
+              <div className="trend-card" key={t.year}>
+                <div className="year">{t.year}</div>
+                <div className="trend-value">{t.totalPlaced}</div>
+                <div className="trend-label">Students Placed</div>
+                <div className="trend-sub">
+                  Avg: <strong>₹{t.avgPackage}L</strong> · Max: <strong>₹{t.highestPackage}L</strong>
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+
+      {/* Sector-wise Distribution */}
+      {sectorWiseData && sectorWiseData.length > 0 && (
+        <>
+          <div className="section-header" style={{ marginTop: 24 }}>
+            <div>
+              <h3>Sector-Wise Recruitment</h3>
+              <p className="section-desc">Hiring volume and package trends across industry sectors</p>
+            </div>
+          </div>
+          <div className="sector-grid">
+            {sectorWiseData.slice(0, 8).map((s) => (
+              <div className="sector-card" key={s.sector}>
+                <div className="sector-name">{s.sector}</div>
+                <div className="sector-stats">
+                  <div className="sector-stat-row">
+                    <span className="s-label">Companies</span>
+                    <span className="s-value">{s.companies}</span>
+                  </div>
+                  <div className="sector-stat-row">
+                    <span className="s-label">Offers</span>
+                    <span className="s-value">{s.offers}</span>
+                  </div>
+                  <div className="sector-stat-row">
+                    <span className="s-label">Avg CTC</span>
+                    <span className="s-value" style={{ color: 'var(--success)' }}>₹{s.avgCTC}L</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+
       {/* Branch Placement Snapshot */}
-      <div className="section-header" style={{ marginTop: 16 }}>
-        <h3>Branch Placement Snapshot</h3>
+      <div className="section-header" style={{ marginTop: 32 }}>
+        <div>
+          <h3>Branch Placement Snapshot</h3>
+          <p className="section-desc">Summary of placement percentages and CTCs by department</p>
+        </div>
       </div>
       <div className="table-container" style={{ marginBottom: 48 }}>
         <table className="data-table" aria-label="Branch placement snapshot">
@@ -85,24 +170,26 @@ export default function DashboardOverview() {
             {branches.map((b) => {
               const pct = ((b.placed / b.totalStudents) * 100).toFixed(1);
               return (
-                <tr key={b.id} style={{ color: b.color }}>
-                  <td style={{ fontWeight: 600 }}>
-                    {b.shortName}
+                <tr key={b.id}>
+                  <td style={{ fontWeight: 600, color: 'var(--text)' }}>
+                    {b.shortName} <span style={{ color: 'var(--muted)', fontSize: 12, fontWeight: 400 }}>— {b.name}</span>
                   </td>
-                  <td style={{ fontFamily: 'var(--font-mono)', fontWeight: 600 }}>
+                  <td style={{ fontFamily: 'var(--mono)', fontWeight: 600 }}>
                     {b.totalStudents}
                   </td>
-                  <td style={{ fontFamily: 'var(--font-mono)', fontWeight: 700 }}>
+                  <td style={{ fontFamily: 'var(--mono)', fontWeight: 700 }}>
                     {b.placed}
                   </td>
                   <td>
-                    <span>{pct}%</span>
+                    <span style={{ fontWeight: 700, color: 'var(--blue-dark)' }}>{pct}%</span>
                   </td>
-                  <td className="ctc-value">
+                  <td className="ctc-value font-mono">
                     ₹{b.avgPackage}L
                   </td>
-                  <td className="ctc-value">₹{b.highestPackage}L</td>
-                  <td style={{ fontFamily: 'var(--font-mono)', fontWeight: 600 }}>
+                  <td className="ctc-value font-mono" style={{ fontWeight: 700 }}>
+                    ₹{b.highestPackage}L
+                  </td>
+                  <td style={{ fontFamily: 'var(--mono)', fontWeight: 600 }}>
                     ₹{b.medianPackage}L
                   </td>
                 </tr>
