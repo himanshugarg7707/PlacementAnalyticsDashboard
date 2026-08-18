@@ -1,4 +1,3 @@
-import { useState, useMemo } from 'react';
 import { companies } from '../data/placementData';
 
 const TYPE_COLORS = {
@@ -30,60 +29,9 @@ const SECTOR_COLORS = {
 };
 
 export default function CompanyTable() {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filterType, setFilterType] = useState('All');
-  const [sortField, setSortField] = useState('ctc');
-  const [sortDir, setSortDir] = useState('desc');
+  const filteredCompanies = [...companies];
 
-  const handleSort = (field) => {
-    if (sortField === field) {
-      setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'));
-    } else {
-      setSortField(field);
-      setSortDir('desc');
-    }
-  };
 
-  const filteredCompanies = useMemo(() => {
-    let result = [...companies];
-
-    // Search
-    if (searchTerm) {
-      const term = searchTerm.toLowerCase();
-      result = result.filter(
-        (c) =>
-          c.name.toLowerCase().includes(term) ||
-          c.sector.toLowerCase().includes(term) ||
-          c.branches.some((b) => b.toLowerCase().includes(term))
-      );
-    }
-
-    // Filter by type
-    if (filterType !== 'All') {
-      result = result.filter((c) => c.type === filterType);
-    }
-
-    // Sort
-    result.sort((a, b) => {
-      let valA = a[sortField];
-      let valB = b[sortField];
-      if (typeof valA === 'string') {
-        valA = valA.toLowerCase();
-        valB = valB.toLowerCase();
-        return sortDir === 'asc'
-          ? valA.localeCompare(valB)
-          : valB.localeCompare(valA);
-      }
-      return sortDir === 'asc' ? valA - valB : valB - valA;
-    });
-
-    return result;
-  }, [searchTerm, filterType, sortField, sortDir]);
-
-  const getSortIcon = (field) => {
-    if (sortField !== field) return '↕';
-    return sortDir === 'asc' ? '↑' : '↓';
-  };
 
   return (
     <section className="animate-in" aria-labelledby="companies-heading">
@@ -91,28 +39,8 @@ export default function CompanyTable() {
         <div>
           <h3 id="companies-heading">Recruiting Companies</h3>
           <p className="section-desc">
-            {companies.length} companies on campus · {filteredCompanies.length} shown
+            {companies.length} companies on campus
           </p>
-        </div>
-        <div className="filter-bar">
-          <input
-            type="text"
-            className="search-input"
-            placeholder="Search company, sector..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            aria-label="Search companies"
-            id="company-search"
-          />
-          {['All', 'Super Dream', 'Dream', 'Normal'].map((type) => (
-            <button
-              key={type}
-              className={`filter-btn ${filterType === type ? 'active' : ''}`}
-              onClick={() => setFilterType(type)}
-            >
-              {type}
-            </button>
-          ))}
         </div>
       </div>
 
@@ -120,25 +48,9 @@ export default function CompanyTable() {
         <table className="data-table" aria-label="Company recruitment data">
           <thead>
             <tr>
-              <th
-                onClick={() => handleSort('name')}
-                className={sortField === 'name' ? 'sorted' : ''}
-              >
-                Company <span className="sort-icon">{getSortIcon('name')}</span>
-              </th>
-              <th
-                onClick={() => handleSort('ctc')}
-                className={sortField === 'ctc' ? 'sorted' : ''}
-              >
-                CTC (LPA) <span className="sort-icon">{getSortIcon('ctc')}</span>
-              </th>
-              <th
-                onClick={() => handleSort('studentsHired')}
-                className={sortField === 'studentsHired' ? 'sorted' : ''}
-              >
-                Hired <span className="sort-icon">{getSortIcon('studentsHired')}</span>
-              </th>
-              <th>Type</th>
+              <th>Company</th>
+              <th>CTC (LPA)</th>
+              <th>Hired</th>
               <th>Branches</th>
               <th>Status</th>
             </tr>
@@ -179,15 +91,6 @@ export default function CompanyTable() {
                   </td>
                   <td>
                     <span className="hired-count">{company.studentsHired}</span>
-                  </td>
-                  <td>
-                    <span
-                      className={`type-badge ${company.type
-                        .toLowerCase()
-                        .replace(' ', '-')}`}
-                    >
-                      {company.type}
-                    </span>
                   </td>
                   <td>
                     <div className="branch-tags">
