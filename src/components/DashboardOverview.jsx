@@ -13,48 +13,23 @@ export default function DashboardOverview() {
     .slice(0, 8);
   const maxHired = topHiring[0]?.studentsHired || 1;
 
-  // Summary quick stats
-  const quickStats = [
-    { label: 'Total Offers', value: collegeInfo.totalOffers, color: 'var(--blue-dark)' },
-    { label: 'Super Dream (>20L)', value: collegeInfo.superDreamOffers, color: '#a855f7' },
-    { label: 'Dream Offers (10-20L)', value: collegeInfo.dreamOffers, color: '#00b4d8' },
-    { label: 'Median CTC', value: `₹${collegeInfo.medianPackage}L`, color: 'var(--warning)' },
-  ];
-
   return (
-    <section className="animate-in">
-      {/* Additional Quick Stats */}
-      <div className="stats-grid" style={{ marginBottom: 32 }}>
-        {quickStats.map((s) => (
-          <div className="stat-card" key={s.label}>
-            <div
-              className="stat-value counter-animate"
-              style={{ color: s.color, fontSize: 28 }}
-            >
-              {s.value}
-            </div>
-            <div className="stat-label">{s.label}</div>
-          </div>
-        ))}
-      </div>
-
+    <section>
       {/* Visual Bar Charts Row */}
-      <div className="charts-row">
+      <div className="branch-charts-duo">
         {/* Top Packages Bar Chart */}
-        <div className="chart-card">
+        <div className="branch-chart-card">
           <h4>🏆 Top Packages Offered (LPA)</h4>
-          <div className="bar-chart">
+          <div className="mini-bars-list">
             {topCompanies.map((c) => {
               const widthPct = Math.max(12, Math.round((c.ctc / maxCTC) * 100));
               return (
-                <div className="bar-item" key={c.id}>
-                  <span className="bar-label">{c.name}</span>
-                  <div className="bar-track">
-                    <div className="bar-fill" style={{ width: `${widthPct}%` }}>
-                      ₹{c.ctc}L
-                    </div>
+                <div className="mini-bar-item" key={c.id}>
+                  <span className="mini-bar-label">{c.name.split(' ')[0]}</span>
+                  <div className="mini-bar-track">
+                    <div className="mini-bar-fill ctc-fill" style={{ width: `${widthPct}%` }} />
                   </div>
-                  <span className="bar-value">₹{c.ctc}L</span>
+                  <span className="mini-bar-val font-mono">₹{c.ctc}L</span>
                 </div>
               );
             })}
@@ -62,26 +37,18 @@ export default function DashboardOverview() {
         </div>
 
         {/* Top Hiring Volume Bar Chart */}
-        <div className="chart-card">
+        <div className="branch-chart-card">
           <h4>📈 Highest Hiring Volume</h4>
-          <div className="bar-chart">
+          <div className="mini-bars-list">
             {topHiring.map((c) => {
               const widthPct = Math.max(12, Math.round((c.studentsHired / maxHired) * 100));
               return (
-                <div className="bar-item" key={c.id}>
-                  <span className="bar-label">{c.name}</span>
-                  <div className="bar-track">
-                    <div
-                      className="bar-fill"
-                      style={{
-                        width: `${widthPct}%`,
-                        background: 'linear-gradient(90deg, #00b4d8, #90e0ef)',
-                      }}
-                    >
-                      {c.studentsHired}
-                    </div>
+                <div className="mini-bar-item" key={c.id}>
+                  <span className="mini-bar-label">{c.name.split(' ')[0]}</span>
+                  <div className="mini-bar-track">
+                    <div className="mini-bar-fill rate-fill" style={{ width: `${widthPct}%` }} />
                   </div>
-                  <span className="bar-value">{c.studentsHired} hires</span>
+                  <span className="mini-bar-val font-mono">{c.studentsHired}</span>
                 </div>
               );
             })}
@@ -92,20 +59,21 @@ export default function DashboardOverview() {
       {/* 5-Year Historical Placement Trend */}
       {yearWiseTrend && yearWiseTrend.length > 0 && (
         <>
-          <div className="section-header" style={{ marginTop: 24 }}>
+          <div className="branch-header-row" style={{ marginTop: 32 }}>
             <div>
-              <h3>5-Year Placement Growth Trend</h3>
-              <p className="section-desc">Consistent year-on-year growth in offers and packages</p>
+              <div className="section-badge-pill">HISTORICAL</div>
+              <h3 className="branch-title" style={{ fontSize: 22 }}>5-Year Placement Growth Trend</h3>
+              <p className="branch-desc">Consistent year-on-year growth in offers and packages</p>
             </div>
           </div>
-          <div className="trend-grid">
+          <div className="branch-grid-layout" style={{ gridTemplateColumns: 'repeat(5, 1fr)' }}>
             {yearWiseTrend.map((t) => (
-              <div className="trend-card" key={t.year}>
-                <div className="year">{t.year}</div>
-                <div className="trend-value">{t.totalPlaced}</div>
-                <div className="trend-label">Students Placed</div>
-                <div className="trend-sub">
-                  Avg: <strong>₹{t.avgPackage}L</strong> · Max: <strong>₹{t.highestPackage}L</strong>
+              <div className="branch-glass-card" key={t.year} style={{ textAlign: 'center' }}>
+                <span className="stat-label" style={{ color: 'var(--aqua-primary)' }}>{t.year}</span>
+                <span className="stat-val font-mono" style={{ fontSize: 26 }}>{t.totalPlaced}</span>
+                <span className="stat-label">Students Placed</span>
+                <div style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 4 }}>
+                  Avg: <strong style={{ color: '#fff' }}>₹{t.avgPackage}L</strong> · Max: <strong style={{ color: '#fff' }}>₹{t.highestPackage}L</strong>
                 </div>
               </div>
             ))}
@@ -116,28 +84,29 @@ export default function DashboardOverview() {
       {/* Sector-wise Distribution */}
       {sectorWiseData && sectorWiseData.length > 0 && (
         <>
-          <div className="section-header" style={{ marginTop: 24 }}>
+          <div className="branch-header-row" style={{ marginTop: 32 }}>
             <div>
-              <h3>Sector-Wise Recruitment</h3>
-              <p className="section-desc">Hiring volume and package trends across industry sectors</p>
+              <div className="section-badge-pill">INDUSTRY</div>
+              <h3 className="branch-title" style={{ fontSize: 22 }}>Sector-Wise Recruitment</h3>
+              <p className="branch-desc">Hiring volume and package trends across industry sectors</p>
             </div>
           </div>
-          <div className="sector-grid">
+          <div className="branch-grid-layout" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))' }}>
             {sectorWiseData.slice(0, 8).map((s) => (
-              <div className="sector-card" key={s.sector}>
-                <div className="sector-name">{s.sector}</div>
-                <div className="sector-stats">
-                  <div className="sector-stat-row">
-                    <span className="s-label">Companies</span>
-                    <span className="s-value">{s.companies}</span>
+              <div className="branch-glass-card" key={s.sector}>
+                <span style={{ fontWeight: 700, fontSize: 15, color: '#ffffff' }}>{s.sector}</span>
+                <div className="branch-metrics-grid" style={{ gridTemplateColumns: '1fr' }}>
+                  <div className="branch-metric-cell">
+                    <span className="b-label">Companies</span>
+                    <span className="b-val font-mono">{s.companies}</span>
                   </div>
-                  <div className="sector-stat-row">
-                    <span className="s-label">Offers</span>
-                    <span className="s-value">{s.offers}</span>
+                  <div className="branch-metric-cell">
+                    <span className="b-label">Offers</span>
+                    <span className="b-val font-mono">{s.offers}</span>
                   </div>
-                  <div className="sector-stat-row">
-                    <span className="s-label">Avg CTC</span>
-                    <span className="s-value" style={{ color: 'var(--success)' }}>₹{s.avgCTC}L</span>
+                  <div className="branch-metric-cell highlight">
+                    <span className="b-label">Avg CTC</span>
+                    <span className="b-val font-mono" style={{ color: 'var(--aqua-primary)' }}>₹{s.avgCTC}L</span>
                   </div>
                 </div>
               </div>
@@ -147,56 +116,58 @@ export default function DashboardOverview() {
       )}
 
       {/* Branch Placement Snapshot */}
-      <div className="section-header" style={{ marginTop: 32 }}>
+      <div className="branch-header-row" style={{ marginTop: 32 }}>
         <div>
-          <h3>Branch Placement Snapshot</h3>
-          <p className="section-desc">Summary of placement percentages and CTCs by department</p>
+          <div className="section-badge-pill">DEPARTMENTS</div>
+          <h3 className="branch-title" style={{ fontSize: 22 }}>Branch Placement Snapshot</h3>
+          <p className="branch-desc">Summary of placement percentages and CTCs by department</p>
         </div>
       </div>
-      <div className="table-container" style={{ marginBottom: 48 }}>
-        <table className="data-table" aria-label="Branch placement snapshot">
-          <thead>
-            <tr>
-              <th>Branch</th>
-              <th>Total</th>
-              <th>Placed</th>
-              <th>Placement %</th>
-              <th>Avg CTC</th>
-              <th>Highest CTC</th>
-              <th>Median CTC</th>
-            </tr>
-          </thead>
-          <tbody>
-            {branches.map((b) => {
-              const pct = ((b.placed / b.totalStudents) * 100).toFixed(1);
-              return (
-                <tr key={b.id}>
-                  <td style={{ fontWeight: 600, color: 'var(--text)' }}>
-                    {b.shortName} <span style={{ color: 'var(--muted)', fontSize: 12, fontWeight: 400 }}>— {b.name}</span>
-                  </td>
-                  <td style={{ fontFamily: 'var(--mono)', fontWeight: 600 }}>
-                    {b.totalStudents}
-                  </td>
-                  <td style={{ fontFamily: 'var(--mono)', fontWeight: 700 }}>
-                    {b.placed}
-                  </td>
-                  <td>
-                    <span style={{ fontWeight: 700, color: 'var(--blue-dark)' }}>{pct}%</span>
-                  </td>
-                  <td className="ctc-value font-mono">
-                    ₹{b.avgPackage}L
-                  </td>
-                  <td className="ctc-value font-mono" style={{ fontWeight: 700 }}>
-                    ₹{b.highestPackage}L
-                  </td>
-                  <td style={{ fontFamily: 'var(--mono)', fontWeight: 600 }}>
-                    ₹{b.medianPackage}L
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+      <div className="table-card" style={{ marginBottom: 48 }}>
+        <div className="table-scroll-container">
+          <table className="clean-table" aria-label="Branch placement snapshot">
+            <thead>
+              <tr>
+                <th>Branch</th>
+                <th className="text-center">Total</th>
+                <th className="text-center">Placed</th>
+                <th className="text-center">Placement %</th>
+                <th className="text-right">Avg CTC</th>
+                <th className="text-right">Highest CTC</th>
+                <th className="text-right">Median CTC</th>
+              </tr>
+            </thead>
+            <tbody>
+              {branches.map((b) => {
+                const pct = ((b.placed / b.totalStudents) * 100).toFixed(1);
+                return (
+                  <tr key={b.id}>
+                    <td>
+                      <span style={{ fontWeight: 700, color: '#ffffff' }}>
+                        {b.shortName}
+                      </span>{' '}
+                      <span style={{ color: 'var(--text-muted)', fontSize: 12 }}>— {b.name}</span>
+                    </td>
+                    <td className="text-center font-mono">{b.totalStudents}</td>
+                    <td className="text-center font-mono font-bold">{b.placed}</td>
+                    <td className="text-center">
+                      <span className={`ctc-value-pill ${pct >= 80 ? 'super-dream' : pct >= 60 ? 'dream' : 'normal'}`}>
+                        {pct}%
+                      </span>
+                    </td>
+                    <td className="text-right font-mono" style={{ color: 'var(--aqua-primary)' }}>
+                      ₹{b.avgPackage}L
+                    </td>
+                    <td className="text-right font-mono font-bold" style={{ color: 'var(--aqua-primary)' }}>
+                      ₹{b.highestPackage}L
+                    </td>
+                    <td className="text-right font-mono">₹{b.medianPackage}L</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       </div>
     </section>
   );

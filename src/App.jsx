@@ -36,12 +36,18 @@ export default function App() {
   };
 
   return (
-    <div className="app-container">
-      <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
-      <main className="main-content" role="main">
-        {renderContent()}
-      </main>
-      <Footer />
-    </div>
+    <>
+      {/* Ambient glow orbs */}
+      <div className="ambient-glow glow-top" />
+      <div className="ambient-glow glow-bottom" />
+
+      <div className="portal-container">
+        <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
+        <main className="main-portal-content" role="main">
+          {renderContent()}
+        </main>
+        <Footer />
+      </div>
+    </>
   );
 }

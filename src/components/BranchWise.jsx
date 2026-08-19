@@ -27,85 +27,103 @@ export default function BranchWise() {
     return list;
   }, [searchTerm, sortBy]);
 
+  const maxPlacementRate = Math.max(
+    ...branches.map((b) => (b.placed / b.totalStudents) * 100)
+  );
   const maxAvgPackage = Math.max(...branches.map((b) => b.avgPackage));
 
   return (
-    <section className="animate-in" aria-labelledby="branches-heading">
-      <div className="section-header">
+    <section className="branch-section" aria-labelledby="branches-heading">
+      {/* Header */}
+      <div className="branch-header-row">
         <div>
-          <h3 id="branches-heading">Branch-Wise Placement Data</h3>
-          <p className="section-desc">
+          <div className="section-badge-pill">DEPARTMENTS</div>
+          <h3 id="branches-heading" className="branch-title">Branch-Wise Placement Data</h3>
+          <p className="branch-desc">
             Detailed department statistics, placement ratios, and package distribution
           </p>
         </div>
-        <div className="filter-bar">
-          <input
-            type="text"
-            className="search-input"
-            placeholder="Search branch (e.g. CSE, ECE)..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            aria-label="Search branches"
-          />
-          <button
-            className={`filter-btn ${sortBy === 'placementRate' ? 'active' : ''}`}
-            onClick={() => setSortBy('placementRate')}
-          >
-            Placement %
-          </button>
-          <button
-            className={`filter-btn ${sortBy === 'avgPackage' ? 'active' : ''}`}
-            onClick={() => setSortBy('avgPackage')}
-          >
-            Avg Package
-          </button>
-          <button
-            className={`filter-btn ${sortBy === 'highestPackage' ? 'active' : ''}`}
-            onClick={() => setSortBy('highestPackage')}
-          >
-            Highest CTC
-          </button>
+        <div className="branch-controls">
+          <div className="branch-search-box">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            <input
+              type="text"
+              className="branch-search-input"
+              placeholder="Search branch..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              aria-label="Search branches"
+            />
+          </div>
+          <div className="branch-sort-pills">
+            <button
+              className={`sort-pill ${sortBy === 'placementRate' ? 'active' : ''}`}
+              onClick={() => setSortBy('placementRate')}
+            >
+              Placement %
+            </button>
+            <button
+              className={`sort-pill ${sortBy === 'avgPackage' ? 'active' : ''}`}
+              onClick={() => setSortBy('avgPackage')}
+            >
+              Avg CTC
+            </button>
+            <button
+              className={`sort-pill ${sortBy === 'highestPackage' ? 'active' : ''}`}
+              onClick={() => setSortBy('highestPackage')}
+            >
+              Highest CTC
+            </button>
+          </div>
         </div>
       </div>
 
-      <div className="branch-grid">
+      {/* Branch Cards Grid */}
+      <div className="branch-grid-layout">
         {filteredBranches.map((branch) => {
           const pct = ((branch.placed / branch.totalStudents) * 100).toFixed(1);
           return (
-            <div className="branch-card" key={branch.id}>
-              <div className="branch-card-header">
-                <h4>{branch.name}</h4>
-                <span className="branch-abbr">{branch.shortName}</span>
+            <div className="branch-glass-card" key={branch.id}>
+              <div className="branch-card-top">
+                <span className="branch-badge">{branch.shortName}</span>
+                <div className="branch-rate-pill">
+                  <span className="rate-num">{pct}%</span>
+                  <span className="rate-label">placed</span>
+                </div>
+              </div>
+              <span className="branch-name">{branch.name}</span>
+
+              <div className="branch-progress-bar-wrap">
+                <div className="branch-progress-bar-track">
+                  <div className="branch-progress-bar-fill" style={{ width: `${pct}%` }} />
+                </div>
+                <div className="branch-progress-labels">
+                  <span>{branch.placed} / {branch.totalStudents} students</span>
+                  <span>{pct}%</span>
+                </div>
               </div>
 
-              <div className="branch-stats">
-                <div className="branch-stat">
-                  <span className="label">Total Students</span>
-                  <span className="value font-mono">{branch.totalStudents}</span>
+              <div className="branch-metrics-grid">
+                <div className="branch-metric-cell">
+                  <span className="b-label">Total</span>
+                  <span className="b-val font-mono">{branch.totalStudents}</span>
                 </div>
-                <div className="branch-stat">
-                  <span className="label">Placed</span>
-                  <span className="value font-mono">{branch.placed}</span>
+                <div className="branch-metric-cell">
+                  <span className="b-label">Placed</span>
+                  <span className="b-val font-mono">{branch.placed}</span>
                 </div>
-                <div className="branch-stat">
-                  <span className="label">Avg Package</span>
-                  <span className="value font-mono">₹{branch.avgPackage}L</span>
+                <div className="branch-metric-cell highlight">
+                  <span className="b-label">Avg CTC</span>
+                  <span className="b-val font-mono">₹{branch.avgPackage}L</span>
                 </div>
-                <div className="branch-stat">
-                  <span className="label">Highest</span>
-                  <span className="value font-mono" style={{ color: 'var(--success)' }}>
+                <div className="branch-metric-cell">
+                  <span className="b-label">Highest</span>
+                  <span className="b-val font-mono" style={{ color: 'var(--emerald-accent)' }}>
                     ₹{branch.highestPackage}L
                   </span>
-                </div>
-              </div>
-
-              <div className="placement-progress">
-                <div className="progress-label">
-                  <span>Placement Rate</span>
-                  <span className="pct">{pct}%</span>
-                </div>
-                <div className="progress-bar-track">
-                  <div className="progress-bar-fill" style={{ width: `${pct}%` }}></div>
                 </div>
               </div>
             </div>
@@ -113,51 +131,43 @@ export default function BranchWise() {
         })}
       </div>
 
-      <div className="charts-row">
-        <div className="chart-card">
+      {/* Comparative Charts */}
+      <div className="branch-charts-duo">
+        <div className="branch-chart-card">
           <h4>📊 Placement % by Branch</h4>
-          <div className="bar-chart">
+          <div className="mini-bars-list">
             {[...branches]
               .sort((a, b) => b.placed / b.totalStudents - a.placed / a.totalStudents)
               .map((branch) => {
                 const pct = ((branch.placed / branch.totalStudents) * 100).toFixed(1);
+                const widthPct = Math.round((parseFloat(pct) / maxPlacementRate) * 100);
                 return (
-                  <div className="bar-item" key={branch.id}>
-                    <span className="bar-label">{branch.shortName}</span>
-                    <div className="bar-track">
-                      <div className="bar-fill" style={{ width: `${pct}%` }}>
-                        {pct}%
-                      </div>
+                  <div className="mini-bar-item" key={branch.id}>
+                    <span className="mini-bar-label">{branch.shortName}</span>
+                    <div className="mini-bar-track">
+                      <div className="mini-bar-fill rate-fill" style={{ width: `${widthPct}%` }} />
                     </div>
-                    <span className="bar-value">{pct}%</span>
+                    <span className="mini-bar-val font-mono">{pct}%</span>
                   </div>
                 );
               })}
           </div>
         </div>
 
-        <div className="chart-card">
-          <h4>💰 Average CTC by Branch (in LPA)</h4>
-          <div className="bar-chart">
+        <div className="branch-chart-card">
+          <h4>💰 Average CTC by Branch (LPA)</h4>
+          <div className="mini-bars-list">
             {[...branches]
               .sort((a, b) => b.avgPackage - a.avgPackage)
               .map((branch) => {
                 const widthPct = Math.round((branch.avgPackage / maxAvgPackage) * 100);
                 return (
-                  <div className="bar-item" key={branch.id}>
-                    <span className="bar-label">{branch.shortName}</span>
-                    <div className="bar-track">
-                      <div
-                        className="bar-fill"
-                        style={{
-                          width: `${widthPct}%`,
-                          background: 'linear-gradient(90deg, #4f9fc4, #8ecae6)',
-                        }}
-                      >
-                        ₹{branch.avgPackage}L
-                      </div>
+                  <div className="mini-bar-item" key={branch.id}>
+                    <span className="mini-bar-label">{branch.shortName}</span>
+                    <div className="mini-bar-track">
+                      <div className="mini-bar-fill ctc-fill" style={{ width: `${widthPct}%` }} />
                     </div>
-                    <span className="bar-value">₹{branch.avgPackage}L</span>
+                    <span className="mini-bar-val font-mono">₹{branch.avgPackage}L</span>
                   </div>
                 );
               })}
