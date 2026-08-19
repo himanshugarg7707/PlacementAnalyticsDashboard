@@ -1,52 +1,42 @@
 import { useState } from 'react';
 
 export default function Navbar({ activeTab, setActiveTab }) {
-  const [menuOpen, setMenuOpen] = useState(false);
-
   const tabs = [
     { id: 'dashboard', label: 'Dashboard' },
     { id: 'companies', label: 'Companies' },
     { id: 'branches', label: 'Branch Wise' },
   ];
 
-  const handleTabClick = (tabId) => {
-    setActiveTab(tabId);
-    setMenuOpen(false);
-  };
-
   return (
     <nav className="navbar" role="navigation" aria-label="Main navigation">
       <div className="navbar-inner">
-        <div className="navbar-brand">
-          <div className="navbar-logo" aria-hidden="true">NK</div>
-          <div className="navbar-title">
-            <h1>NIT Kurukshetra</h1>
-            <span>Campus Placement Cell</span>
+        <div className="nav-brand" onClick={() => setActiveTab('dashboard')}>
+          <div className="nav-logo" aria-hidden="true">NK</div>
+          <div className="nav-title-group">
+            <span className="inst-name">NIT Kurukshetra</span>
+            <span className="portal-sub">Campus Placement Cell</span>
           </div>
         </div>
 
-        <ul className={`navbar-links ${menuOpen ? 'open' : ''}`}>
+        <div className="nav-center-tabs">
           {tabs.map((tab) => (
-            <li key={tab.id}>
-              <button
-                className={`nav-link ${activeTab === tab.id ? 'active' : ''}`}
-                onClick={() => handleTabClick(tab.id)}
-                aria-current={activeTab === tab.id ? 'page' : undefined}
-              >
-                {tab.label}
-              </button>
-            </li>
+            <button
+              key={tab.id}
+              className={`nav-tab-btn ${activeTab === tab.id ? 'active' : ''}`}
+              onClick={() => setActiveTab(tab.id)}
+              aria-current={activeTab === tab.id ? 'page' : undefined}
+            >
+              {tab.label}
+            </button>
           ))}
-        </ul>
+        </div>
 
-        <button
-          className="mobile-menu-btn"
-          onClick={() => setMenuOpen(!menuOpen)}
-          aria-label="Toggle navigation menu"
-          aria-expanded={menuOpen}
-        >
-          {menuOpen ? '✕' : '☰'}
-        </button>
+        <div className="nav-right">
+          <div className="status-indicator">
+            <span className="pulse-dot" aria-hidden="true"></span>
+            Live 2024-25
+          </div>
+        </div>
       </div>
     </nav>
   );
