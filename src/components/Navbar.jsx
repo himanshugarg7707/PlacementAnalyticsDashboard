@@ -1,43 +1,41 @@
-import { useState } from 'react';
-
-export default function Navbar({ activeTab, setActiveTab }) {
-  const tabs = [
-    { id: 'dashboard', label: 'Dashboard' },
-    { id: 'companies', label: 'Companies' },
-    { id: 'branches', label: 'Branch Wise' },
-  ];
-
+export default function Navbar({ activeTab, setActiveTab, onExportCSV }) {
   return (
-    <nav className="navbar" role="navigation" aria-label="Main navigation">
+    <header className="navbar" role="banner">
       <div className="navbar-inner">
-        <div className="nav-brand" onClick={() => setActiveTab('dashboard')}>
-          <div className="nav-logo" aria-hidden="true">NK</div>
+        <div className="nav-brand" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+          <div className="nav-logo">NITKKR</div>
           <div className="nav-title-group">
             <span className="inst-name">NIT Kurukshetra</span>
-            <span className="portal-sub">Campus Placement Cell</span>
+            <span className="portal-sub">Placement Records 2024–25</span>
           </div>
         </div>
 
+        {/* Center Tab Switcher */}
         <div className="nav-center-tabs">
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              className={`nav-tab-btn ${activeTab === tab.id ? 'active' : ''}`}
-              onClick={() => setActiveTab(tab.id)}
-              aria-current={activeTab === tab.id ? 'page' : undefined}
-            >
-              {tab.label}
-            </button>
-          ))}
+          <button
+            className={`nav-tab-btn ${activeTab === 'recruiters' ? 'active' : ''}`}
+            onClick={() => setActiveTab('recruiters')}
+          >
+            🏢 Recruiters Directory
+          </button>
+          <button
+            className={`nav-tab-btn ${activeTab === 'branches' ? 'active' : ''}`}
+            onClick={() => setActiveTab('branches')}
+          >
+            🎓 Branch-Wise Insights
+          </button>
         </div>
 
         <div className="nav-right">
           <div className="status-indicator">
-            <span className="pulse-dot" aria-hidden="true"></span>
-            Live 2024-25
+            <span className="pulse-dot"></span>
+            <span>Season Active</span>
           </div>
+          <button className="nav-export-btn" onClick={onExportCSV}>
+            📥 Export CSV
+          </button>
         </div>
       </div>
-    </nav>
+    </header>
   );
 }
