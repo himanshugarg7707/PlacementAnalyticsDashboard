@@ -1,20 +1,23 @@
+import { collegeInfo } from '../data/placementData';
+
 export default function Footer() {
   return (
     <footer className="footer-minimal" role="contentinfo">
       <div className="footer-inner-clean">
-        <div>
-          <div className="footer-brand-title">NIT Kurukshetra</div>
-          <div className="footer-sub">
-            Training &amp; Placement Cell · Session 2024-25
-          </div>
+        <div className="footer-left">
+          <div className="footer-brand-title">NIT Kurukshetra • Placement Portal</div>
+          <p className="footer-sub">
+            Training &amp; Placement Cell, National Institute of Technology, Kurukshetra, Haryana, India.
+          </p>
         </div>
         <div className="footer-right">
-          <span className="footer-tag">nitkkr.ac.in</span>
-          <span className="footer-tag">tpc@nitkkr.ac.in</span>
+          <span className="footer-tag">Batch {collegeInfo.session}</span>
+          <span className="footer-tag">187+ Recruiters</span>
+          <span className="footer-tag">₹{collegeInfo.highestPackage} LPA Max CTC</span>
         </div>
       </div>
       <div className="footer-copy-clean">
-        © 2025 NIT Kurukshetra — All data is for the academic session 2024-25.
+        © {new Date().getFullYear()} National Institute of Technology, Kurukshetra. Verified institutional placement records.
       </div>
     </footer>
   );
