@@ -2,6 +2,29 @@ import { useEffect, useState } from 'react';
 import { interviewQuestions } from '../data/placementData';
 import CompanyLogo from './CompanyLogo';
 
+/**
+ * CompanyDetailModal Component
+ *
+ * A fullscreen overlay modal that displays detailed information about
+ * a selected recruiting company. Includes CTC breakdown, hiring stats,
+ * eligible branches, interview questions, and hiring process timeline.
+ *
+ * Features:
+ * - Escape key and backdrop click to close
+ * - Body scroll lock when modal is open
+ * - Bookmark/shortlist toggle with animated star
+ * - Copy company summary to clipboard
+ * - Interview questions and hiring round timeline
+ * - Responsive layout with glassmorphism styling
+ *
+ * @param {Object} props
+ * @param {Object} props.company - Company data object with name, ctc, sector, etc.
+ * @param {Function} props.onClose - Callback to close the modal
+ * @param {boolean} [props.isShortlisted=false] - Whether the company is bookmarked
+ * @param {Function} props.onToggleShortlist - Callback to toggle bookmark state
+ * @param {Function} props.showToast - Callback to show toast notification
+ * @returns {JSX.Element|null} Company detail modal overlay or null if no company
+ */
 export default function CompanyDetailModal({
   company,
   onClose,

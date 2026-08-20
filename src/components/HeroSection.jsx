@@ -1,6 +1,29 @@
 import { useState, useEffect } from 'react';
 import { collegeInfo } from '../data/placementData';
 
+/**
+ * HeroSection Component
+ *
+ * The main hero banner for the IIT Bombay Placement Portal.
+ * Displays a campus photo showcase, animated placement metrics,
+ * search functionality, and tier-based category filters.
+ *
+ * Features:
+ * - Campus photo banner with gradient fade overlay
+ * - Animated counter metrics (peak package, avg CTC, total offers, recruiters)
+ * - Ease-out cubic animation for smooth number transitions
+ * - Real-time search with clear button
+ * - Quick category filter pills (All, Super Dream, Dream, Normal, Shortlisted)
+ * - Responsive layout adapting to different screen sizes
+ *
+ * @param {Object} props
+ * @param {string} props.searchTerm - Current search query string
+ * @param {Function} props.setSearchTerm - Callback to update search query
+ * @param {string} props.filterType - Active tier filter (All/Super Dream/Dream/Normal/Shortlisted)
+ * @param {Function} props.setFilterType - Callback to update active tier filter
+ * @param {number} [props.shortlistedCount=0] - Count of bookmarked/shortlisted companies
+ * @returns {JSX.Element} Hero section with campus banner, stats, and search
+ */
 export default function HeroSection({
   searchTerm,
   setSearchTerm,

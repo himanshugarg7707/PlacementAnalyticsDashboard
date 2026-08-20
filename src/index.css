@@ -2107,3 +2107,118 @@ button, input, select {
     align-items: flex-start;
   }
 }
+
+/* ── TABLET BREAKPOINT ── */
+@media (max-width: 1024px) {
+  .branch-grid-layout {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+
+  .branch-charts-duo {
+    grid-template-columns: 1fr;
+  }
+
+  .trends-grid-cards {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  }
+
+  .sectors-grid-layout {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  }
+
+  .hero-filter-bar {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .hero-tier-pills {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+
+  .table-controls-bar {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .table-right-controls {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+}
+
+/* ── ACCESSIBILITY FOCUS STYLES ── */
+*:focus-visible {
+  outline: 2px solid var(--aqua-primary);
+  outline-offset: 2px;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--aqua-vibrant);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* ── PRINT STYLES ── */
+@media print {
+  .ambient-glow,
+  .navbar,
+  .hero-filter-bar,
+  .hero-tier-pills,
+  .table-controls-bar,
+  .footer-minimal {
+    display: none !important;
+  }
+
+  .portal-container {
+    background: #fff;
+    color: #000;
+  }
+
+  .clean-table th,
+  .clean-table td {
+    border: 1px solid #ccc;
+    color: #000;
+  }
+
+  .branch-glass-card {
+    border: 1px solid #ddd;
+    background: #fff;
+    color: #000;
+    break-inside: avoid;
+  }
+}
+
+/* ── SMOOTH SCROLL BEHAVIOR ── */
+html {
+  scroll-behavior: smooth;
+}
+
+/* ── SELECTION HIGHLIGHT ── */
+::selection {
+  background: var(--aqua-deep);
+  color: #fff;
+}
+
+/* ── SCROLLBAR CUSTOMIZATION ── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-deep);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--aqua-soft);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--aqua-border);
+}

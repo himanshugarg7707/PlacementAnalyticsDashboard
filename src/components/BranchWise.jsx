@@ -1,6 +1,28 @@
 import { useState, useMemo } from 'react';
 import { branches, yearWiseTrend, sectorWiseData } from '../data/placementData';
 
+/**
+ * BranchWise Component
+ *
+ * Renders a comprehensive branch-wise placement analytics view with three
+ * switchable sub-tabs: Engineering Departments, 5-Year Growth Trajectory,
+ * and Sector-Wise Analytics.
+ *
+ * Features:
+ * - Department-level placement cards with progress bars and metrics
+ * - Sortable by placement rate, average CTC, or highest CTC
+ * - Searchable department list with real-time filtering
+ * - Comparative horizontal bar charts for placement rate and average package
+ * - 5-year historical trend cards with year-over-year growth indicators
+ * - Sector-wise distribution cards showing offers, recruiters, and average CTC
+ *
+ * Data sources:
+ * - branches: Array of department objects from placementData
+ * - yearWiseTrend: 5-year historical placement data
+ * - sectorWiseData: Industry sector breakdown
+ *
+ * @returns {JSX.Element} Branch-wise analytics section with sub-navigation
+ */
 export default function BranchWise() {
   const [activeSubTab, setActiveSubTab] = useState('departments'); // 'departments' | 'trends' | 'sectors'
   const [searchTerm, setSearchTerm] = useState('');

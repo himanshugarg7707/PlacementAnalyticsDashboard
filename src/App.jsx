@@ -6,6 +6,21 @@ import BranchWise from './components/BranchWise';
 import Footer from './components/Footer';
 import Toast from './components/Toast';
 
+/**
+ * App Component — Root Application Entry
+ *
+ * The main application container for the IIT Bombay Placement Analytics Portal.
+ * Manages global state for navigation, search, filtering, shortlist bookmarks,
+ * and toast notifications. Orchestrates all child components.
+ *
+ * State Management:
+ * - activeTab: Controls the primary view (recruiters vs branches)
+ * - searchTerm & filterType: Shared search/filter state passed to Hero and Table
+ * - shortlisted: Bookmarked company IDs persisted via localStorage
+ * - toast: Ephemeral notification messages for user feedback
+ *
+ * @returns {JSX.Element} Complete placement portal application layout
+ */
 export default function App() {
   const [activeTab, setActiveTab] = useState('recruiters'); // 'recruiters' | 'branches'
   const [searchTerm, setSearchTerm] = useState('');

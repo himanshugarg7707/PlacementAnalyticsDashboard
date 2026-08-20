@@ -3,6 +3,33 @@ import { companies } from '../data/placementData';
 import CompanyLogo from './CompanyLogo';
 import CompanyDetailModal from './CompanyDetailModal';
 
+/**
+ * PlacementTable Component
+ *
+ * Renders the main recruiters directory table with comprehensive
+ * filtering, sorting, pagination, and export capabilities.
+ *
+ * Features:
+ * - Multi-criteria search (company name, sector, branch, tier)
+ * - Tier-based filtering (All, Super Dream, Dream, Normal)
+ * - Sector and branch dropdown filters
+ * - Sortable columns (company name, sector, CTC, offers)
+ * - Paginated results with configurable page size (15, 25, 50, All)
+ * - CSV export of filtered data
+ * - Company detail modal on row click
+ * - Bookmark/shortlist toggle per company with localStorage persistence
+ * - Responsive table with horizontal scroll on mobile
+ *
+ * @param {Object} props
+ * @param {string} props.searchTerm - Current search query
+ * @param {Function} props.setSearchTerm - Callback to update search
+ * @param {string} props.filterType - Active tier filter
+ * @param {Function} props.setFilterType - Callback to update tier
+ * @param {Array<number>} props.shortlisted - Array of shortlisted company IDs
+ * @param {Function} props.onToggleShortlist - Callback to toggle bookmark
+ * @param {Function} props.showToast - Callback to display toast notification
+ * @returns {JSX.Element} Filterable, sortable placement records table
+ */
 export default function PlacementTable({
   searchTerm,
   setSearchTerm,
