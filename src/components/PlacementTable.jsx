@@ -3,9 +3,45 @@ import { companies } from '../data/placementData';
 import CompanyLogo from './CompanyLogo';
 import CompanyDetailModal from './CompanyDetailModal';
 
-export default function PlacementTable({ searchTerm, setSearchTerm, filterType, setFilterType }) {
+/**
+ * PlacementTable Component
+ *
+ * Renders the main recruiters directory table with comprehensive
+ * filtering, sorting, pagination, and export capabilities.
+ *
+ * Features:
+ * - Multi-criteria search (company name, sector, branch, tier)
+ * - Tier-based filtering (All, Super Dream, Dream, Normal)
+ * - Sector and branch dropdown filters
+ * - Sortable columns (company name, sector, CTC, offers)
+ * - Paginated results with configurable page size (15, 25, 50, All)
+ * - CSV export of filtered data
+ * - Company detail modal on row click
+ * - Bookmark/shortlist toggle per company with localStorage persistence
+ * - Responsive table with horizontal scroll on mobile
+ *
+ * @param {Object} props
+ * @param {string} props.searchTerm - Current search query
+ * @param {Function} props.setSearchTerm - Callback to update search
+ * @param {string} props.filterType - Active tier filter
+ * @param {Function} props.setFilterType - Callback to update tier
+ * @param {Array<number>} props.shortlisted - Array of shortlisted company IDs
+ * @param {Function} props.onToggleShortlist - Callback to toggle bookmark
+ * @param {Function} props.showToast - Callback to display toast notification
+ * @returns {JSX.Element} Filterable, sortable placement records table
+ */
+export default function PlacementTable({
+  searchTerm,
+  setSearchTerm,
+  filterType,
+  setFilterType,
+  shortlisted = [],
+  onToggleShortlist,
+  showToast,
+}) {
   const [selectedSector, setSelectedSector] = useState('All');
   const [selectedBranch, setSelectedBranch] = useState('All');
+  const [ctcRange, setCtcRange] = useState('All'); // 'All' | '30+' | '20-30' | '10-20' | 'below10'
   const [sortField, setSortField] = useState('ctc');
   const [sortDir, setSortDir] = useState('desc');
   const [currentPage, setCurrentPage] = useState(1);
@@ -39,8 +75,22 @@ export default function PlacementTable({ searchTerm, setSearchTerm, filterType, 
       );
     }
 
-    if (filterType !== 'All') {
+    // Tier / Shortlist Filter
+    if (filterType === 'Shortlisted') {
+      list = list.filter((c) => shortlisted.includes(c.id));
+    } else if (filterType !== 'All') {
       list = list.filter((c) => c.type === filterType);
+    }
+
+    // CTC Range filter
+    if (ctcRange === '30+') {
+      list = list.filter((c) => c.ctc >= 30);
+    } else if (ctcRange === '20-30') {
+      list = list.filter((c) => c.ctc >= 20 && c.ctc < 30);
+    } else if (ctcRange === '10-20') {
+      list = list.filter((c) => c.ctc >= 10 && c.ctc < 20);
+    } else if (ctcRange === 'below10') {
+      list = list.filter((c) => c.ctc < 10);
     }
 
     if (selectedSector !== 'All') {
@@ -63,12 +113,12 @@ export default function PlacementTable({ searchTerm, setSearchTerm, filterType, 
     });
 
     return list;
-  }, [searchTerm, filterType, selectedSector, selectedBranch, sortField, sortDir]);
+  }, [searchTerm, filterType, shortlisted, ctcRange, selectedSector, selectedBranch, sortField, sortDir]);
 
   // Reset pagination on filter changes
   useMemo(() => {
     setCurrentPage(1);
-  }, [searchTerm, filterType, selectedSector, selectedBranch, pageSize]);
+  }, [searchTerm, filterType, ctcRange, selectedSector, selectedBranch, pageSize]);
 
   // Pagination calculation
   const totalPages = pageSize === 'All' ? 1 : Math.ceil(filteredCompanies.length / pageSize);
@@ -92,6 +142,14 @@ export default function PlacementTable({ searchTerm, setSearchTerm, filterType, 
     return <span className="sort-active">{sortDir === 'asc' ? '↑' : '↓'}</span>;
   };
 
+  const resetAllFilters = () => {
+    setSearchTerm('');
+    setFilterType('All');
+    setSelectedSector('All');
+    setSelectedBranch('All');
+    setCtcRange('All');
+  };
+
   const handleExportCSV = () => {
     const headers = ['Company', 'Sector', 'CTC (LPA)', 'Offers', 'Tier', 'Branches', 'Status'];
     const rows = filteredCompanies.map((c) => [
@@ -108,11 +166,21 @@ export default function PlacementTable({ searchTerm, setSearchTerm, filterType, 
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement('a');
     link.setAttribute('href', encodedUri);
-    link.setAttribute('download', 'NIT_Kurukshetra_Placement_Records.csv');
+    link.setAttribute('download', 'IIT_Bombay_Placement_Records_2024-25.csv');
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    if (showToast) {
+      showToast('Exported placement records to CSV! 📥', 'success');
+    }
   };
+
+  const hasActiveFilters =
+    searchTerm ||
+    filterType !== 'All' ||
+    selectedSector !== 'All' ||
+    selectedBranch !== 'All' ||
+    ctcRange !== 'All';
 
   return (
     <section id="placement-table-section" className="records-section">
@@ -122,22 +190,30 @@ export default function PlacementTable({ searchTerm, setSearchTerm, filterType, 
           <span className="results-count">
             <strong>{filteredCompanies.length}</strong> Recruiters on Record
           </span>
-          {(searchTerm || filterType !== 'All' || selectedSector !== 'All' || selectedBranch !== 'All') && (
-            <button
-              className="clear-filters-link"
-              onClick={() => {
-                setSearchTerm('');
-                setFilterType('All');
-                setSelectedSector('All');
-                setSelectedBranch('All');
-              }}
-            >
+          {hasActiveFilters && (
+            <button className="clear-filters-link" onClick={resetAllFilters}>
               Reset Filters ✕
             </button>
           )}
         </div>
 
         <div className="table-right-controls">
+          {/* Quick CTC Bracket Filter */}
+          <div className="select-wrap">
+            <select
+              className="minimal-select"
+              value={ctcRange}
+              onChange={(e) => setCtcRange(e.target.value)}
+              aria-label="Filter by CTC Range"
+            >
+              <option value="All">All CTC Brackets</option>
+              <option value="30+">₹30+ LPA</option>
+              <option value="20-30">₹20 - ₹30 LPA</option>
+              <option value="10-20">₹10 - ₹20 LPA</option>
+              <option value="below10">&lt; ₹10 LPA</option>
+            </select>
+          </div>
+
           <div className="select-wrap">
             <select
               className="minimal-select"
@@ -166,7 +242,11 @@ export default function PlacementTable({ searchTerm, setSearchTerm, filterType, 
             </select>
           </div>
 
-          <button className="minimal-export-btn" onClick={handleExportCSV} title="Download CSV">
+          <button
+            className="minimal-export-btn"
+            onClick={handleExportCSV}
+            title="Export filtered records to CSV"
+          >
             📥 Export CSV
           </button>
         </div>
@@ -175,16 +255,9 @@ export default function PlacementTable({ searchTerm, setSearchTerm, filterType, 
       {/* Main Table */}
       {filteredCompanies.length === 0 ? (
         <div className="minimal-empty-state">
+          <span className="empty-state-icon">🔍</span>
           <p>No recruiters match the selected criteria.</p>
-          <button
-            className="reset-btn-pill"
-            onClick={() => {
-              setSearchTerm('');
-              setFilterType('All');
-              setSelectedSector('All');
-              setSelectedBranch('All');
-            }}
-          >
+          <button className="reset-btn-pill" onClick={resetAllFilters}>
             Show All Companies
           </button>
         </div>
@@ -194,6 +267,7 @@ export default function PlacementTable({ searchTerm, setSearchTerm, filterType, 
             <table className="clean-table">
               <thead>
                 <tr>
+                  <th className="th-action-col">⭐</th>
                   <th className="th-num">#</th>
                   <th onClick={() => handleSort('name')} className="sortable">
                     Company {getSortIndicator('name')}
@@ -215,12 +289,31 @@ export default function PlacementTable({ searchTerm, setSearchTerm, filterType, 
               <tbody>
                 {paginatedCompanies.map((c, idx) => {
                   const globalIdx = pageSize === 'All' ? idx + 1 : (currentPage - 1) * pageSize + idx + 1;
+                  const isSaved = shortlisted.includes(c.id);
+
                   return (
                     <tr
                       key={c.id}
                       onClick={() => setActiveCompany(c)}
                       className="clickable-row"
                     >
+                      {/* Shortlist Star Cell */}
+                      <td
+                        className="td-star-cell"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onToggleShortlist(c.id);
+                        }}
+                      >
+                        <button
+                          className={`row-star-btn ${isSaved ? 'starred' : ''}`}
+                          title={isSaved ? 'Remove from shortlist' : 'Add to target shortlist'}
+                          aria-label={`Shortlist ${c.name}`}
+                        >
+                          {isSaved ? '⭐' : '☆'}
+                        </button>
+                      </td>
+
                       <td className="td-num font-mono">{globalIdx}</td>
                       <td>
                         <div className="company-name-cell">
@@ -307,7 +400,13 @@ export default function PlacementTable({ searchTerm, setSearchTerm, filterType, 
 
       {/* Detail Modal */}
       {activeCompany && (
-        <CompanyDetailModal company={activeCompany} onClose={() => setActiveCompany(null)} />
+        <CompanyDetailModal
+          company={activeCompany}
+          onClose={() => setActiveCompany(null)}
+          isShortlisted={shortlisted.includes(activeCompany.id)}
+          onToggleShortlist={onToggleShortlist}
+          showToast={showToast}
+        />
       )}
     </section>
   );

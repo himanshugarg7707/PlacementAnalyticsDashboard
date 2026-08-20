@@ -1,11 +1,24 @@
-export default function Navbar({ activeTab, setActiveTab, onExportCSV }) {
+/**
+ * Navbar Component
+ * 
+ * Top navigation bar for the IIT Bombay Placement Portal.
+ * Provides tab-based navigation between Dashboard, Recruiters Directory,
+ * and Branch-Wise Insights views.
+ * 
+ * @param {Object} props
+ * @param {string} props.activeTab - Currently active navigation tab
+ * @param {Function} props.setActiveTab - Callback to change the active tab
+ * @param {number} [props.shortlistedCount=0] - Number of shortlisted companies to show as badge
+ */
+export default function Navbar({ activeTab, setActiveTab, shortlistedCount = 0 }) {
   return (
     <header className="navbar" role="banner">
       <div className="navbar-inner">
+        {/* Brand Logo and Institution Name */}
         <div className="nav-brand" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-          <div className="nav-logo">NITKKR</div>
+          <div className="nav-logo">IITB</div>
           <div className="nav-title-group">
-            <span className="inst-name">NIT Kurukshetra</span>
+            <span className="inst-name">IIT Bombay</span>
             <span className="portal-sub">Placement Records 2024–25</span>
           </div>
         </div>
@@ -17,6 +30,9 @@ export default function Navbar({ activeTab, setActiveTab, onExportCSV }) {
             onClick={() => setActiveTab('recruiters')}
           >
             🏢 Recruiters Directory
+            {shortlistedCount > 0 && (
+              <span className="nav-shortlist-badge">{shortlistedCount}</span>
+            )}
           </button>
           <button
             className={`nav-tab-btn ${activeTab === 'branches' ? 'active' : ''}`}
@@ -26,14 +42,12 @@ export default function Navbar({ activeTab, setActiveTab, onExportCSV }) {
           </button>
         </div>
 
+        {/* Right-side Status Indicator */}
         <div className="nav-right">
           <div className="status-indicator">
             <span className="pulse-dot"></span>
             <span>Season Active</span>
           </div>
-          <button className="nav-export-btn" onClick={onExportCSV}>
-            📥 Export CSV
-          </button>
         </div>
       </div>
     </header>

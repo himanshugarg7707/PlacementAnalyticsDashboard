@@ -4,53 +4,92 @@ import HeroSection from './components/HeroSection';
 import PlacementTable from './components/PlacementTable';
 import BranchWise from './components/BranchWise';
 import Footer from './components/Footer';
-import { companies } from './data/placementData';
+import Toast from './components/Toast';
 
+/**
+ * App Component — Root Application Entry
+ *
+ * The main application container for the IIT Bombay Placement Analytics Portal.
+ * Manages global state for navigation, search, filtering, shortlist bookmarks,
+ * and toast notifications. Orchestrates all child components.
+ *
+ * State Management:
+ * - activeTab: Controls the primary view (recruiters vs branches)
+ * - searchTerm & filterType: Shared search/filter state passed to Hero and Table
+ * - shortlisted: Bookmarked company IDs persisted via localStorage
+ * - toast: Ephemeral notification messages for user feedback
+ *
+ * @returns {JSX.Element} Complete placement portal application layout
+ */
 export default function App() {
   const [activeTab, setActiveTab] = useState('recruiters'); // 'recruiters' | 'branches'
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState('All');
 
-  const handleExportCSV = () => {
-    const headers = ['Company', 'Sector', 'CTC (LPA)', 'Offers', 'Tier', 'Branches', 'Status'];
-    const rows = companies.map((c) => [
-      `"${c.name.replace(/"/g, '""')}"`,
-      `"${c.sector.replace(/"/g, '""')}"`,
-      c.ctc.toFixed(2),
-      c.studentsHired,
-      `"${c.type}"`,
-      `"${c.branches.join(', ')}"`,
-      `"${c.status}"`,
-    ]);
+  // Shortlist bookmark state persisted in localStorage
+  const [shortlisted, setShortlisted] = useState(() => {
+    try {
+      const saved = localStorage.getItem('iitb_shortlisted_recruiters');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
 
-    const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement('a');
-    link.setAttribute('href', encodedUri);
-    link.setAttribute('download', 'NIT_Kurukshetra_Placement_Records_2024-25.csv');
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+  // Toast notification state
+  const [toast, setToast] = useState(null);
+
+  const showToast = (message, type = 'info') => {
+    setToast({ message, type });
+  };
+
+  const toggleShortlist = (companyId) => {
+    setShortlisted((prev) => {
+      let updated;
+      if (prev.includes(companyId)) {
+        updated = prev.filter((id) => id !== companyId);
+        showToast('Removed from target shortlist', 'info');
+      } else {
+        updated = [...prev, companyId];
+        showToast('Added to target shortlist! ⭐', 'bookmark');
+      }
+      try {
+        localStorage.setItem('iitb_shortlisted_recruiters', JSON.stringify(updated));
+      } catch {
+        // ignore
+      }
+      return updated;
+    });
   };
 
   return (
     <div className="portal-container">
       {/* Background Subtle Ambient Glow */}
-      <div className="ambient-glow glow-top"></div>
-      <div className="ambient-glow glow-bottom"></div>
+      <div className="ambient-glow glow-top" />
+      <div className="ambient-glow glow-bottom" />
+
+      {/* Floating Global Toast */}
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(null)}
+        />
+      )}
 
       <Navbar
         activeTab={activeTab}
         setActiveTab={setActiveTab}
-        onExportCSV={handleExportCSV}
+        shortlistedCount={shortlisted.length}
       />
-      
-      {/* Full Hero Section with Campus Background */}
+
+      {/* Full Hero Section */}
       <HeroSection
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
         filterType={filterType}
         setFilterType={setFilterType}
+        shortlistedCount={shortlisted.length}
       />
 
       <main className="main-portal-content" role="main">
@@ -60,6 +99,9 @@ export default function App() {
             setSearchTerm={setSearchTerm}
             filterType={filterType}
             setFilterType={setFilterType}
+            shortlisted={shortlisted}
+            onToggleShortlist={toggleShortlist}
+            showToast={showToast}
           />
         ) : (
           <BranchWise />
