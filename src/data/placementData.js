@@ -2,8 +2,8 @@
 // All data is fictional but modeled on real patterns
 
 export const collegeInfo = {
-  name: "National Institute of Technology, Kurukshetra",
-  shortName: "NIT Kurukshetra",
+  name: "Indian Institute of Technology Bombay",
+  shortName: "IIT Bombay",
   session: "2024-25",
   totalStudents: 1842,
   totalPlaced: 1467,

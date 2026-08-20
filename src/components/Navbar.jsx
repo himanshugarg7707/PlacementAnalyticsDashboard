@@ -23,12 +23,11 @@ export default function Navbar({ activeTab, setActiveTab, shortlistedCount = 0 }
           </div>
         </div>
 
-        {/* Center Tab Switcher - Primary Navigation */}
+        {/* Center Tab Switcher */}
         <div className="nav-center-tabs">
           <button
             className={`nav-tab-btn ${activeTab === 'recruiters' ? 'active' : ''}`}
             onClick={() => setActiveTab('recruiters')}
-            aria-current={activeTab === 'recruiters' ? 'page' : undefined}
           >
             🏢 Recruiters Directory
             {shortlistedCount > 0 && (
@@ -38,7 +37,6 @@ export default function Navbar({ activeTab, setActiveTab, shortlistedCount = 0 }
           <button
             className={`nav-tab-btn ${activeTab === 'branches' ? 'active' : ''}`}
             onClick={() => setActiveTab('branches')}
-            aria-current={activeTab === 'branches' ? 'page' : undefined}
           >
             🎓 Branch-Wise Insights
           </button>
