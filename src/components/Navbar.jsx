@@ -1,8 +1,21 @@
 export default function Navbar({ activeTab, setActiveTab, onExportCSV }) {
+  const tabs = [
+    { id: 'dashboard', label: '📊 Dashboard' },
+    { id: 'companies', label: '🏢 Recruiters Directory' },
+    { id: 'branches', label: '🎓 Branch-Wise Insights' },
+  ];
+
   return (
     <header className="navbar" role="banner">
       <div className="navbar-inner">
-        <div className="nav-brand" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+        <div
+          className="nav-brand"
+          style={{ cursor: 'pointer' }}
+          onClick={() => {
+            setActiveTab('dashboard');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+        >
           <div className="nav-logo">NITKKR</div>
           <div className="nav-title-group">
             <span className="inst-name">NIT Kurukshetra</span>
@@ -12,18 +25,15 @@ export default function Navbar({ activeTab, setActiveTab, onExportCSV }) {
 
         {/* Center Tab Switcher */}
         <div className="nav-center-tabs">
-          <button
-            className={`nav-tab-btn ${activeTab === 'recruiters' ? 'active' : ''}`}
-            onClick={() => setActiveTab('recruiters')}
-          >
-            🏢 Recruiters Directory
-          </button>
-          <button
-            className={`nav-tab-btn ${activeTab === 'branches' ? 'active' : ''}`}
-            onClick={() => setActiveTab('branches')}
-          >
-            🎓 Branch-Wise Insights
-          </button>
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              className={`nav-tab-btn ${activeTab === tab.id ? 'active' : ''}`}
+              onClick={() => setActiveTab(tab.id)}
+            >
+              {tab.label}
+            </button>
+          ))}
         </div>
 
         <div className="nav-right">
@@ -31,11 +41,14 @@ export default function Navbar({ activeTab, setActiveTab, onExportCSV }) {
             <span className="pulse-dot"></span>
             <span>Season Active</span>
           </div>
-          <button className="nav-export-btn" onClick={onExportCSV}>
-            📥 Export CSV
-          </button>
+          {onExportCSV && (
+            <button className="nav-export-btn" onClick={onExportCSV}>
+              📥 Export CSV
+            </button>
+          )}
         </div>
       </div>
     </header>
   );
 }
+

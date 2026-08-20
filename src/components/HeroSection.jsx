@@ -1,6 +1,11 @@
 import { collegeInfo } from '../data/placementData';
 
-export default function HeroSection({ searchTerm, setSearchTerm, filterType, setFilterType }) {
+export default function HeroSection({
+  searchTerm = '',
+  setSearchTerm = () => {},
+  filterType = 'All',
+  setFilterType = () => {},
+}) {
   const quickCategories = [
     { id: 'All', label: 'All Recruiters', count: collegeInfo.totalCompanies },
     { id: 'Super Dream', label: 'Super Dream (>20L)', count: collegeInfo.superDreamOffers },
