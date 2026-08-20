@@ -1,21 +1,28 @@
 /**
  * Navbar Component
  * 
- * Top navigation bar for the IIT Bombay Placement Portal.
- * Provides tab-based navigation between Dashboard, Recruiters Directory,
- * and Branch-Wise Insights views.
- * 
- * @param {Object} props
- * @param {string} props.activeTab - Currently active navigation tab
- * @param {Function} props.setActiveTab - Callback to change the active tab
- * @param {number} [props.shortlistedCount=0] - Number of shortlisted companies to show as badge
+ * Unified top navigation bar for the IIT Bombay Placement Portal.
+ * Provides sleek, centralized tab navigation between Recruiters Directory,
+ * Branch Analytics, and Placement Insights views.
  */
-export default function Navbar({ activeTab, setActiveTab, shortlistedCount = 0 }) {
+export default function Navbar({
+  activeTab,
+  setActiveTab,
+  shortlistedCount = 0,
+  tabs = [
+    { id: 'recruiters', label: 'Recruiters Directory', icon: '🏢' },
+    { id: 'branches', label: 'Branch Analytics', icon: '🎓' },
+    { id: 'insights', label: 'Placement Insights', icon: '📊' },
+  ],
+}) {
   return (
     <header className="navbar" role="banner">
       <div className="navbar-inner">
         {/* Brand Logo and Institution Name */}
-        <div className="nav-brand" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+        <div
+          className="nav-brand"
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        >
           <div className="nav-logo">IITB</div>
           <div className="nav-title-group">
             <span className="inst-name">IIT Bombay</span>
@@ -23,24 +30,25 @@ export default function Navbar({ activeTab, setActiveTab, shortlistedCount = 0 }
           </div>
         </div>
 
-        {/* Center Tab Switcher */}
-        <div className="nav-center-tabs">
-          <button
-            className={`nav-tab-btn ${activeTab === 'recruiters' ? 'active' : ''}`}
-            onClick={() => setActiveTab('recruiters')}
-          >
-            🏢 Recruiters Directory
-            {shortlistedCount > 0 && (
-              <span className="nav-shortlist-badge">{shortlistedCount}</span>
-            )}
-          </button>
-          <button
-            className={`nav-tab-btn ${activeTab === 'branches' ? 'active' : ''}`}
-            onClick={() => setActiveTab('branches')}
-          >
-            🎓 Branch-Wise Insights
-          </button>
-        </div>
+        {/* Unified Center Tab Switcher */}
+        <nav className="nav-center-tabs" aria-label="Main Navigation">
+          {tabs.map((tab) => {
+            const isActive = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                className={`nav-tab-btn ${isActive ? 'active' : ''}`}
+                onClick={() => setActiveTab(tab.id)}
+              >
+                <span className="nav-tab-icon">{tab.icon}</span>
+                <span className="nav-tab-label">{tab.label}</span>
+                {tab.id === 'recruiters' && shortlistedCount > 0 && (
+                  <span className="nav-shortlist-badge">{shortlistedCount}</span>
+                )}
+              </button>
+            );
+          })}
+        </nav>
 
         {/* Right-side Status Indicator */}
         <div className="nav-right">

@@ -54,9 +54,6 @@ export default function BranchWise() {
     return list;
   }, [searchTerm, sortBy]);
 
-  const maxAvgPackage = Math.max(...branches.map((b) => b.avgPackage));
-  const maxSectorOffers = Math.max(...sectorWiseData.map((s) => s.offers));
-  const maxTrendOffers = Math.max(...yearWiseTrend.map((y) => y.totalPlaced));
 
   return (
     <section className="branch-section" aria-labelledby="branches-heading">
@@ -151,18 +148,9 @@ export default function BranchWise() {
 
                   <h3 className="branch-name">{b.name}</h3>
 
-                  {/* Progress Bar */}
-                  <div className="branch-progress-bar-wrap">
-                    <div className="branch-progress-bar-track">
-                      <div
-                        className="branch-progress-bar-fill"
-                        style={{ width: `${placementRate}%` }}
-                      ></div>
-                    </div>
-                    <div className="branch-progress-labels">
-                      <span>{b.placed} placed</span>
-                      <span>{b.totalStudents} total students</span>
-                    </div>
+                  <div className="branch-progress-labels">
+                    <span>{b.placed} placed</span>
+                    <span>{b.totalStudents} total students</span>
                   </div>
 
                   {/* Stats Grid */}
@@ -189,51 +177,6 @@ export default function BranchWise() {
                 </div>
               );
             })}
-          </div>
-
-          {/* Visual Comparative Summary */}
-          <div className="branch-charts-duo">
-            {/* Placement Rate Rank */}
-            <div className="branch-chart-card">
-              <h4>🏆 Placement Rate Comparison</h4>
-              <div className="mini-bars-list">
-                {[...branches]
-                  .sort((a, b) => b.placed / b.totalStudents - a.placed / a.totalStudents)
-                  .map((b) => {
-                    const pct = ((b.placed / b.totalStudents) * 100).toFixed(1);
-                    return (
-                      <div className="mini-bar-item" key={b.id}>
-                        <span className="mini-bar-label font-mono">{b.shortName}</span>
-                        <div className="mini-bar-track">
-                          <div className="mini-bar-fill rate-fill" style={{ width: `${pct}%` }}></div>
-                        </div>
-                        <span className="mini-bar-val font-mono">{pct}%</span>
-                      </div>
-                    );
-                  })}
-              </div>
-            </div>
-
-            {/* Average CTC Rank */}
-            <div className="branch-chart-card">
-              <h4>💰 Average Package Comparison (LPA)</h4>
-              <div className="mini-bars-list">
-                {[...branches]
-                  .sort((a, b) => b.avgPackage - a.avgPackage)
-                  .map((b) => {
-                    const widthPct = Math.max(15, Math.round((b.avgPackage / maxAvgPackage) * 100));
-                    return (
-                      <div className="mini-bar-item" key={b.id}>
-                        <span className="mini-bar-label font-mono">{b.shortName}</span>
-                        <div className="mini-bar-track">
-                          <div className="mini-bar-fill ctc-fill" style={{ width: `${widthPct}%` }}></div>
-                        </div>
-                        <span className="mini-bar-val font-mono">₹{b.avgPackage}L</span>
-                      </div>
-                    );
-                  })}
-              </div>
-            </div>
           </div>
         </div>
       )}
@@ -275,14 +218,6 @@ export default function BranchWise() {
                     <span className="trend-num-label">Students Placed</span>
                   </div>
 
-                  {/* Visual Bar */}
-                  <div className="trend-bar-wrap">
-                    <div
-                      className="trend-bar-fill"
-                      style={{ width: `${(t.totalPlaced / maxTrendOffers) * 100}%` }}
-                    ></div>
-                  </div>
-
                   <div className="trend-meta-grid">
                     <div className="trend-meta-item">
                       <span className="t-meta-label">Avg Package</span>
@@ -319,7 +254,6 @@ export default function BranchWise() {
 
           <div className="sectors-grid-layout">
             {sectorWiseData.map((s) => {
-              const offerSharePct = ((s.offers / maxSectorOffers) * 100).toFixed(0);
               return (
                 <div className="sector-glass-card" key={s.sector}>
                   <div className="sector-card-top">
@@ -338,13 +272,6 @@ export default function BranchWise() {
                       <span className="s-m-label">Recruiters</span>
                       <span className="s-m-val font-mono">{s.companies}</span>
                     </div>
-                  </div>
-
-                  <div className="sector-progress-track">
-                    <div
-                      className="sector-progress-fill"
-                      style={{ width: `${Math.max(12, offerSharePct)}%` }}
-                    ></div>
                   </div>
                 </div>
               );
