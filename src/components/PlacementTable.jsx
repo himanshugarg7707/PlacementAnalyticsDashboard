@@ -1,7 +1,6 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { companies } from '../data/placementData';
 import CompanyLogo from './CompanyLogo';
-import CompanyDetailModal from './CompanyDetailModal';
 
 /**
  * PlacementTable Component
@@ -16,7 +15,7 @@ import CompanyDetailModal from './CompanyDetailModal';
  * - Sortable columns (company name, sector, CTC, offers)
  * - Paginated results with configurable page size (15, 25, 50, All)
  * - CSV export of filtered data
- * - Company detail modal on row click
+ * - Feature Coming Soon toast notification on row click
  * - Bookmark/shortlist toggle per company with localStorage persistence
  * - Responsive table with horizontal scroll on mobile
  *
@@ -46,7 +45,6 @@ export default function PlacementTable({
   const [sortDir, setSortDir] = useState('desc');
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(25);
-  const [activeCompany, setActiveCompany] = useState(null);
 
   // Extract unique sectors & branches
   const uniqueSectors = useMemo(() => {
@@ -116,7 +114,7 @@ export default function PlacementTable({
   }, [searchTerm, filterType, shortlisted, ctcRange, selectedSector, selectedBranch, sortField, sortDir]);
 
   // Reset pagination on filter changes
-  useMemo(() => {
+  useEffect(() => {
     setCurrentPage(1);
   }, [searchTerm, filterType, ctcRange, selectedSector, selectedBranch, pageSize]);
 
@@ -294,7 +292,11 @@ export default function PlacementTable({
                   return (
                     <tr
                       key={c.id}
-                      onClick={() => setActiveCompany(c)}
+                      onClick={() => {
+                        if (showToast) {
+                          showToast(`Company details for ${c.name} coming soon! ✨`, 'info');
+                        }
+                      }}
                       className="clickable-row"
                     >
                       {/* Shortlist Star Cell */}
@@ -396,17 +398,6 @@ export default function PlacementTable({
             )}
           </div>
         </div>
-      )}
-
-      {/* Detail Modal */}
-      {activeCompany && (
-        <CompanyDetailModal
-          company={activeCompany}
-          onClose={() => setActiveCompany(null)}
-          isShortlisted={shortlisted.includes(activeCompany.id)}
-          onToggleShortlist={onToggleShortlist}
-          showToast={showToast}
-        />
       )}
     </section>
   );
