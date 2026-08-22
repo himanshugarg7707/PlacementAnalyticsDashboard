@@ -2011,16 +2011,25 @@ button, input, select {
 }
 
 /* ── FOOTER ── */
-.footer-minimal {
-  background: #04080b;
-  border-top: 1px solid var(--border-glass);
-  padding: 32px 0 24px;
+.site-footer {
+  background: linear-gradient(180deg, #060d12 0%, #030608 100%);
   margin-top: auto;
   position: relative;
   z-index: 10;
+  padding: 28px 0 22px;
 }
 
-.footer-inner-clean {
+.footer-glow-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, var(--aqua-primary) 30%, #6366f1 70%, transparent 100%);
+  opacity: 0.6;
+}
+
+.footer-container {
   max-width: 1360px;
   margin: 0 auto;
   padding: 0 24px;
@@ -2028,99 +2037,109 @@ button, input, select {
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: 14px 24px;
 }
 
-.footer-brand-title {
-  font-weight: 700;
-  font-size: 14px;
-  color: #ffffff;
-  letter-spacing: -0.2px;
-}
-
-.footer-sub {
-  font-size: 12px;
-  color: var(--text-muted);
-  margin-top: 3px;
-  max-width: 600px;
-  line-height: 1.5;
-}
-
-.footer-right {
+.footer-brand {
   display: flex;
+  align-items: center;
   gap: 8px;
+  font-size: 13.5px;
+  white-space: nowrap;
+}
+
+.footer-logo-text {
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.3px;
+}
+
+.footer-divider {
+  color: rgba(255, 255, 255, 0.15);
+  font-weight: 300;
+}
+
+.footer-subtitle {
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+.footer-chips {
+  display: flex;
+  gap: 6px;
   flex-wrap: wrap;
   align-items: center;
 }
 
-.footer-tag {
-  font-size: 11px;
+.footer-chip {
+  font-size: 10.5px;
   font-weight: 500;
+  font-family: var(--font-mono, 'SF Mono', 'Fira Code', monospace);
   background: rgba(255, 255, 255, 0.04);
-  border: 1px solid var(--border-glass);
-  padding: 4px 10px;
-  border-radius: var(--radius-sm);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 3px 10px;
+  border-radius: 20px;
   color: var(--text-muted);
+  transition: all 0.25s ease;
 }
 
-.footer-tag-link {
+.footer-chip--link {
   color: var(--aqua-primary);
+  border-color: rgba(56, 189, 248, 0.2);
   text-decoration: none;
-  border-color: var(--aqua-border);
-  transition: all 0.2s ease;
+  cursor: pointer;
 }
 
-.footer-tag-link:hover {
-  background: var(--aqua-soft);
-  color: #ffffff;
+.footer-chip--link:hover {
+  background: rgba(56, 189, 248, 0.1);
+  border-color: rgba(56, 189, 248, 0.4);
+  color: #fff;
+  transform: translateY(-1px);
 }
 
-/* ── FOOTER COPYRIGHT ROW ── */
-.footer-copy-clean {
-  max-width: 1360px;
-  margin: 18px auto 0;
-  padding: 16px 24px 0;
-  border-top: 1px solid var(--border-light);
-  font-size: 11.5px;
-  color: var(--text-light);
-}
-
-.footer-copy-row {
+.footer-copy {
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 8px;
-  text-align: center;
+  gap: 6px;
+  margin-top: 10px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.3);
 }
 
-.footer-legal-btn {
-  background: none;
-  border: none;
-  color: var(--text-muted);
-  font-size: 11.5px;
-  font-family: inherit;
-  font-weight: 500;
+.footer-dot {
+  opacity: 0.35;
+  user-select: none;
+}
+
+.footer-legal-trigger {
+  all: unset;
   cursor: pointer;
-  padding: 0;
-  text-decoration: underline;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 11px;
+  font-family: inherit;
+  text-decoration-line: underline;
+  text-decoration-style: dotted;
   text-underline-offset: 3px;
   transition: color 0.2s ease;
 }
 
-.footer-legal-btn:hover {
+.footer-legal-trigger:hover {
   color: var(--aqua-primary);
 }
 
-.footer-link {
-  color: var(--text-muted);
+.footer-ext-link {
+  color: rgba(255, 255, 255, 0.4);
   text-decoration: none;
   transition: color 0.2s ease;
 }
 
-.footer-link:hover {
+.footer-ext-link:hover {
   color: var(--aqua-primary);
-  text-decoration: underline;
 }
 
 .dot-sep {
@@ -2293,7 +2312,7 @@ button, input, select {
     white-space: nowrap;
   }
   
-  .footer-inner-clean {
+  .footer-container {
     flex-direction: column;
     align-items: flex-start;
   }
@@ -2816,7 +2835,7 @@ select:focus-visible {
   .hero-filter-bar,
   .hero-tier-pills,
   .table-controls-bar,
-  .footer-minimal {
+  .site-footer {
     display: none !important;
   }
 

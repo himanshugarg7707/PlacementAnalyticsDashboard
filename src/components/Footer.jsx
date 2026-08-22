@@ -1,7 +1,7 @@
 /**
  * Footer Component
  * 
- * Minimal, dark-themed institutional footer with copyright and disclaimer links.
+ * Sleek single-strip footer with gradient accent, inline tags, and copyright.
  * 
  * @param {Object} props
  * @param {Function} [props.onOpenLegal] - Callback to open the copyright modal
@@ -11,51 +11,49 @@ export default function Footer({ onOpenLegal }) {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="footer-minimal" role="contentinfo">
-      <div className="footer-inner-clean">
-        {/* Left Side: Brand and Address */}
-        <div className="footer-left">
-          <div className="footer-brand-title">
-            <span>IIT Bombay • Placement Portal</span>
-          </div>
-          <p className="footer-sub">
-            Training &amp; Placement Cell, Indian Institute of Technology Bombay, Powai, Mumbai 400076.
-          </p>
+    <footer className="site-footer" role="contentinfo">
+      {/* Gradient accent line */}
+      <div className="footer-glow-line" aria-hidden="true" />
+
+      <div className="footer-container">
+        {/* Brand */}
+        <div className="footer-brand">
+          <span className="footer-logo-text">IIT Bombay</span>
+          <span className="footer-divider">|</span>
+          <span className="footer-subtitle">Placement Analytics</span>
         </div>
 
-        {/* Right Side: Tags and External Link */}
-        <div className="footer-right">
-          <span className="footer-tag font-mono">Autonomous Institute</span>
-          <span className="footer-tag font-mono">Batch 2021–25</span>
+        {/* Chips */}
+        <div className="footer-chips">
+          <span className="footer-chip">Batch 2021–25</span>
+          <span className="footer-chip">Autonomous Institute</span>
           <a
             href="https://www.iitb.ac.in"
             target="_blank"
             rel="noopener noreferrer"
-            className="footer-tag footer-tag-link font-mono"
+            className="footer-chip footer-chip--link"
           >
             iitb.ac.in ↗
           </a>
         </div>
-      </div>
 
-      {/* Clean Copyright & Disclaimers Row */}
-      <div className="footer-copy-clean font-mono">
-        <div className="footer-copy-row">
-          <span>© {currentYear} Indian Institute of Technology Bombay.</span>
-          <span className="dot-sep">•</span>
+        {/* Copyright row */}
+        <div className="footer-copy font-mono">
+          <span>© {currentYear} IIT Bombay</span>
+          <span className="footer-dot">·</span>
           <button
             type="button"
-            className="footer-legal-btn"
+            className="footer-legal-trigger"
             onClick={() => onOpenLegal && onOpenLegal()}
           >
             Copyright &amp; Disclaimers
           </button>
-          <span className="dot-sep">•</span>
+          <span className="footer-dot">·</span>
           <a
             href="https://placements.iitb.ac.in"
             target="_blank"
             rel="noopener noreferrer"
-            className="footer-link"
+            className="footer-ext-link"
           >
             Placement Cell ↗
           </a>
