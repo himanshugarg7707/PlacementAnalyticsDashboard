@@ -6,6 +6,7 @@ import BranchWise from './components/BranchWise';
 import Footer from './components/Footer';
 import Toast from './components/Toast';
 import CompanyDetailModal from './components/CompanyDetailModal';
+import CopyrightModal from './components/CopyrightModal';
 import {
   companies,
   branches,
@@ -336,6 +337,7 @@ export default function App() {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState('All');
   const [activeModalCompany, setActiveModalCompany] = useState(null);
+  const [isCopyrightOpen, setIsCopyrightOpen] = useState(false);
 
   // Shortlisted Recruiters (persisted in localStorage)
   const [shortlisted, setShortlisted] = useState(() => {
@@ -369,7 +371,8 @@ export default function App() {
       // If typing in input or modal open, skip number shortcuts
       if (
         ['INPUT', 'SELECT', 'TEXTAREA'].includes(document.activeElement?.tagName) ||
-        activeModalCompany
+        activeModalCompany ||
+        isCopyrightOpen
       ) {
         return;
       }
@@ -386,7 +389,7 @@ export default function App() {
 
     window.addEventListener('keydown', handleGlobalKeyDown);
     return () => window.removeEventListener('keydown', handleGlobalKeyDown);
-  }, [activeModalCompany, showToast]);
+  }, [activeModalCompany, isCopyrightOpen, showToast]);
 
   // Toggle Shortlist Bookmark
   const toggleShortlist = useCallback(
@@ -475,8 +478,16 @@ export default function App() {
         />
       )}
 
+      {/* Clean Copyright & Legal Notice Modal */}
+      {isCopyrightOpen && (
+        <CopyrightModal
+          onClose={() => setIsCopyrightOpen(false)}
+          showToast={showToast}
+        />
+      )}
+
       {/* Institutional Footer */}
-      <Footer />
+      <Footer onOpenLegal={() => setIsCopyrightOpen(true)} />
     </div>
   );
 }

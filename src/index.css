@@ -2012,10 +2012,12 @@ button, input, select {
 
 /* ── FOOTER ── */
 .footer-minimal {
-  background: rgba(3, 6, 8, 0.95);
+  background: #04080b;
   border-top: 1px solid var(--border-glass);
-  padding: 36px 0 24px;
+  padding: 32px 0 24px;
   margin-top: auto;
+  position: relative;
+  z-index: 10;
 }
 
 .footer-inner-clean {
@@ -2030,41 +2032,214 @@ button, input, select {
 }
 
 .footer-brand-title {
-  font-weight: 800;
+  font-weight: 700;
   font-size: 14px;
   color: #ffffff;
+  letter-spacing: -0.2px;
 }
 
 .footer-sub {
   font-size: 12px;
   color: var(--text-muted);
-  margin-top: 2px;
+  margin-top: 3px;
+  max-width: 600px;
+  line-height: 1.5;
 }
 
 .footer-right {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
+  align-items: center;
 }
 
 .footer-tag {
   font-size: 11px;
-  font-weight: 600;
-  background: rgba(255, 255, 255, 0.06);
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.04);
   border: 1px solid var(--border-glass);
-  padding: 3px 9px;
+  padding: 4px 10px;
   border-radius: var(--radius-sm);
   color: var(--text-muted);
 }
 
+.footer-tag-link {
+  color: var(--aqua-primary);
+  text-decoration: none;
+  border-color: var(--aqua-border);
+  transition: all 0.2s ease;
+}
+
+.footer-tag-link:hover {
+  background: var(--aqua-soft);
+  color: #ffffff;
+}
+
+/* ── FOOTER COPYRIGHT ROW ── */
 .footer-copy-clean {
   max-width: 1360px;
   margin: 18px auto 0;
-  padding: 18px 24px 0;
+  padding: 16px 24px 0;
   border-top: 1px solid var(--border-light);
-  font-size: 11px;
+  font-size: 11.5px;
   color: var(--text-light);
+}
+
+.footer-copy-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
   text-align: center;
+}
+
+.footer-legal-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 11.5px;
+  font-family: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.2s ease;
+}
+
+.footer-legal-btn:hover {
+  color: var(--aqua-primary);
+}
+
+.footer-link {
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.footer-link:hover {
+  color: var(--aqua-primary);
+  text-decoration: underline;
+}
+
+.dot-sep {
+  color: var(--border-glass);
+  font-size: 10px;
+  user-select: none;
+}
+
+/* ── SIMPLE DARK-THEMED LEGAL / COPYRIGHT MODAL ── */
+.simple-legal-modal {
+  max-width: 580px;
+  width: 92%;
+  background: #080d11;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(204, 231, 235, 0.06);
+  padding: 0;
+  overflow: hidden;
+}
+
+.simple-legal-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid var(--border-glass);
+}
+
+.simple-legal-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  background: rgba(204, 231, 235, 0.08);
+  border: 1px solid var(--aqua-border);
+  display: grid;
+  place-items: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.simple-legal-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.2px;
+}
+
+.simple-legal-sub {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 1px;
+}
+
+.simple-legal-body {
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.simple-legal-section {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.simple-legal-label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--aqua-primary);
+  margin-bottom: 1px;
+}
+
+.simple-legal-contact-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: var(--text-muted);
+}
+
+.simple-legal-links {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.simple-link {
+  color: var(--aqua-primary);
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.simple-link:hover {
+  text-decoration: underline;
+  color: #ffffff;
+}
+
+.simple-legal-footer {
+  padding: 14px 24px;
+  background: #05080b;
+  border-top: 1px solid var(--border-glass);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.btn-sm {
+  padding: 6px 14px;
+  font-size: 12px;
 }
 
 /* ── ANIMATIONS ── */
