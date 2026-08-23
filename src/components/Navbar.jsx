@@ -9,6 +9,8 @@ export default function Navbar({
   activeTab,
   setActiveTab,
   shortlistedCount = 0,
+  onChangeCollege,
+  onLogin,
   tabs = [
     { id: 'recruiters', label: 'Recruiters Directory', icon: '🏢' },
     { id: 'branches', label: 'Branch Analytics', icon: '🎓' },
@@ -50,12 +52,34 @@ export default function Navbar({
           })}
         </nav>
 
-        {/* Right-side Status Indicator */}
+        {/* Right-side Action Buttons */}
         <div className="nav-right">
-          <div className="status-indicator">
-            <span className="pulse-dot"></span>
-            <span>Season Active</span>
-          </div>
+          {onChangeCollege && (
+            <button
+              type="button"
+              className="btn-change-college"
+              onClick={onChangeCollege}
+              title="Switch College / Campus"
+              aria-label="Change College"
+            >
+              <span className="btn-change-college-icon">🏛️</span>
+              <span className="btn-change-college-label">Change College</span>
+              <span className="btn-change-college-badge">Beta</span>
+            </button>
+          )}
+
+          {onLogin && (
+            <button
+              type="button"
+              className="btn-login"
+              onClick={onLogin}
+              title="Sign In / Portal Login"
+              aria-label="Login"
+            >
+              <span className="btn-login-icon">👤</span>
+              <span className="btn-login-label">Login</span>
+            </button>
+          )}
         </div>
       </div>
     </header>

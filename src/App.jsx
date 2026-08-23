@@ -7,6 +7,7 @@ import Footer from './components/Footer';
 import Toast from './components/Toast';
 import CompanyDetailModal from './components/CompanyDetailModal';
 import CopyrightModal from './components/CopyrightModal';
+import ChangeCollegeModal from './components/ChangeCollegeModal';
 import {
   companies,
   branches,
@@ -65,11 +66,16 @@ function PlacementInsights({ onSelectCompany, showToast }) {
       .slice(0, 10);
 
     // Branch-wise placement rates
-    const branchPerformance = branches.map((b) => ({
-      ...b,
-      placementRate: ((b.studentsPlaced / b.totalStudents) * 100).toFixed(1),
-      gap: b.highestPackage - b.avgPackage,
-    })).sort((a, b) => parseFloat(b.placementRate) - parseFloat(a.placementRate));
+    const branchPerformance = branches.map((b) => {
+      const placedCount = b.placed ?? b.studentsPlaced ?? 0;
+      const rate = b.totalStudents > 0 ? ((placedCount / b.totalStudents) * 100).toFixed(1) : '0.0';
+      return {
+        ...b,
+        placed: placedCount,
+        placementRate: rate,
+        gap: b.highestPackage - b.avgPackage,
+      };
+    }).sort((a, b) => parseFloat(b.placementRate) - parseFloat(a.placementRate));
 
     // Offer tier distribution
     const tierDistribution = [
@@ -270,7 +276,7 @@ function PlacementInsights({ onSelectCompany, showToast }) {
                   <div className="heatmap-stats">
                     <span>Avg: ₹{b.avgPackage} L</span>
                     <span>High: ₹{b.highestPackage} L</span>
-                    <span>{b.studentsPlaced}/{b.totalStudents} placed</span>
+                    <span>{b.placed}/{b.totalStudents} placed</span>
                   </div>
                 </div>
               );
@@ -338,6 +344,7 @@ export default function App() {
   const [filterType, setFilterType] = useState('All');
   const [activeModalCompany, setActiveModalCompany] = useState(null);
   const [isCopyrightOpen, setIsCopyrightOpen] = useState(false);
+  const [comingSoonModal, setComingSoonModal] = useState(null);
 
   // Shortlisted Recruiters (persisted in localStorage)
   const [shortlisted, setShortlisted] = useState(() => {
@@ -372,7 +379,8 @@ export default function App() {
       if (
         ['INPUT', 'SELECT', 'TEXTAREA'].includes(document.activeElement?.tagName) ||
         activeModalCompany ||
-        isCopyrightOpen
+        isCopyrightOpen ||
+        comingSoonModal
       ) {
         return;
       }
@@ -389,7 +397,7 @@ export default function App() {
 
     window.addEventListener('keydown', handleGlobalKeyDown);
     return () => window.removeEventListener('keydown', handleGlobalKeyDown);
-  }, [activeModalCompany, isCopyrightOpen, showToast]);
+  }, [activeModalCompany, isCopyrightOpen, comingSoonModal, showToast]);
 
   // Toggle Shortlist Bookmark
   const toggleShortlist = useCallback(
@@ -428,6 +436,22 @@ export default function App() {
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         shortlistedCount={shortlisted.length}
+        onChangeCollege={() =>
+          setComingSoonModal({
+            title: 'Change College',
+            description: 'The ability to change and switch between colleges is currently under development. Stay tuned for future updates!',
+            badge: 'Multi-Campus',
+            emoji: '🏛️',
+          })
+        }
+        onLogin={() =>
+          setComingSoonModal({
+            title: 'Login Portal',
+            description: 'Student authentication, T&P coordinator console, and recruiter login portals are currently under development.',
+            badge: 'Sign In',
+            emoji: '👤',
+          })
+        }
         tabs={TAB_CONFIG}
       />
 
@@ -486,8 +510,21 @@ export default function App() {
         />
       )}
 
+      {/* Feature Coming Soon Modal */}
+      {comingSoonModal && (
+        <ChangeCollegeModal
+          title={comingSoonModal.title}
+          description={comingSoonModal.description}
+          badge={comingSoonModal.badge}
+          emoji={comingSoonModal.emoji}
+          onClose={() => setComingSoonModal(null)}
+        />
+      )}
+
       {/* Institutional Footer */}
-      <Footer onOpenLegal={() => setIsCopyrightOpen(true)} />
+      <Footer
+        onOpenLegal={() => setIsCopyrightOpen(true)}
+      />
     </div>
   );
 }
