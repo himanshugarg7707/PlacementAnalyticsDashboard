@@ -4,7 +4,9 @@ import CompanyLogo from './CompanyLogo';
 /**
  * CompanyDetailModal Component
  *
- * A clean overlay modal placeholder when company details are opened.
+ * Contributor: Himanshu Garg (himanshugarg7707@gmail.com)
+ *
+ * A clean overlay modal dialog when company details and analytics are requested.
  */
 export default function CompanyDetailModal({
   company,

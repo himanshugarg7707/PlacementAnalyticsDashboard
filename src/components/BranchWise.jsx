@@ -4,6 +4,8 @@ import { branches, yearWiseTrend, sectorWiseData } from '../data/placementData';
 /**
  * BranchWise Component
  *
+ * Contributor: Himanshu Garg (himanshugarg7707@gmail.com)
+ *
  * Renders a comprehensive branch-wise placement analytics view with three
  * switchable sub-tabs: Engineering Departments, 5-Year Growth Trajectory,
  * and Sector-Wise Analytics.
