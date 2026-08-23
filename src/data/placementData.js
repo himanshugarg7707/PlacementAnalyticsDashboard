@@ -1,5 +1,11 @@
-// Realistic placement data for NIT Kurukshetra (2024-25 session)
-// All data is fictional but modeled on real patterns
+/**
+ * Placement Analytics Dataset & Historical Archives
+ * 
+ * Contributor: Himanshu Garg (himanshugarg7707@gmail.com)
+ * 
+ * Comprehensive dataset modeling real recruitment patterns, compensation tiers,
+ * branch eligibility, sector distribution, and 5-year trends for IIT Bombay.
+ */
 
 export const collegeInfo = {
   name: "Indian Institute of Technology Bombay",
