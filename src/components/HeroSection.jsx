@@ -4,6 +4,8 @@ import { collegeInfo } from '../data/placementData';
 /**
  * HeroSection Component
  *
+ * Contributor: Diya Arora (aroradiya187@gmail.com)
+ *
  * The main hero banner for the IIT Bombay Placement Portal.
  * Displays a campus photo showcase, animated placement metrics,
  * search functionality, and tier-based category filters.

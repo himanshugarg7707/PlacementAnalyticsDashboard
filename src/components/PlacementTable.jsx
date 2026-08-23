@@ -5,6 +5,8 @@ import CompanyLogo from './CompanyLogo';
 /**
  * PlacementTable Component
  *
+ * Contributor: Diya Arora (aroradiya187@gmail.com)
+ *
  * Renders the main recruiters directory table with comprehensive
  * filtering, sorting, pagination, and export capabilities.
  *
