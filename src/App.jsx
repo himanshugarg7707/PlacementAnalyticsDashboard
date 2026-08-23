@@ -1,3 +1,14 @@
+/**
+ * Placement Analytics Dashboard — Main Application Root
+ * 
+ * Project Contributors:
+ * - Alankrit Narang (narangalankrit123@gmail.com)
+ * - Diya Arora (aroradiya187@gmail.com)
+ * - Himanshu Garg (himanshugarg7707@gmail.com)
+ * - Yuvraj Yadav (yuvrajyadav.tech@gmail.com)
+ * 
+ * Indian Institute of Technology Bombay Placement Analytics Suite
+ */
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import Navbar from './components/Navbar';
 import HeroSection from './components/HeroSection';

@@ -1,6 +1,8 @@
 /**
  * Footer Component
  * 
+ * Contributor: Alankrit Narang (narangalankrit123@gmail.com)
+ * 
  * Sleek single-strip footer with gradient accent, inline tags, and copyright.
  * 
  * @param {Object} props

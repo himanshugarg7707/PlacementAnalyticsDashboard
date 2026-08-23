@@ -1,9 +1,11 @@
 /**
  * Navbar Component
  * 
+ * Contributor: Alankrit Narang (narangalankrit123@gmail.com)
+ * 
  * Unified top navigation bar for the IIT Bombay Placement Portal.
  * Provides sleek, centralized tab navigation between Recruiters Directory,
- * Branch Analytics, and Placement Insights views.
+ * Branch Analytics, and Placement Insights views with Change College & Login actions.
  */
 export default function Navbar({
   activeTab,

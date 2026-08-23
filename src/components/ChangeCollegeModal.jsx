@@ -3,6 +3,8 @@ import { useEffect } from 'react';
 /**
  * ChangeCollegeModal / ComingSoonModal Component
  *
+ * Contributor: Alankrit Narang (narangalankrit123@gmail.com)
+ *
  * Minimal, clean popup modal that informs the user that the
  * requested feature (e.g. Change College, Login) is coming soon.
  *
