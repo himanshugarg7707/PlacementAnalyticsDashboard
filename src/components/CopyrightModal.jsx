@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 /**
  * CopyrightModal Component
  *
+ * Contributor: Diya Arora (aroradiya187@gmail.com)
+ *
  * Clean, dark-themed copyright, legal terms, and institutional placement charter.
  * Contains the complete codified placement regulations, recruiter guidelines,
  * student code of conduct, telemetry privacy policy, and statutory disclaimers.
