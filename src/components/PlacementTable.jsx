@@ -1,36 +1,8 @@
+// Contributor: Diya Arora - Placement Records Table
 import { useState, useMemo, useEffect } from 'react';
 import { companies } from '../data/placementData';
 import CompanyLogo from './CompanyLogo';
 
-/**
- * PlacementTable Component
- *
- * Contributor: Diya Arora (aroradiya187@gmail.com)
- *
- * Renders the main recruiters directory table with comprehensive
- * filtering, sorting, pagination, and export capabilities.
- *
- * Features:
- * - Multi-criteria search (company name, sector, branch, tier)
- * - Tier-based filtering (All, Super Dream, Dream, Normal)
- * - Sector and branch dropdown filters
- * - Sortable columns (company name, sector, CTC, offers)
- * - Paginated results with configurable page size (15, 25, 50, All)
- * - CSV export of filtered data
- * - Feature Coming Soon toast notification on row click
- * - Bookmark/shortlist toggle per company with localStorage persistence
- * - Responsive table with horizontal scroll on mobile
- *
- * @param {Object} props
- * @param {string} props.searchTerm - Current search query
- * @param {Function} props.setSearchTerm - Callback to update search
- * @param {string} props.filterType - Active tier filter
- * @param {Function} props.setFilterType - Callback to update tier
- * @param {Array<number>} props.shortlisted - Array of shortlisted company IDs
- * @param {Function} props.onToggleShortlist - Callback to toggle bookmark
- * @param {Function} props.showToast - Callback to display toast notification
- * @returns {JSX.Element} Filterable, sortable placement records table
- */
 export default function PlacementTable({
   searchTerm,
   setSearchTerm,
@@ -42,13 +14,12 @@ export default function PlacementTable({
 }) {
   const [selectedSector, setSelectedSector] = useState('All');
   const [selectedBranch, setSelectedBranch] = useState('All');
-  const [ctcRange, setCtcRange] = useState('All'); // 'All' | '30+' | '20-30' | '10-20' | 'below10'
+  const [ctcRange, setCtcRange] = useState('All');
   const [sortField, setSortField] = useState('ctc');
   const [sortDir, setSortDir] = useState('desc');
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(25);
 
-  // Extract unique sectors & branches
   const uniqueSectors = useMemo(() => {
     const set = new Set(companies.map((c) => c.sector));
     return ['All', ...Array.from(set).sort()];
@@ -60,7 +31,6 @@ export default function PlacementTable({
     return ['All', ...Array.from(set).sort()];
   }, []);
 
-  // Filter & Sort
   const filteredCompanies = useMemo(() => {
     let list = [...companies];
 
@@ -75,14 +45,12 @@ export default function PlacementTable({
       );
     }
 
-    // Tier / Shortlist Filter
     if (filterType === 'Shortlisted') {
       list = list.filter((c) => shortlisted.includes(c.id));
     } else if (filterType !== 'All') {
       list = list.filter((c) => c.type === filterType);
     }
 
-    // CTC Range filter
     if (ctcRange === '30+') {
       list = list.filter((c) => c.ctc >= 30);
     } else if (ctcRange === '20-30') {
@@ -115,12 +83,10 @@ export default function PlacementTable({
     return list;
   }, [searchTerm, filterType, shortlisted, ctcRange, selectedSector, selectedBranch, sortField, sortDir]);
 
-  // Reset pagination on filter changes
   useEffect(() => {
     setCurrentPage(1);
   }, [searchTerm, filterType, ctcRange, selectedSector, selectedBranch, pageSize]);
 
-  // Pagination calculation
   const totalPages = pageSize === 'All' ? 1 : Math.ceil(filteredCompanies.length / pageSize);
   const paginatedCompanies = useMemo(() => {
     if (pageSize === 'All') return filteredCompanies;
@@ -184,7 +150,6 @@ export default function PlacementTable({
 
   return (
     <section id="placement-table-section" className="records-section">
-      {/* Top Controls Bar */}
       <div className="table-controls-bar">
         <div className="table-meta-info">
           <span className="results-count">
@@ -198,7 +163,6 @@ export default function PlacementTable({
         </div>
 
         <div className="table-right-controls">
-          {/* Quick CTC Bracket Filter */}
           <div className="select-wrap">
             <select
               className="minimal-select"
@@ -252,7 +216,6 @@ export default function PlacementTable({
         </div>
       </div>
 
-      {/* Main Table */}
       {filteredCompanies.length === 0 ? (
         <div className="minimal-empty-state">
           <span className="empty-state-icon">🔍</span>
@@ -301,7 +264,6 @@ export default function PlacementTable({
                       }}
                       className="clickable-row"
                     >
-                      {/* Shortlist Star Cell */}
                       <td
                         className="td-star-cell"
                         onClick={(e) => {
@@ -362,7 +324,6 @@ export default function PlacementTable({
             </table>
           </div>
 
-          {/* Minimal Pagination */}
           <div className="table-footer-bar">
             <div className="page-size-selector">
               <span>Show:</span>

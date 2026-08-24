@@ -1,21 +1,6 @@
+// Contributor: Alankrit Narang - Change College Modal
 import { useEffect } from 'react';
 
-/**
- * ChangeCollegeModal / ComingSoonModal Component
- *
- * Contributor: Alankrit Narang (narangalankrit123@gmail.com)
- *
- * Minimal, clean popup modal that informs the user that the
- * requested feature (e.g. Change College, Login) is coming soon.
- *
- * @param {Object} props
- * @param {string} [props.title='Feature Coming Soon'] - Modal title
- * @param {string} [props.description] - Description text
- * @param {string} [props.badge='Coming Soon'] - Badge pill text
- * @param {string} [props.emoji='✨'] - Emoji icon
- * @param {Function} props.onClose - Modal close handler
- * @returns {JSX.Element}
- */
 export default function ChangeCollegeModal({
   title = 'Feature Coming Soon',
   description = 'This feature is currently under development. Stay tuned for future updates!',
@@ -23,7 +8,6 @@ export default function ChangeCollegeModal({
   emoji = '✨',
   onClose,
 }) {
-  // Close modal on Escape key press and manage body scroll lock
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') onClose();
@@ -48,7 +32,6 @@ export default function ChangeCollegeModal({
         className="modal-content simple-coming-soon-modal"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Close Button */}
         <button
           className="modal-close-btn"
           onClick={onClose}

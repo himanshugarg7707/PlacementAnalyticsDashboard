@@ -1,10 +1,4 @@
-/**
- * Toast Component
- * 
- * Contributor: Yuvraj Yadav (yuvrajyadav.tech@gmail.com)
- * 
- * Global ephemeral notification banner with auto-dismiss timer and accessible ARIA live region.
- */
+// Contributor: Yuvraj Yadav - Toast Notification Component
 import { useEffect } from 'react';
 
 export default function Toast({ message, type = 'info', onClose }) {

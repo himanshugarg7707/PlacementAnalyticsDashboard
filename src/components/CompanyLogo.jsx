@@ -1,12 +1,4 @@
-/**
- * CompanyLogo Component
- * 
- * Contributor: Yuvraj Yadav (yuvrajyadav.tech@gmail.com)
- * 
- * High-fidelity vector SVG logo renderer and fallback generator for recruiters.
- * Maps company names to verified brand colors and official vector paths.
- */
-// Authentic company logo vector rendering & brand colors
+// Contributor: Yuvraj Yadav - Company Logo & Vector Icons
 const BRAND_LOGOS = {
   Google: {
     bg: '#ffffff',
@@ -188,7 +180,6 @@ export default function CompanyLogo({ company, size = 36 }) {
     );
   }
 
-  // Sector-based gradient fallback
   const fallbackGradient = SECTOR_GRADIENTS[company.sector] || 'linear-gradient(135deg, #0284c7, #38bdf8)';
   const initials = company.name
     .split(' ')

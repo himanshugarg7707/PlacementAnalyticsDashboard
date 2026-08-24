@@ -1,12 +1,4 @@
-/**
- * Placement Analytics Dataset & Historical Archives
- * 
- * Contributor: Himanshu Garg (himanshugarg7707@gmail.com)
- * 
- * Comprehensive dataset modeling real recruitment patterns, compensation tiers,
- * branch eligibility, sector distribution, and 5-year trends for IIT Bombay.
- */
-
+// Contributor: Himanshu Garg - Placement Dataset & Statistics
 export const collegeInfo = {
   name: "Indian Institute of Technology Bombay",
   shortName: "IIT Bombay",
@@ -2312,11 +2304,7 @@ export const yearWiseTrend = [
     highestPackage: 62.5,
     companiesVisited: 187,
   },
-];
-
-// ─────────────────────────────────────────────────────────────────────────────
-// INSTITUTIONAL PLACEMENT POLICIES & GUIDELINES DATA
-// ─────────────────────────────────────────────────────────────────────────────
+];
 
 export const placementPolicies = {
   tierDefinitions: [
@@ -2347,11 +2335,7 @@ export const placementPolicies = {
     "Minimum CGPA cutoff criteria are determined individually by visiting recruitment organizations.",
     "A 100% attendance is mandatory for registered pre-placement talks (PPTs) and online assessment rounds.",
   ],
-};
-
-// ─────────────────────────────────────────────────────────────────────────────
-// FREQUENTLY ASKED QUESTIONS (FAQS) DATA
-// ─────────────────────────────────────────────────────────────────────────────
+};
 
 export const placementFaqs = [
   {
@@ -2390,11 +2374,7 @@ export const placementFaqs = [
     question: "Do core engineering branches have access to software recruiter drives?",
     answer: "Over 80% of software and fintech recruiters allow students across all engineering branches (ECE, EE, ME, CE, PIE, BT) to register, provided they clear the initial coding assessment rounds.",
   },
-];
-
-// ─────────────────────────────────────────────────────────────────────────────
-// RECRUITMENT SEASON TIMELINE & MILESTONES
-// ─────────────────────────────────────────────────────────────────────────────
+];
 
 export const recruitmentMilestones = [
   {
@@ -2437,11 +2417,7 @@ export const recruitmentMilestones = [
       "Annual placement statistics compilation and audit report release",
     ],
   },
-];
-
-// ─────────────────────────────────────────────────────────────────────────────
-// DOMAIN-WISE SKILL & PREPARATION MATRIX
-// ─────────────────────────────────────────────────────────────────────────────
+];
 
 export const skillMatrixByDomain = [
   {
@@ -2492,11 +2468,7 @@ export const skillMatrixByDomain = [
     ],
     recommendedTools: ["Tableau", "PowerBI", "Figma", "Jira", "Excel / Sheets"],
   },
-];
-
-// ─────────────────────────────────────────────────────────────────────────────
-// ALUMNI MENTORSHIP & INTERVIEW PREP NETWORK
-// ─────────────────────────────────────────────────────────────────────────────
+];
 
 export const alumniMentorshipDirectory = [
   {
@@ -2559,11 +2531,7 @@ export const alumniMentorshipDirectory = [
     specialization: "Power Management ICs & Circuit Simulation",
     availability: "Core Electrical & Analog Electronics Prep",
   },
-];
-
-// ─────────────────────────────────────────────────────────────────────────────
-// DETAILED CORPORATE RECRUITER KNOWLEDGE BASE & HIRING PROFILES
-// ─────────────────────────────────────────────────────────────────────────────
+];
 
 export const detailedRecruiterProfiles = [
   {
@@ -2773,11 +2741,7 @@ export const detailedRecruiterProfiles = [
     minimumCpiCutoff: 6.5,
     benefitsPackage: ["Annual Performance Bonus", "Health Insurance", "Certification Sponsorships", "Flexible Remote Work"],
   },
-];
-
-// ─────────────────────────────────────────────────────────────────────────────
-// ACADEMIC DEPARTMENT CURRICULUM & CORE SPECIALIZATION MATRIX
-// ─────────────────────────────────────────────────────────────────────────────
+];
 
 export const departmentCurriculumMatrix = [
   {
@@ -2918,11 +2882,7 @@ export const departmentCurriculumMatrix = [
     ],
     industryPartners: ["Oracle", "Salesforce", "Cisco Systems", "Atlassian", "Paypal"],
   },
-];
-
-// ─────────────────────────────────────────────────────────────────────────────
-// HISTORICAL PLACEMENT DATA ARCHIVES (2015-16 TO 2024-25)
-// ─────────────────────────────────────────────────────────────────────────────
+];
 
 export const historicalPlacementArchives = [
   {
@@ -3045,11 +3005,7 @@ export const historicalPlacementArchives = [
     medianCtc: 9.6,
     participatingCompanies: 187,
   },
-];
-
-// ─────────────────────────────────────────────────────────────────────────────
-// COMPREHENSIVE TECHNICAL INTERVIEW QUESTION BANK
-// ─────────────────────────────────────────────────────────────────────────────
+];
 
 export const interviewQuestionBank = [
   {
@@ -3124,11 +3080,7 @@ export const interviewQuestionBank = [
     question: "Estimate the annual market size (in INR) for residential electric vehicle home charging stations across top 10 metro cities in India over the next 5 years.",
     conceptsTested: ["Top-down & Bottom-up Guesstimate", "Adoption Curves", "Unit Economics", "Sensitivity Analysis"],
   },
-];
-
-// ─────────────────────────────────────────────────────────────────────────────
-// SALARY DISTRIBUTION HISTOGRAM & STATISTICAL BUCKETS
-// ─────────────────────────────────────────────────────────────────────────────
+];
 
 export const salaryDistributionHistograms = [
   { bucket: "< 6 LPA", count: 184, percentage: 12.5, primarySectors: ["IT Services", "Civil Infrastructure"] },
@@ -3139,11 +3091,7 @@ export const salaryDistributionHistograms = [
   { bucket: "30 - 40 LPA", count: 72, percentage: 4.9, primarySectors: ["Super Dream Tech", "E-Commerce"] },
   { bucket: "40 - 50 LPA", count: 26, percentage: 1.8, primarySectors: ["Global Software Conglomerates", "AI Research"] },
   { bucket: "> 50 LPA", count: 12, percentage: 0.8, primarySectors: ["Quantitative Algorithmic Trading", "High-Frequency Finance"] },
-];
-
-// ─────────────────────────────────────────────────────────────────────────────
-// RECRUITER ACCREDITATION & JNF COMPLIANCE CHECKLIST
-// ─────────────────────────────────────────────────────────────────────────────
+];
 
 export const recruiterAccreditationChecklist = [
   { ruleId: "JNF-01", description: "Mandatory declaration of Gross CTC, Base Salary, and Variable Pay", complianceStatus: "Required" },
@@ -3152,11 +3100,7 @@ export const recruiterAccreditationChecklist = [
   { ruleId: "JNF-04", description: "Explicit disclosure of service bonds, probation durations, and penalties", complianceStatus: "Required" },
   { ruleId: "JNF-05", description: "Non-discrimination and equal opportunity employer certification", complianceStatus: "Required" },
   { ruleId: "JNF-06", description: "Work visa sponsorship and travel insurance for overseas postings", complianceStatus: "Mandatory for International" },
-];
-
-// ─────────────────────────────────────────────────────────────────────────────
-// GLOBAL OVERSEAS PLACEMENT & PURCHASING POWER PARITY MATRIX
-// ─────────────────────────────────────────────────────────────────────────────
+];
 
 export const globalRelocationMatrix = [
   {
@@ -3209,11 +3153,7 @@ export const globalRelocationMatrix = [
     visaCategory: "EU Blue Card",
     taxRateAverage: "35% – 42%",
   },
-];
-
-// ─────────────────────────────────────────────────────────────────────────────
-// PUBLIC SECTOR UNDERTAKINGS (PSUs) & NATIONAL RESEARCH LABORATORIES
-// ─────────────────────────────────────────────────────────────────────────────
+];
 
 export const psuAndResearchLabProfiles = [
   {
@@ -3320,11 +3260,7 @@ export const psuAndResearchLabProfiles = [
     securityClearanceRequired: "Standard PSU Security Check",
     coreProjectDomains: ["Supercritical Thermal Power", "Vande Bharat Propulsion Systems", "Naval Gun Mounts", "Solar PV Modules"],
   },
-];
-
-// ─────────────────────────────────────────────────────────────────────────────
-// STARTUP VENTURE DIRECTORY & HIGH-GROWTH TECH ACCREDITATION MATRIX
-// ─────────────────────────────────────────────────────────────────────────────
+];
 
 export const startupVentureDirectory = [
   {
@@ -3392,11 +3328,7 @@ export const startupVentureDirectory = [
     ctcRangeLpa: "18.0 – 32.0",
     esopPolicy: "Vesting aligned with orbital launch milestones and private equity rounds",
   },
-];
-
-// ─────────────────────────────────────────────────────────────────────────────
-// FIVE-YEAR SECTORAL GROWTH FORECASTS & TALENT DEMAND INDICES
-// ─────────────────────────────────────────────────────────────────────────────
+];
 
 export const sectorGrowthForecasts = [
   {
@@ -3434,11 +3366,7 @@ export const sectorGrowthForecasts = [
     topInDemandSkills: ["Kubernetes Operator Development", "Zero Trust Architecture", "Cloud Security Posture", "Distributed Consensus"],
     averagePackageTrajectoryLpa: { "2022": 16.5, "2023": 19.0, "2024": 22.0, "2025 (Proj)": 25.0, "2026 (Proj)": 28.5 },
   },
-];
-
-// ─────────────────────────────────────────────────────────────────────────────
-// SUMMER INTERNSHIP & PPO CONVERSION ANALYTICS
-// ─────────────────────────────────────────────────────────────────────────────
+];
 
 export const internshipConversionMetrics = [
   {
@@ -3501,11 +3429,7 @@ export const internshipConversionMetrics = [
     avgStipendPerMonthInr: 55000,
     highestStipendPerMonthInr: 150000,
   },
-];
-
-// ─────────────────────────────────────────────────────────────────────────────
-// DIAGNOSTIC MOCK ASSESSMENT RUBRICS & EVALUATION DIMENSIONS
-// ─────────────────────────────────────────────────────────────────────────────
+];
 
 export const diagnosticAssessmentRubrics = [
   {
@@ -3552,11 +3476,7 @@ export const diagnosticAssessmentRubrics = [
       { score: "Level 4 (9-10)", descriptor: "Inspiring leadership examples; deep self-awareness, customer obsession, and high integrity." },
     ],
   },
-];
-
-// ─────────────────────────────────────────────────────────────────────────────
-// INSTITUTIONAL PLACEMENT HONOR ROLL & APEX ACHIEVEMENTS
-// ─────────────────────────────────────────────────────────────────────────────
+];
 
 export const placementHonorRoll = [
   {
@@ -3596,7 +3516,4 @@ export const placementHonorRoll = [
     department: "Mechanical Engineering",
   },
 ];
-
-
-
 

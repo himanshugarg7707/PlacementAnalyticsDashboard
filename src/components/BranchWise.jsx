@@ -1,34 +1,11 @@
+// Contributor: Himanshu Garg - Branch-Wise Analytics Component
 import { useState, useMemo } from 'react';
 import { branches, yearWiseTrend, sectorWiseData } from '../data/placementData';
 
-/**
- * BranchWise Component
- *
- * Contributor: Himanshu Garg (himanshugarg7707@gmail.com)
- *
- * Renders a comprehensive branch-wise placement analytics view with three
- * switchable sub-tabs: Engineering Departments, 5-Year Growth Trajectory,
- * and Sector-Wise Analytics.
- *
- * Features:
- * - Department-level placement cards with progress bars and metrics
- * - Sortable by placement rate, average CTC, or highest CTC
- * - Searchable department list with real-time filtering
- * - Comparative horizontal bar charts for placement rate and average package
- * - 5-year historical trend cards with year-over-year growth indicators
- * - Sector-wise distribution cards showing offers, recruiters, and average CTC
- *
- * Data sources:
- * - branches: Array of department objects from placementData
- * - yearWiseTrend: 5-year historical placement data
- * - sectorWiseData: Industry sector breakdown
- *
- * @returns {JSX.Element} Branch-wise analytics section with sub-navigation
- */
 export default function BranchWise() {
-  const [activeSubTab, setActiveSubTab] = useState('departments'); // 'departments' | 'trends' | 'sectors'
+  const [activeSubTab, setActiveSubTab] = useState('departments');
   const [searchTerm, setSearchTerm] = useState('');
-  const [sortBy, setSortBy] = useState('rate'); // 'rate' | 'avg' | 'highest' | 'total'
+  const [sortBy, setSortBy] = useState('rate');
 
   const filteredBranches = useMemo(() => {
     let list = branches.filter(
@@ -56,10 +33,8 @@ export default function BranchWise() {
     return list;
   }, [searchTerm, sortBy]);
 
-
   return (
     <section className="branch-section" aria-labelledby="branches-heading">
-      {/* View Switcher Sub-Navigation */}
       <div className="insights-view-switcher">
         <button
           className={`insight-switch-btn ${activeSubTab === 'departments' ? 'active' : ''}`}
@@ -81,10 +56,8 @@ export default function BranchWise() {
         </button>
       </div>
 
-      {/* ── VIEW 1: ENGINEERING DEPARTMENTS ── */}
       {activeSubTab === 'departments' && (
         <div className="tab-pane-content">
-          {/* Header & Filter Row */}
           <div className="branch-header-row">
             <div>
               <div className="section-badge-pill">Departmental Analytics</div>
@@ -134,7 +107,6 @@ export default function BranchWise() {
             </div>
           </div>
 
-          {/* Branch Cards Grid */}
           <div className="branch-grid-layout">
             {filteredBranches.map((b) => {
               const placementRate = ((b.placed / b.totalStudents) * 100).toFixed(1);
@@ -155,7 +127,6 @@ export default function BranchWise() {
                     <span>{b.totalStudents} total students</span>
                   </div>
 
-                  {/* Stats Grid */}
                   <div className="branch-metrics-grid">
                     <div className="branch-metric-cell highlight">
                       <span className="b-label">Avg Package</span>
@@ -183,7 +154,6 @@ export default function BranchWise() {
         </div>
       )}
 
-      {/* ── VIEW 2: 5-YEAR GROWTH TRAJECTORY ── */}
       {activeSubTab === 'trends' && (
         <div className="tab-pane-content">
           <div className="branch-header-row">
@@ -241,7 +211,6 @@ export default function BranchWise() {
         </div>
       )}
 
-      {/* ── VIEW 3: SECTOR-WISE ANALYTICS ── */}
       {activeSubTab === 'sectors' && (
         <div className="tab-pane-content">
           <div className="branch-header-row">

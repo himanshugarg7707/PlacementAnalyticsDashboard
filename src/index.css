@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap');
 
-/* ── #CCE7EB ICE AQUA + DEEP BLACK MINIMAL THEME ── */
 :root {
   --bg-deep: #030608;
   --bg-surface: #070c0f;
@@ -12,8 +11,7 @@
   --text-secondary: #e2e8f0;
   --text-muted: #94a3b8;
   --text-light: #64748b;
-  
-  /* #CCE7EB Ice Aqua & Companion Palette */
+
   --aqua-primary: #CCE7EB;
   --aqua-light: #EEF9FA;
   --aqua-vibrant: #8CD3DD;
@@ -44,7 +42,6 @@
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* ── RESET & BASE ── */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -81,7 +78,6 @@ button, input, select {
   font-weight: 700;
 }
 
-/* ── AMBIENT GLOW ORBS (BREATHING BACKGROUND) ── */
 .ambient-glow {
   position: fixed;
   border-radius: 50%;
@@ -115,7 +111,6 @@ button, input, select {
   100% { transform: translateY(-10px) scale(0.95); opacity: 0.8; }
 }
 
-/* ── LAYOUT ── */
 .portal-container {
   min-height: 100vh;
   display: flex;
@@ -132,7 +127,6 @@ button, input, select {
   padding: 14px 24px 80px;
 }
 
-/* ── NAVBAR ── */
 .navbar {
   position: sticky;
   top: 0;
@@ -196,7 +190,6 @@ button, input, select {
   font-weight: 600;
 }
 
-/* Center Tabs */
 .nav-center-tabs {
   display: flex;
   background: rgba(10, 16, 21, 0.85);
@@ -279,7 +272,6 @@ button, input, select {
   100% { transform: scale(0.9); opacity: 0.8; }
 }
 
-/* ── HERO MASTER WRAPPER ── */
 .hero-master-wrapper {
   width: 100%;
   display: flex;
@@ -290,7 +282,6 @@ button, input, select {
   margin-bottom: 28px;
 }
 
-/* ── STANDALONE CAMPUS PHOTO SHOWCASE CARD ── */
 .campus-showcase-card {
   width: 100%;
   max-width: 1360px;
@@ -362,7 +353,6 @@ button, input, select {
   box-shadow: 0 0 8px var(--aqua-primary);
 }
 
-/* ── HERO CONTENT SECTION ── */
 .hero-content-section {
   width: 100%;
   max-width: 920px;
@@ -417,7 +407,6 @@ button, input, select {
   color: #ffffff;
 }
 
-/* 4-Metric Glass Bar */
 .hero-stats-glass-bar {
   display: flex;
   align-items: center;
@@ -480,7 +469,6 @@ button, input, select {
   background: var(--border-glass);
 }
 
-/* Search & Tier Pills */
 .hero-filter-bar {
   display: flex;
   flex-direction: column;
@@ -592,7 +580,6 @@ button, input, select {
   color: var(--aqua-primary);
 }
 
-/* ── RECORDS TABLE SECTION ── */
 .records-section {
   display: flex;
   flex-direction: column;
@@ -666,7 +653,6 @@ button, input, select {
   border-color: var(--aqua-primary);
 }
 
-/* ── TABLE CARD ── */
 .table-card {
   background: var(--bg-card);
   backdrop-filter: blur(14px);
@@ -731,7 +717,6 @@ button, input, select {
 .text-right { text-align: right; }
 .text-center { text-align: center; }
 
-/* Table Body */
 .clean-table tbody tr {
   border-bottom: 1px solid var(--border-light);
   transition: background 0.15s ease;
@@ -760,7 +745,6 @@ button, input, select {
   text-align: center;
 }
 
-/* Shortlist Star Cell */
 .td-star-cell {
   text-align: center;
   padding: 0 4px !important;
@@ -787,7 +771,6 @@ button, input, select {
   text-shadow: 0 0 8px rgba(251, 191, 36, 0.5);
 }
 
-/* Company Cell & Logos */
 .company-name-cell {
   display: flex;
   align-items: center;
@@ -813,7 +796,6 @@ button, input, select {
   font-size: 13px;
 }
 
-/* CTC Pill */
 .ctc-value-pill {
   display: inline-block;
   padding: 4px 10px;
@@ -847,7 +829,6 @@ button, input, select {
   font-size: 14px;
 }
 
-/* Clean Badges */
 .clean-badge {
   display: inline-block;
   padding: 3px 9px;
@@ -875,7 +856,6 @@ button, input, select {
   border: 1px solid var(--border-glass);
 }
 
-/* Branch Tags */
 .branch-tags-row {
   display: flex;
   flex-wrap: wrap;
@@ -899,7 +879,6 @@ button, input, select {
   font-weight: 700;
 }
 
-/* Status Pill */
 .status-pill {
   display: inline-flex;
   align-items: center;
@@ -940,7 +919,6 @@ button, input, select {
 }
 .status-pill.upcoming .status-dot { background: var(--aqua-primary); }
 
-/* Table Footer & Pagination */
 .table-footer-bar {
   display: flex;
   align-items: center;
@@ -1004,7 +982,6 @@ button, input, select {
   color: var(--text-muted);
 }
 
-/* Minimal Empty State */
 .minimal-empty-state {
   background: var(--bg-card);
   border: 1px dashed var(--border-glass);
@@ -1037,7 +1014,6 @@ button, input, select {
   transform: scale(1.04);
 }
 
-/* ── BRANCH-WISE SECTION & VIEW SWITCHER ── */
 .branch-section {
   display: flex;
   flex-direction: column;
@@ -1179,7 +1155,6 @@ button, input, select {
   font-weight: 800;
 }
 
-/* Branch Grid Layout */
 .branch-grid-layout {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -1310,7 +1285,6 @@ button, input, select {
   margin-top: 2px;
 }
 
-/* Branch Comparative Charts */
 .branch-charts-duo {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1381,7 +1355,6 @@ button, input, select {
   color: #ffffff;
 }
 
-/* ── 5-YEAR TRENDS VIEW ── */
 .trends-grid-cards {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -1497,7 +1470,6 @@ button, input, select {
   font-weight: 700;
 }
 
-/* ── SECTOR ANALYTICS VIEW ── */
 .sectors-grid-layout {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -1586,7 +1558,6 @@ button, input, select {
   border-radius: var(--radius-full);
 }
 
-/* ── MODAL DRAWER ── */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -1689,7 +1660,6 @@ button, input, select {
   color: var(--text-muted);
 }
 
-/* Modal Sub Tabs */
 .modal-sub-tabs {
   display: flex;
   border-bottom: 1px solid var(--border-glass);
@@ -1814,7 +1784,6 @@ button, input, select {
   color: var(--aqua-primary);
 }
 
-/* Interview Stage Visualizer in Modal */
 .rounds-timeline-card {
   padding: 12px;
   background: rgba(255, 255, 255, 0.03);
@@ -1955,7 +1924,6 @@ button, input, select {
   cursor: pointer;
 }
 
-/* ── TOAST NOTIFICATIONS ── */
 .toast-floating-container {
   position: fixed;
   top: 24px;
@@ -2010,7 +1978,6 @@ button, input, select {
   color: #ffffff;
 }
 
-/* ── FOOTER ── */
 .site-footer {
   background: linear-gradient(180deg, #060d12 0%, #030608 100%);
   margin-top: auto;
@@ -2148,7 +2115,6 @@ button, input, select {
   user-select: none;
 }
 
-/* ── SIMPLE DARK-THEMED LEGAL / COPYRIGHT MODAL ── */
 .simple-legal-modal {
   max-width: 580px;
   width: 92%;
@@ -2261,13 +2227,11 @@ button, input, select {
   font-size: 12px;
 }
 
-/* ── ANIMATIONS ── */
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
 }
 
-/* ── RESPONSIVE ── */
 @media (max-width: 900px) {
   .branch-charts-duo {
     grid-template-columns: 1fr;
@@ -2318,9 +2282,6 @@ button, input, select {
   }
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   ── PLACEMENT INSIGHTS & ANALYTICS (ORIGINAL THEME) ──
-   ═══════════════════════════════════════════════════════════════════════════ */
 .insights-container {
   display: flex;
   flex-direction: column;
@@ -2364,7 +2325,6 @@ button, input, select {
   color: var(--aqua-primary);
 }
 
-/* Key Metric KPI Cards */
 .insight-kpi-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -2462,7 +2422,6 @@ button, input, select {
   margin-bottom: 18px;
 }
 
-/* Graph 1: Sector Bar Chart */
 .sector-bar-chart {
   display: flex;
   flex-direction: column;
@@ -2512,7 +2471,6 @@ button, input, select {
   font-family: var(--font-mono);
 }
 
-/* Graph 2: CTC Histogram */
 .ctc-histogram {
   display: flex;
   align-items: flex-end;
@@ -2551,7 +2509,6 @@ button, input, select {
   text-align: center;
 }
 
-/* Dual Panel Layout (Leaderboards) */
 .insights-dual-panel {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -2621,7 +2578,6 @@ button, input, select {
   white-space: nowrap;
 }
 
-/* Branch Performance Heatmap */
 .branch-heatmap-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
@@ -2681,7 +2637,6 @@ button, input, select {
   color: var(--text-muted);
 }
 
-/* 5-Year Trend Table */
 .trend-table-wrapper {
   overflow-x: auto;
 }
@@ -2773,7 +2728,6 @@ button, input, select {
   }
 }
 
-/* ── TABLET BREAKPOINT ── */
 @media (max-width: 1024px) {
   .branch-grid-layout {
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -2813,7 +2767,6 @@ button, input, select {
   }
 }
 
-/* ── ACCESSIBILITY FOCUS STYLES ── */
 *:focus-visible {
   outline: 2px solid var(--aqua-primary);
   outline-offset: 2px;
@@ -2828,7 +2781,6 @@ select:focus-visible {
   border-radius: var(--radius-sm);
 }
 
-/* ── PRINT STYLES ── */
 @media print {
   .ambient-glow,
   .navbar,
@@ -2858,18 +2810,15 @@ select:focus-visible {
   }
 }
 
-/* ── SMOOTH SCROLL BEHAVIOR ── */
 html {
   scroll-behavior: smooth;
 }
 
-/* ── SELECTION HIGHLIGHT ── */
 ::selection {
   background: var(--aqua-deep);
   color: #fff;
 }
 
-/* ── SCROLLBAR CUSTOMIZATION ── */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -2888,7 +2837,6 @@ html {
   background: var(--aqua-border);
 }
 
-/* ── CHANGE COLLEGE NAVBAR BUTTON & POPUP MODAL ── */
 .btn-change-college {
   display: inline-flex;
   align-items: center;
@@ -2962,7 +2910,6 @@ html {
   letter-spacing: -0.1px;
 }
 
-/* ── SIMPLE 'FEATURE COMING SOON' POPUP MODAL ── */
 .simple-coming-soon-modal {
   max-width: 440px;
   width: 92%;

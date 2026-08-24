@@ -1,22 +1,6 @@
+// Contributor: Diya Arora - Copyright & Legal Terms Modal
 import { useEffect, useState } from 'react';
 
-/**
- * CopyrightModal Component
- *
- * Contributor: Diya Arora (aroradiya187@gmail.com)
- *
- * Clean, dark-themed copyright, legal terms, and institutional placement charter.
- * Contains the complete codified placement regulations, recruiter guidelines,
- * student code of conduct, telemetry privacy policy, and statutory disclaimers.
- *
- * Indian Institute of Technology Bombay • Training & Placement Cell
- * Main Building, Powai, Mumbai 400076, Maharashtra, India.
- *
- * @param {Object} props
- * @param {Function} props.onClose - Modal dismissal callback
- * @param {Function} [props.showToast] - Global toast notification callback
- * @returns {JSX.Element}
- */
 export default function CopyrightModal({ onClose, showToast }) {
   const [copied, setCopied] = useState(false);
 
@@ -55,7 +39,6 @@ export default function CopyrightModal({ onClose, showToast }) {
         style={{ maxWidth: '840px', width: '94%', maxHeight: '90vh' }}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Close Button */}
         <button
           className="modal-close-btn"
           onClick={onClose}
@@ -64,7 +47,6 @@ export default function CopyrightModal({ onClose, showToast }) {
           ✕
         </button>
 
-        {/* Modal Header */}
         <div className="simple-legal-header">
           <div className="simple-legal-icon">🏛️</div>
           <div>
@@ -77,10 +59,8 @@ export default function CopyrightModal({ onClose, showToast }) {
           </div>
         </div>
 
-        {/* Modal Body with Full Written Content */}
         <div className="simple-legal-body" style={{ maxHeight: '70vh', overflowY: 'auto' }}>
           
-          {/* SECTION 1 */}
           <section className="simple-legal-section">
             <h3 className="simple-legal-label">1. Statutory Authority, Preamble &amp; Institutional Scope</h3>
             <p>
@@ -115,7 +95,6 @@ export default function CopyrightModal({ onClose, showToast }) {
             </p>
           </section>
 
-          {/* SECTION 2 */}
           <section className="simple-legal-section">
             <h3 className="simple-legal-label">2. Comprehensive Definitions &amp; Analytical Nomenclature</h3>
             <p>
@@ -168,7 +147,6 @@ export default function CopyrightModal({ onClose, showToast }) {
             </p>
           </section>
 
-          {/* SECTION 3 */}
           <section className="simple-legal-section">
             <h3 className="simple-legal-label">3. Student Eligibility, Verification &amp; Master Dossier</h3>
             <p>
@@ -191,7 +169,6 @@ export default function CopyrightModal({ onClose, showToast }) {
             </p>
           </section>
 
-          {/* SECTION 4 */}
           <section className="simple-legal-section">
             <h3 className="simple-legal-label">4. The Universal One-Student-One-Offer Doctrine</h3>
             <p>
@@ -214,7 +191,6 @@ export default function CopyrightModal({ onClose, showToast }) {
             </p>
           </section>
 
-          {/* SECTION 5 */}
           <section className="simple-legal-section">
             <h3 className="simple-legal-label">5. Assessment Integrity &amp; Anti-Cheating Directives</h3>
             <p>
@@ -234,7 +210,6 @@ export default function CopyrightModal({ onClose, showToast }) {
             </p>
           </section>
 
-          {/* SECTION 6 */}
           <section className="simple-legal-section">
             <h3 className="simple-legal-label">6. Disciplinary Sanctions, Penalties &amp; Appeals</h3>
             <p>
@@ -253,7 +228,6 @@ export default function CopyrightModal({ onClose, showToast }) {
             </p>
           </section>
 
-          {/* SECTION 7 */}
           <section className="simple-legal-section">
             <h3 className="simple-legal-label">7. Corporate Recruiter Accreditation &amp; JNF Standards</h3>
             <p>
@@ -276,7 +250,6 @@ export default function CopyrightModal({ onClose, showToast }) {
             </p>
           </section>
 
-          {/* SECTION 8 */}
           <section className="simple-legal-section">
             <h3 className="simple-legal-label">8. Slot Allocation &amp; Day 0 Scheduling Matrix</h3>
             <p>
@@ -293,7 +266,6 @@ export default function CopyrightModal({ onClose, showToast }) {
             </p>
           </section>
 
-          {/* SECTION 9 */}
           <section className="simple-legal-section">
             <h3 className="simple-legal-label">9. Summer Internships &amp; Pre-Placement Offers (PPOs)</h3>
             <p>
@@ -310,7 +282,6 @@ export default function CopyrightModal({ onClose, showToast }) {
             </p>
           </section>
 
-          {/* SECTION 10 */}
           <section className="simple-legal-section">
             <h3 className="simple-legal-label">10. Department-Specific Regulations &amp; Degree Cohorts</h3>
             <p>
@@ -333,7 +304,6 @@ export default function CopyrightModal({ onClose, showToast }) {
             </p>
           </section>
 
-          {/* SECTION 11 */}
           <section className="simple-legal-section">
             <h3 className="simple-legal-label">11. Public Sector Undertakings (PSUs) &amp; Research Labs</h3>
             <p>
@@ -347,7 +317,6 @@ export default function CopyrightModal({ onClose, showToast }) {
             </p>
           </section>
 
-          {/* SECTION 12 */}
           <section className="simple-legal-section">
             <h3 className="simple-legal-label">12. International Placements &amp; Overseas Postings</h3>
             <p>
@@ -361,7 +330,6 @@ export default function CopyrightModal({ onClose, showToast }) {
             </p>
           </section>
 
-          {/* SECTION 13 */}
           <section className="simple-legal-section">
             <h3 className="simple-legal-label">13. Startups &amp; High-Growth Venture Recruitment Policy</h3>
             <p>
@@ -375,7 +343,6 @@ export default function CopyrightModal({ onClose, showToast }) {
             </p>
           </section>
 
-          {/* SECTION 14 */}
           <section className="simple-legal-section">
             <h3 className="simple-legal-label">14. Remote, Hybrid &amp; Distributed Workplace Guidelines</h3>
             <p>
@@ -389,7 +356,6 @@ export default function CopyrightModal({ onClose, showToast }) {
             </p>
           </section>
 
-          {/* SECTION 15 */}
           <section className="simple-legal-section">
             <h3 className="simple-legal-label">15. Higher Studies &amp; Competitive Exam De-Registration</h3>
             <p>
@@ -400,7 +366,6 @@ export default function CopyrightModal({ onClose, showToast }) {
             </p>
           </section>
 
-          {/* SECTION 16 */}
           <section className="simple-legal-section">
             <h3 className="simple-legal-label">16. Data Governance &amp; DPDP Act, 2023 Compliance</h3>
             <p>
@@ -420,7 +385,6 @@ export default function CopyrightModal({ onClose, showToast }) {
             </p>
           </section>
 
-          {/* SECTION 17 */}
           <section className="simple-legal-section">
             <h3 className="simple-legal-label">17. Intellectual Property, Trademarks &amp; Copyright</h3>
             <p>
@@ -437,7 +401,6 @@ export default function CopyrightModal({ onClose, showToast }) {
             </p>
           </section>
 
-          {/* SECTION 18 */}
           <section className="simple-legal-section">
             <h3 className="simple-legal-label">18. Disclaimer of Warranties &amp; Limitation of Liability</h3>
             <p>
@@ -457,7 +420,6 @@ export default function CopyrightModal({ onClose, showToast }) {
             </p>
           </section>
 
-          {/* SECTION 19 */}
           <section className="simple-legal-section">
             <h3 className="simple-legal-label">19. Dispute Resolution, Arbitration &amp; Jurisdiction</h3>
             <p>
@@ -471,7 +433,6 @@ export default function CopyrightModal({ onClose, showToast }) {
             </p>
           </section>
 
-          {/* SECTION 20 */}
           <section className="simple-legal-section">
             <h3 className="simple-legal-label">20. Placement Sanctions &amp; Disciplinary Penalty Matrix</h3>
             <p>
@@ -494,7 +455,6 @@ export default function CopyrightModal({ onClose, showToast }) {
             </p>
           </section>
 
-          {/* SECTION 21 */}
           <section className="simple-legal-section">
             <h3 className="simple-legal-label">21. Equal Opportunity, Diversity &amp; Anti-Harassment Safeguards</h3>
             <p>
@@ -508,7 +468,6 @@ export default function CopyrightModal({ onClose, showToast }) {
             </p>
           </section>
 
-          {/* SECTION 22 */}
           <section className="simple-legal-section">
             <h3 className="simple-legal-label">22. Anti-Ragging &amp; Placement Decorum</h3>
             <p>
@@ -519,7 +478,6 @@ export default function CopyrightModal({ onClose, showToast }) {
             </p>
           </section>
 
-          {/* SECTION 23 */}
           <section className="simple-legal-section">
             <h3 className="simple-legal-label">23. Whistleblower Safeguards &amp; Ombudsman Reporting</h3>
             <p>
@@ -530,7 +488,6 @@ export default function CopyrightModal({ onClose, showToast }) {
             </p>
           </section>
 
-          {/* SECTION 24 */}
           <section className="simple-legal-section">
             <h3 className="simple-legal-label">24. Frequently Asked Questions &amp; Placement Directives (Part I)</h3>
             <p>
@@ -595,7 +552,6 @@ export default function CopyrightModal({ onClose, showToast }) {
             </p>
           </section>
 
-          {/* SECTION 25 */}
           <section className="simple-legal-section">
             <h3 className="simple-legal-label">25. Pre-Employment Screening &amp; Background Verification (BGV)</h3>
             <p>
@@ -609,7 +565,6 @@ export default function CopyrightModal({ onClose, showToast }) {
             </p>
           </section>
 
-          {/* SECTION 26 */}
           <section className="simple-legal-section">
             <h3 className="simple-legal-label">26. Pre-Season Career Development &amp; Alumni Mentorship</h3>
             <p>
@@ -623,7 +578,6 @@ export default function CopyrightModal({ onClose, showToast }) {
             </p>
           </section>
 
-          {/* SECTION 27 */}
           <section className="simple-legal-section">
             <h3 className="simple-legal-label">27. Academic Degree Requirements &amp; Thesis Clearance</h3>
             <p>
@@ -637,7 +591,6 @@ export default function CopyrightModal({ onClose, showToast }) {
             </p>
           </section>
 
-          {/* SECTION 28 */}
           <section className="simple-legal-section">
             <h3 className="simple-legal-label">28. Placement Calendar, Milestones &amp; Operational Phases</h3>
             <p>
@@ -651,7 +604,6 @@ export default function CopyrightModal({ onClose, showToast }) {
             </p>
           </section>
 
-          {/* SECTION 29 */}
           <section className="simple-legal-section">
             <h3 className="simple-legal-label">29. Statutory Archival &amp; Right to Information (RTI Act, 2005)</h3>
             <p>
@@ -662,7 +614,6 @@ export default function CopyrightModal({ onClose, showToast }) {
             </p>
           </section>
 
-          {/* SECTION 30 */}
           <section className="simple-legal-section">
             <h3 className="simple-legal-label">30. Policy Directives &amp; FAQ Matrix (Part II)</h3>
             <p>
@@ -707,7 +658,6 @@ export default function CopyrightModal({ onClose, showToast }) {
             </p>
           </section>
 
-          {/* SECTION 31 */}
           <section className="simple-legal-section">
             <h3 className="simple-legal-label">31. Startup Incubation (SINE IIT Bombay) &amp; Deferred Placement</h3>
             <p>
@@ -721,7 +671,6 @@ export default function CopyrightModal({ onClose, showToast }) {
             </p>
           </section>
 
-          {/* SECTION 32 */}
           <section className="simple-legal-section">
             <h3 className="simple-legal-label">32. Laboratory Work &amp; Sponsored Research Redaction</h3>
             <p>
@@ -732,7 +681,6 @@ export default function CopyrightModal({ onClose, showToast }) {
             </p>
           </section>
 
-          {/* SECTION 33 */}
           <section className="simple-legal-section">
             <h3 className="simple-legal-label">33. Multi-Tier Grievance Redressal Mechanism</h3>
             <p>
@@ -746,7 +694,6 @@ export default function CopyrightModal({ onClose, showToast }) {
             </p>
           </section>
 
-          {/* SECTION 34 */}
           <section className="simple-legal-section">
             <h3 className="simple-legal-label">34. Emergency Health, Safety &amp; Virtual Interview Protocols</h3>
             <p>
@@ -760,7 +707,6 @@ export default function CopyrightModal({ onClose, showToast }) {
             </p>
           </section>
 
-          {/* SECTION 35 */}
           <section className="simple-legal-section">
             <h3 className="simple-legal-label">35. Intellectual Property &amp; Patent Disclosures</h3>
             <p>
@@ -771,7 +717,6 @@ export default function CopyrightModal({ onClose, showToast }) {
             </p>
           </section>
 
-          {/* SECTION 36 */}
           <section className="simple-legal-section">
             <h3 className="simple-legal-label">36. Multi-Program Academic Registration &amp; Joint Degrees</h3>
             <p>
@@ -782,7 +727,6 @@ export default function CopyrightModal({ onClose, showToast }) {
             </p>
           </section>
 
-          {/* SECTION 37 */}
           <section className="simple-legal-section">
             <h3 className="simple-legal-label">37. Workplace Safety &amp; Industrial Hazards Induction</h3>
             <p>
@@ -793,7 +737,6 @@ export default function CopyrightModal({ onClose, showToast }) {
             </p>
           </section>
 
-          {/* SECTION 38 */}
           <section className="simple-legal-section">
             <h3 className="simple-legal-label">38. Alumni Career Transition &amp; Lateral Placement Services</h3>
             <p>
@@ -804,7 +747,6 @@ export default function CopyrightModal({ onClose, showToast }) {
             </p>
           </section>
 
-          {/* SECTION 39 */}
           <section className="simple-legal-section">
             <h3 className="simple-legal-label">39. Corporate CSR, Diversity &amp; Campus Partnerships</h3>
             <p>
@@ -815,7 +757,6 @@ export default function CopyrightModal({ onClose, showToast }) {
             </p>
           </section>
 
-          {/* SECTION 40 */}
           <section className="simple-legal-section">
             <h3 className="simple-legal-label">40. Comprehensive Institutional Policy FAQ (Part III)</h3>
             <p>
@@ -840,7 +781,6 @@ export default function CopyrightModal({ onClose, showToast }) {
             </p>
           </section>
 
-          {/* SECTION 41 */}
           <section className="simple-legal-section">
             <h3 className="simple-legal-label">41. Standing Disciplinary Committee Hearing Bylaws</h3>
             <p>
@@ -851,7 +791,6 @@ export default function CopyrightModal({ onClose, showToast }) {
             </p>
           </section>
 
-          {/* SECTION 42 */}
           <section className="simple-legal-section">
             <h3 className="simple-legal-label">42. Business Continuity, Force Majeure &amp; Epidemic Protocols</h3>
             <p>
@@ -862,7 +801,6 @@ export default function CopyrightModal({ onClose, showToast }) {
             </p>
           </section>
 
-          {/* SECTION 43 */}
           <section className="simple-legal-section">
             <h3 className="simple-legal-label">43. Annual Placement Broadsheet Archival Norms</h3>
             <p>
@@ -873,7 +811,6 @@ export default function CopyrightModal({ onClose, showToast }) {
             </p>
           </section>
 
-          {/* SECTION 44 */}
           <section className="simple-legal-section">
             <h3 className="simple-legal-label">44. Summary of Disciplinary Penalty Tariff Points</h3>
             <p>
@@ -893,7 +830,6 @@ export default function CopyrightModal({ onClose, showToast }) {
             </p>
           </section>
 
-          {/* SECTION 45 */}
           <section className="simple-legal-section">
             <h3 className="simple-legal-label">45. Candidate Health Insurance &amp; Overseas Travel Protection</h3>
             <p>
@@ -904,7 +840,6 @@ export default function CopyrightModal({ onClose, showToast }) {
             </p>
           </section>
 
-          {/* SECTION 46 */}
           <section className="simple-legal-section">
             <h3 className="simple-legal-label">46. Quantitative Finance &amp; Algorithmic Research Test Protocols</h3>
             <p>
@@ -915,7 +850,6 @@ export default function CopyrightModal({ onClose, showToast }) {
             </p>
           </section>
 
-          {/* SECTION 47 */}
           <section className="simple-legal-section">
             <h3 className="simple-legal-label">47. Student Placement Volunteer Charter &amp; Ethical Oath</h3>
             <p>
@@ -929,7 +863,6 @@ export default function CopyrightModal({ onClose, showToast }) {
             </p>
           </section>
 
-          {/* SECTION 48 */}
           <section className="simple-legal-section">
             <h3 className="simple-legal-label">48. Multi-Sector Analytics &amp; Benchmark Reporting Directives</h3>
             <p>
@@ -940,7 +873,6 @@ export default function CopyrightModal({ onClose, showToast }) {
             </p>
           </section>
 
-          {/* SECTION 49 */}
           <section className="simple-legal-section">
             <h3 className="simple-legal-label">49. Executive Summary of Candidate Responsibilities</h3>
             <p>
@@ -960,7 +892,6 @@ export default function CopyrightModal({ onClose, showToast }) {
             </p>
           </section>
 
-          {/* SECTION 50 */}
           <section className="simple-legal-section">
             <h3 className="simple-legal-label">50. Defense Sponsored Candidates &amp; Armed Forces Officers</h3>
             <p>
@@ -971,7 +902,6 @@ export default function CopyrightModal({ onClose, showToast }) {
             </p>
           </section>
 
-          {/* SECTION 51 */}
           <section className="simple-legal-section">
             <h3 className="simple-legal-label">51. International Tax Treaties &amp; Double Taxation Relief (DTAA)</h3>
             <p>
@@ -982,7 +912,6 @@ export default function CopyrightModal({ onClose, showToast }) {
             </p>
           </section>
 
-          {/* SECTION 52 */}
           <section className="simple-legal-section">
             <h3 className="simple-legal-label">52. Corporate Feedback Loops &amp; Recruiter Audit</h3>
             <p>
@@ -993,7 +922,6 @@ export default function CopyrightModal({ onClose, showToast }) {
             </p>
           </section>
 
-          {/* SECTION 53 */}
           <section className="simple-legal-section">
             <h3 className="simple-legal-label">53. High-Performance Computing (HPC) &amp; Computational Infrastructure</h3>
             <p>
@@ -1004,7 +932,6 @@ export default function CopyrightModal({ onClose, showToast }) {
             </p>
           </section>
 
-          {/* SECTION 54 */}
           <section className="simple-legal-section">
             <h3 className="simple-legal-label">54. Non-Disclosure Agreements (NDAs) &amp; Test Security</h3>
             <p>
@@ -1015,7 +942,6 @@ export default function CopyrightModal({ onClose, showToast }) {
             </p>
           </section>
 
-          {/* SECTION 55 */}
           <section className="simple-legal-section">
             <h3 className="simple-legal-label">55. Multi-Stage Technical Interview Protocols &amp; Debriefings</h3>
             <p>
@@ -1026,7 +952,6 @@ export default function CopyrightModal({ onClose, showToast }) {
             </p>
           </section>
 
-          {/* SECTION 56 */}
           <section className="simple-legal-section">
             <h3 className="simple-legal-label">56. Electronic Document Security &amp; Digital Signatures</h3>
             <p>
@@ -1037,7 +962,6 @@ export default function CopyrightModal({ onClose, showToast }) {
             </p>
           </section>
 
-          {/* SECTION 57 */}
           <section className="simple-legal-section">
             <h3 className="simple-legal-label">57. Data Subject Access Requests (DSAR) &amp; Privacy Procedures</h3>
             <p>
@@ -1048,7 +972,6 @@ export default function CopyrightModal({ onClose, showToast }) {
             </p>
           </section>
 
-          {/* SECTION 58 */}
           <section className="simple-legal-section">
             <h3 className="simple-legal-label">58. Comprehensive Institutional Policy FAQ (Part IV)</h3>
             <p>
@@ -1073,7 +996,6 @@ export default function CopyrightModal({ onClose, showToast }) {
             </p>
           </section>
 
-          {/* SECTION 59 */}
           <section className="simple-legal-section">
             <h3 className="simple-legal-label">59. Master Placement Checklist for Registered Candidates</h3>
             <p>
@@ -1093,7 +1015,6 @@ export default function CopyrightModal({ onClose, showToast }) {
             </p>
           </section>
 
-          {/* SECTION 60 */}
           <section className="simple-legal-section">
             <h3 className="simple-legal-label">60. Institutional Directorate, Standing Officers &amp; Physical Address</h3>
             <div className="simple-legal-contact-row">
@@ -1129,7 +1050,6 @@ export default function CopyrightModal({ onClose, showToast }) {
           </section>
         </div>
 
-        {/* Modal Footer */}
         <div className="simple-legal-footer">
           <button
             type="button"

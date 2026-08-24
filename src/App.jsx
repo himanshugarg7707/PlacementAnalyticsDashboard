@@ -1,14 +1,4 @@
-/**
- * Placement Analytics Dashboard — Main Application Root
- * 
- * Project Contributors:
- * - Alankrit Narang (narangalankrit123@gmail.com)
- * - Diya Arora (aroradiya187@gmail.com)
- * - Himanshu Garg (himanshugarg7707@gmail.com)
- * - Yuvraj Yadav (yuvrajyadav.tech@gmail.com)
- * 
- * Indian Institute of Technology Bombay Placement Analytics Suite
- */
+// Contributors: Alankrit Narang (App & Insights), Diya Arora (Hero & Table), Himanshu Garg (Branches & Data), Yuvraj Yadav (Logos & Toast)
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import Navbar from './components/Navbar';
 import HeroSection from './components/HeroSection';
@@ -27,38 +17,19 @@ import {
   yearWiseTrend,
 } from './data/placementData';
 
-// ─────────────────────────────────────────────────────────────────────────────
-// CONSTANTS
-// ─────────────────────────────────────────────────────────────────────────────
-
 const TAB_CONFIG = [
   { id: 'recruiters', label: 'Recruiters Directory', icon: '🏢', shortcut: '1' },
   { id: 'branches', label: 'Branch Analytics', icon: '🎓', shortcut: '2' },
   { id: 'insights', label: 'Placement Insights', icon: '📊', shortcut: '3' },
 ];
 
-// ─────────────────────────────────────────────────────────────────────────────
-// SUB-COMPONENT: PLACEMENT INSIGHTS & ANALYTICS DASHBOARD
-// ─────────────────────────────────────────────────────────────────────────────
-
-/**
- * PlacementInsights Component
- *
- * Data-driven analytics module computing live insights from placement records.
- * Features sector distribution bar chart, 5-year trend sparklines, placement
- * health gauges, top recruiter leaderboard, branch heatmap, and key stats
- * cards — all derived from the placement dataset with zero external deps.
- */
 function PlacementInsights({ onSelectCompany, showToast }) {
   const [insightFilter, setInsightFilter] = useState('all');
   const [expandedInsight, setExpandedInsight] = useState(null);
 
-  // ── Computed Analytics ──
   const analytics = useMemo(() => {
-    // Placement Rate
     const placementRate = ((collegeInfo.totalPlaced / collegeInfo.totalStudents) * 100).toFixed(1);
 
-    // Sector breakdown
     const sectorBreakdown = sectorWiseData
       .map((s) => ({
         ...s,
@@ -66,17 +37,14 @@ function PlacementInsights({ onSelectCompany, showToast }) {
       }))
       .sort((a, b) => b.offers - a.offers);
 
-    // Top 10 highest-paying companies
     const topPayingCompanies = [...companies]
       .sort((a, b) => b.ctc - a.ctc)
       .slice(0, 10);
 
-    // Top 10 by volume (most offers)
     const topHiringCompanies = [...companies]
       .sort((a, b) => b.studentsHired - a.studentsHired)
       .slice(0, 10);
 
-    // Branch-wise placement rates
     const branchPerformance = branches.map((b) => {
       const placedCount = b.placed ?? b.studentsPlaced ?? 0;
       const rate = b.totalStudents > 0 ? ((placedCount / b.totalStudents) * 100).toFixed(1) : '0.0';
@@ -88,14 +56,12 @@ function PlacementInsights({ onSelectCompany, showToast }) {
       };
     }).sort((a, b) => parseFloat(b.placementRate) - parseFloat(a.placementRate));
 
-    // Offer tier distribution
     const tierDistribution = [
       { tier: 'Super Dream', count: collegeInfo.superDreamOffers, color: '#34d399' },
       { tier: 'Dream', count: collegeInfo.dreamOffers, color: '#60a5fa' },
       { tier: 'Normal', count: collegeInfo.normalOffers, color: '#94a3b8' },
     ];
 
-    // Year-over-year growth
     const yoyGrowth = yearWiseTrend.map((y, i) => {
       const prev = yearWiseTrend[i - 1];
       return {
@@ -105,7 +71,6 @@ function PlacementInsights({ onSelectCompany, showToast }) {
       };
     });
 
-    // CTC distribution buckets
     const ctcBuckets = [
       { range: '< 6 LPA', min: 0, max: 6, count: 0, color: '#94a3b8' },
       { range: '6–10 LPA', min: 6, max: 10, count: 0, color: '#60a5fa' },
@@ -119,7 +84,6 @@ function PlacementInsights({ onSelectCompany, showToast }) {
       if (bucket) bucket.count++;
     });
 
-    // Key insight cards
     const keyInsights = [
       {
         id: 'placement-rate',
@@ -184,10 +148,8 @@ function PlacementInsights({ onSelectCompany, showToast }) {
     };
   }, []);
 
-
   return (
     <div className="insights-container">
-      {/* Header */}
       <div className="insights-header">
         <div>
           <span className="section-badge-pill">Analytics Intelligence</span>
@@ -210,7 +172,6 @@ function PlacementInsights({ onSelectCompany, showToast }) {
         </div>
       </div>
 
-      {/* Key Metric Cards */}
       <div className="insight-kpi-grid">
         {analytics.keyInsights.map((card) => (
           <div
@@ -229,10 +190,8 @@ function PlacementInsights({ onSelectCompany, showToast }) {
         ))}
       </div>
 
-      {/* Dual Panel Leaderboards */}
       {(insightFilter === 'all' || insightFilter === 'leaderboards') && (
         <div className="insights-dual-panel">
-          {/* Top Paying Leaderboard */}
           <div className="insight-section insight-half">
             <h3 className="insight-section-title">💎 Top 10 Highest-Paying Recruiters</h3>
             <div className="leaderboard-list">
@@ -251,7 +210,6 @@ function PlacementInsights({ onSelectCompany, showToast }) {
             </div>
           </div>
 
-          {/* Top Hiring Leaderboard */}
           <div className="insight-section insight-half">
             <h3 className="insight-section-title">📋 Top 10 Mass Hiring Recruiters</h3>
             <div className="leaderboard-list">
@@ -272,7 +230,6 @@ function PlacementInsights({ onSelectCompany, showToast }) {
         </div>
       )}
 
-      {/* Branch Performance Heatmap */}
       {(insightFilter === 'all' || insightFilter === 'branches') && (
         <div className="insight-section">
           <h3 className="insight-section-title">🎓 Branch-Wise Performance</h3>
@@ -296,7 +253,6 @@ function PlacementInsights({ onSelectCompany, showToast }) {
         </div>
       )}
 
-      {/* Year-over-Year Trend Table */}
       {(insightFilter === 'all' || insightFilter === 'trends') && (
         <div className="insight-section">
           <h3 className="insight-section-title">📈 5-Year Placement Trend</h3>
@@ -336,19 +292,6 @@ function PlacementInsights({ onSelectCompany, showToast }) {
   );
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// MAIN APPLICATION ROOT COMPONENT
-// ─────────────────────────────────────────────────────────────────────────────
-
-/**
- * App Component — Root Application Entry
- *
- * The main application container for the IIT Bombay Placement Analytics Portal.
- * Manages state for 3 primary views: Recruiters Directory, Branch Analytics,
- * and Placement Insights.
- *
- * @returns {JSX.Element} Complete placement analytics suite
- */
 export default function App() {
   const [activeTab, setActiveTab] = useState('recruiters');
   const [searchTerm, setSearchTerm] = useState('');
@@ -357,7 +300,6 @@ export default function App() {
   const [isCopyrightOpen, setIsCopyrightOpen] = useState(false);
   const [comingSoonModal, setComingSoonModal] = useState(null);
 
-  // Shortlisted Recruiters (persisted in localStorage)
   const [shortlisted, setShortlisted] = useState(() => {
     try {
       const saved = localStorage.getItem('iitb_shortlisted_recruiters');
@@ -367,26 +309,21 @@ export default function App() {
     }
   });
 
-  // Toast Notifications
   const [toast, setToast] = useState(null);
 
   const showToast = useCallback((message, type = 'info') => {
     setToast({ message, type });
   }, []);
 
-  // Save shortlist to localStorage
   useEffect(() => {
     try {
       localStorage.setItem('iitb_shortlisted_recruiters', JSON.stringify(shortlisted));
     } catch {
-      // ignore
     }
   }, [shortlisted]);
 
-  // Global Keyboard Shortcuts (1-3 for tabs)
   useEffect(() => {
     const handleGlobalKeyDown = (e) => {
-      // If typing in input or modal open, skip number shortcuts
       if (
         ['INPUT', 'SELECT', 'TEXTAREA'].includes(document.activeElement?.tagName) ||
         activeModalCompany ||
@@ -396,7 +333,6 @@ export default function App() {
         return;
       }
 
-      // Quick tab numbers 1-3
       if (e.key >= '1' && e.key <= '3') {
         const tabIdx = parseInt(e.key, 10) - 1;
         if (TAB_CONFIG[tabIdx]) {
@@ -410,7 +346,6 @@ export default function App() {
     return () => window.removeEventListener('keydown', handleGlobalKeyDown);
   }, [activeModalCompany, isCopyrightOpen, comingSoonModal, showToast]);
 
-  // Toggle Shortlist Bookmark
   const toggleShortlist = useCallback(
     (companyId) => {
       const company = companies.find((c) => c.id === companyId);
@@ -429,11 +364,9 @@ export default function App() {
 
   return (
     <div className="portal-container">
-      {/* Subtle Background Glows */}
       <div className="ambient-glow glow-top" />
       <div className="ambient-glow glow-bottom" />
 
-      {/* Floating Global Toast */}
       {toast && (
         <Toast
           message={toast.message}
@@ -442,7 +375,6 @@ export default function App() {
         />
       )}
 
-      {/* Institutional Top Navbar with Unified Tabs */}
       <Navbar
         activeTab={activeTab}
         setActiveTab={setActiveTab}
@@ -466,7 +398,6 @@ export default function App() {
         tabs={TAB_CONFIG}
       />
 
-      {/* Full Campus Hero Section */}
       <HeroSection
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
@@ -475,9 +406,7 @@ export default function App() {
         shortlistedCount={shortlisted.length}
       />
 
-      {/* ── MAIN PORTAL CONTENT AREA ── */}
       <main className="main-portal-content" role="main">
-        {/* VIEW 1: RECRUITERS DIRECTORY TABLE */}
         {activeTab === 'recruiters' && (
           <PlacementTable
             searchTerm={searchTerm}
@@ -490,10 +419,8 @@ export default function App() {
           />
         )}
 
-        {/* VIEW 2: BRANCH-WISE INSIGHTS & 5-YEAR TRENDS */}
         {activeTab === 'branches' && <BranchWise />}
 
-        {/* VIEW 3: PLACEMENT INSIGHTS & ANALYTICS */}
         {activeTab === 'insights' && (
           <PlacementInsights
             onSelectCompany={setActiveModalCompany}
@@ -502,7 +429,6 @@ export default function App() {
         )}
       </main>
 
-      {/* Detail Modal Overlay */}
       {activeModalCompany && (
         <CompanyDetailModal
           company={activeModalCompany}
@@ -513,7 +439,6 @@ export default function App() {
         />
       )}
 
-      {/* Clean Copyright & Legal Notice Modal */}
       {isCopyrightOpen && (
         <CopyrightModal
           onClose={() => setIsCopyrightOpen(false)}
@@ -521,7 +446,6 @@ export default function App() {
         />
       )}
 
-      {/* Feature Coming Soon Modal */}
       {comingSoonModal && (
         <ChangeCollegeModal
           title={comingSoonModal.title}
@@ -532,7 +456,6 @@ export default function App() {
         />
       )}
 
-      {/* Institutional Footer */}
       <Footer
         onOpenLegal={() => setIsCopyrightOpen(true)}
       />

@@ -1,31 +1,18 @@
-/**
- * Footer Component
- * 
- * Contributor: Alankrit Narang (narangalankrit123@gmail.com)
- * 
- * Sleek single-strip footer with gradient accent, inline tags, and copyright.
- * 
- * @param {Object} props
- * @param {Function} [props.onOpenLegal] - Callback to open the copyright modal
- * @returns {JSX.Element}
- */
+// Contributor: Alankrit Narang - Footer Component
 export default function Footer({ onOpenLegal }) {
   const currentYear = new Date().getFullYear();
 
   return (
     <footer className="site-footer" role="contentinfo">
-      {/* Gradient accent line */}
       <div className="footer-glow-line" aria-hidden="true" />
 
       <div className="footer-container">
-        {/* Brand */}
         <div className="footer-brand">
           <span className="footer-logo-text">IIT Bombay</span>
           <span className="footer-divider">|</span>
           <span className="footer-subtitle">Placement Analytics</span>
         </div>
 
-        {/* Chips */}
         <div className="footer-chips">
           <span className="footer-chip">Batch 2021–25</span>
           <span className="footer-chip">Autonomous Institute</span>
@@ -39,7 +26,6 @@ export default function Footer({ onOpenLegal }) {
           </a>
         </div>
 
-        {/* Copyright row */}
         <div className="footer-copy font-mono">
           <span>© {currentYear} IIT Bombay</span>
           <span className="footer-dot">·</span>

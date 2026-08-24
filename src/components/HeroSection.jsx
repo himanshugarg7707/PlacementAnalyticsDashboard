@@ -1,31 +1,7 @@
+// Contributor: Diya Arora - Hero Section Component
 import { useState, useEffect } from 'react';
 import { collegeInfo } from '../data/placementData';
 
-/**
- * HeroSection Component
- *
- * Contributor: Diya Arora (aroradiya187@gmail.com)
- *
- * The main hero banner for the IIT Bombay Placement Portal.
- * Displays a campus photo showcase, animated placement metrics,
- * search functionality, and tier-based category filters.
- *
- * Features:
- * - Campus photo banner with gradient fade overlay
- * - Animated counter metrics (peak package, avg CTC, total offers, recruiters)
- * - Ease-out cubic animation for smooth number transitions
- * - Real-time search with clear button
- * - Quick category filter pills (All, Super Dream, Dream, Normal, Shortlisted)
- * - Responsive layout adapting to different screen sizes
- *
- * @param {Object} props
- * @param {string} props.searchTerm - Current search query string
- * @param {Function} props.setSearchTerm - Callback to update search query
- * @param {string} props.filterType - Active tier filter (All/Super Dream/Dream/Normal/Shortlisted)
- * @param {Function} props.setFilterType - Callback to update active tier filter
- * @param {number} [props.shortlistedCount=0] - Count of bookmarked/shortlisted companies
- * @returns {JSX.Element} Hero section with campus banner, stats, and search
- */
 export default function HeroSection({
   searchTerm,
   setSearchTerm,
@@ -33,7 +9,6 @@ export default function HeroSection({
   setFilterType,
   shortlistedCount = 0,
 }) {
-  // Animated metric counters on mount
   const [animatedHighest, setAnimatedHighest] = useState(0);
   const [animatedAvg, setAnimatedAvg] = useState(0);
   const [animatedOffers, setAnimatedOffers] = useState(0);
@@ -41,12 +16,11 @@ export default function HeroSection({
 
   useEffect(() => {
     let startTimestamp = null;
-    const duration = 1200; // ms
+    const duration = 1200;
 
     const step = (timestamp) => {
       if (!startTimestamp) startTimestamp = timestamp;
       const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-      // Ease out cubic
       const ease = 1 - Math.pow(1 - progress, 3);
 
       setAnimatedHighest(Number((ease * collegeInfo.highestPackage).toFixed(1)));
@@ -71,7 +45,6 @@ export default function HeroSection({
 
   return (
     <div className="hero-master-wrapper">
-      {/* ── STANDALONE PHOTO BANNER ── */}
       <div className="campus-showcase-card">
         <div className="campus-image-container">
           <img
@@ -87,7 +60,6 @@ export default function HeroSection({
         </div>
       </div>
 
-      {/* ── HERO CONTENT (SHIFTED DOWNWARDS) ── */}
       <div className="hero-content-section">
         <div className="hero-badge">
           <span className="badge-pulse"></span>
@@ -103,7 +75,6 @@ export default function HeroSection({
           <strong>Indian Institute of Technology Bombay</strong>.
         </p>
 
-        {/* Minimal 4-Metric Glass Bar (#CCE7EB Ice Aqua + Deep Black) */}
         <div className="hero-stats-glass-bar">
           <div className="stat-item">
             <span className="stat-label">Peak Package</span>
@@ -130,7 +101,6 @@ export default function HeroSection({
           </div>
         </div>
 
-        {/* Search & Filter Bar */}
         <div className="hero-filter-bar">
           <div className="hero-search-input-wrap">
             <svg
@@ -175,7 +145,6 @@ export default function HeroSection({
               </button>
             ))}
 
-            {/* Bookmark Shortlist Filter Pill */}
             <button
               className={`tier-pill bookmark-filter-pill ${filterType === 'Shortlisted' ? 'active' : ''}`}
               onClick={() => setFilterType(filterType === 'Shortlisted' ? 'All' : 'Shortlisted')}

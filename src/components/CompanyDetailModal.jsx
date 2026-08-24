@@ -1,13 +1,7 @@
+// Contributor: Himanshu Garg - Company Detail Modal
 import { useEffect } from 'react';
 import CompanyLogo from './CompanyLogo';
 
-/**
- * CompanyDetailModal Component
- *
- * Contributor: Himanshu Garg (himanshugarg7707@gmail.com)
- *
- * A clean overlay modal dialog when company details and analytics are requested.
- */
 export default function CompanyDetailModal({
   company,
   onClose,
