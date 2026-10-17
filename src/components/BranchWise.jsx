@@ -134,7 +134,7 @@ export default function BranchWise() {
                     </div>
                     <div className="branch-metric-cell">
                       <span className="b-label">Highest Package</span>
-                      <span className="b-val font-mono" style={{ color: '#34d399' }}>
+                      <span className="b-val font-mono b-val-highest">
                         ₹{b.highestPackage} LPA
                       </span>
                     </div>

@@ -1,6 +1,6 @@
 // Contributor: Diya Arora - Placement Records Table
 import { useState, useMemo, useEffect } from 'react';
-import { companies } from '../data/placementData';
+import { companies, collegeInfo } from '../data/placementData';
 import CompanyLogo from './CompanyLogo';
 
 export default function PlacementTable({
@@ -148,8 +148,69 @@ export default function PlacementTable({
     selectedBranch !== 'All' ||
     ctcRange !== 'All';
 
+  const quickCategories = [
+    { id: 'All', label: 'All Recruiters', count: collegeInfo.totalCompanies },
+    { id: 'Super Dream', label: 'Super Dream (>20L)', count: collegeInfo.superDreamOffers },
+    { id: 'Dream', label: 'Dream (10-20L)', count: collegeInfo.dreamOffers },
+    { id: 'Normal', label: 'Core / Normal', count: collegeInfo.normalOffers },
+  ];
+
   return (
     <section id="placement-table-section" className="records-section">
+      {/* Search Bar & Tier Filter Pills directly attached to Table */}
+      <div className="table-search-header">
+        <div className="hero-search-input-wrap">
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            className="search-icon-svg"
+          >
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+          <input
+            type="text"
+            className="hero-search-input"
+            placeholder="Search company (Google, Microsoft), branch (CSE, EE), or sector..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            aria-label="Search recruiters"
+          />
+          {searchTerm && (
+            <button
+              className="clear-btn"
+              onClick={() => setSearchTerm('')}
+              aria-label="Clear search query"
+            >
+              ✕
+            </button>
+          )}
+        </div>
+
+        <div className="hero-tier-pills">
+          {quickCategories.map((cat) => (
+            <button
+              key={cat.id}
+              className={`tier-pill ${filterType === cat.id ? 'active' : ''}`}
+              onClick={() => setFilterType(cat.id)}
+            >
+              {cat.label}
+            </button>
+          ))}
+
+          <button
+            className={`tier-pill bookmark-filter-pill ${filterType === 'Shortlisted' ? 'active' : ''}`}
+            onClick={() => setFilterType(filterType === 'Shortlisted' ? 'All' : 'Shortlisted')}
+            title="View your saved target companies"
+          >
+            ⭐ Shortlisted {shortlisted.length > 0 && <span className="shortlist-count-badge">{shortlisted.length}</span>}
+          </button>
+        </div>
+      </div>
       <div className="table-controls-bar">
         <div className="table-meta-info">
           <span className="results-count">

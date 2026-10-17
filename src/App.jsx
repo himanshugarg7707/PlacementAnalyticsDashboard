@@ -2,6 +2,7 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import Navbar from './components/Navbar';
 import HeroSection from './components/HeroSection';
+import ScrollShowcase from './components/ScrollShowcase';
 import PlacementTable from './components/PlacementTable';
 import BranchWise from './components/BranchWise';
 import Footer from './components/Footer';
@@ -99,39 +100,23 @@ function PlacementInsights({ onSelectCompany, showToast }) {
         value: `₹${collegeInfo.averagePackage} LPA`,
         detail: `Median: ₹${collegeInfo.medianPackage} LPA • Highest: ₹${collegeInfo.highestPackage} LPA`,
         trend: 'up',
-        icon: '💎',
-      },
-      {
-        id: 'multi-offers',
-        title: 'Multiple Offers',
-        value: `${collegeInfo.totalOffers - collegeInfo.totalPlaced}`,
-        detail: `${collegeInfo.totalOffers} total offers for ${collegeInfo.totalPlaced} placed students`,
-        trend: 'up',
-        icon: '🎯',
-      },
-      {
-        id: 'companies-visited',
-        title: 'Recruiters Participated',
-        value: `${collegeInfo.totalCompanies}`,
-        detail: `Across ${sectorWiseData.length} industry sectors`,
-        trend: 'up',
-        icon: '🏢',
+        icon: '💰',
       },
       {
         id: 'super-dream',
-        title: 'Super Dream Offers',
-        value: `${collegeInfo.superDreamOffers}`,
-        detail: `${((collegeInfo.superDreamOffers / collegeInfo.totalOffers) * 100).toFixed(1)}% of all offers above ₹20 LPA`,
+        title: 'Super Dream Offers (>20L)',
+        value: collegeInfo.superDreamOffers,
+        detail: `${((collegeInfo.superDreamOffers / collegeInfo.totalOffers) * 100).toFixed(0)}% of total offers were >20 LPA`,
         trend: 'up',
-        icon: '🌟',
+        icon: '🚀',
       },
       {
-        id: 'diversity-index',
-        title: 'Sector Diversity',
-        value: `${sectorWiseData.length} Sectors`,
-        detail: `Top sector: ${sectorBreakdown[0]?.sector} with ${sectorBreakdown[0]?.offers} offers`,
-        trend: 'stable',
-        icon: '🌐',
+        id: 'recruiters',
+        title: 'Total Recruiters Visited',
+        value: collegeInfo.totalCompanies,
+        detail: `${sectorBreakdown.length} unique industry sectors represented`,
+        trend: 'up',
+        icon: '🏢',
       },
     ];
 
@@ -151,76 +136,141 @@ function PlacementInsights({ onSelectCompany, showToast }) {
   return (
     <div className="insights-container">
       <div className="insights-header">
-        <div>
-          <span className="section-badge-pill">Analytics Intelligence</span>
-          <h2 className="section-title-clean">Placement Insights & Trends</h2>
+        <div className="insights-header-text">
+          <span className="section-badge-pill">
+            <span className="pill-dot" />
+            Analytics Intelligence
+          </span>
+          <h2 className="section-title-clean">Placement Insights &amp; Trends</h2>
           <p className="section-subtitle-clean">
             Deep-dive into sector dynamics, compensation trends, branch performance,
             and year-over-year placement health — all computed live from {companies.length} recruiter records.
           </p>
         </div>
-        <div className="insights-filter-bar">
-          {['all', 'leaderboards', 'branches', 'trends'].map((f) => (
+
+        <div className="insight-filter-pills">
+          {['all', 'overview', 'compensation', 'sectors', 'branches', 'trends'].map((filter) => (
             <button
-              key={f}
-              className={`insight-filter-btn ${insightFilter === f ? 'active' : ''}`}
-              onClick={() => setInsightFilter(f)}
+              key={filter}
+              className={`insight-pill ${insightFilter === filter ? 'active' : ''}`}
+              onClick={() => setInsightFilter(filter)}
             >
-              {f === 'all' ? '🔍 All' : f === 'leaderboards' ? '💎 Top Recruiters' : f === 'branches' ? '🎓 Branch Stats' : '📈 5-Year Trends'}
+              {filter.charAt(0).toUpperCase() + filter.slice(1)}
             </button>
           ))}
         </div>
       </div>
 
-      <div className="insight-kpi-grid">
+      <div className="insights-kpi-grid">
         {analytics.keyInsights.map((card) => (
           <div
             key={card.id}
             className={`insight-kpi-card ${expandedInsight === card.id ? 'expanded' : ''}`}
             onClick={() => setExpandedInsight(expandedInsight === card.id ? null : card.id)}
           >
-            <span className="kpi-icon">{card.icon}</span>
-            <span className="kpi-value">{card.value}</span>
-            <span className="kpi-title">{card.title}</span>
-            <span className="kpi-detail">{card.detail}</span>
-            <span className={`kpi-trend ${card.trend}`}>
-              {card.trend === 'up' ? '▲' : card.trend === 'down' ? '▼' : '●'}
-            </span>
+            <div className="kpi-card-header">
+              <div className="kpi-icon-bubble">{card.icon}</div>
+              <div className={`kpi-trend-pill ${card.trend}`}>
+                <span className="trend-arrow">{card.trend === 'up' ? '▲' : card.trend === 'down' ? '▼' : '●'}</span>
+                <span>{card.trend === 'up' ? 'Growing' : card.trend === 'down' ? 'Dip' : 'Steady'}</span>
+              </div>
+            </div>
+
+            <div className="kpi-card-body">
+              <div className="kpi-value font-mono">{card.value}</div>
+              <div className="kpi-title">{card.title}</div>
+              <div className="kpi-detail">{card.detail}</div>
+            </div>
           </div>
         ))}
       </div>
 
-      {(insightFilter === 'all' || insightFilter === 'leaderboards') && (
-        <div className="insights-dual-panel">
-          <div className="insight-section insight-half">
-            <h3 className="insight-section-title">💎 Top 10 Highest-Paying Recruiters</h3>
-            <div className="leaderboard-list">
+      {(insightFilter === 'all' || insightFilter === 'compensation') && (
+        <div className="insight-section">
+          <h3 className="insight-section-title">📊 Compensation Distribution (CTC Tiers)</h3>
+          <div className="tier-bar-chart">
+            {analytics.ctcBuckets.map((bucket) => {
+              const maxCount = Math.max(...analytics.ctcBuckets.map((b) => b.count));
+              const heightPct = maxCount > 0 ? (bucket.count / maxCount) * 100 : 0;
+              return (
+                <div key={bucket.range} className="tier-bar-col">
+                  <div className="tier-bar-count font-mono">{bucket.count}</div>
+                  <div className="tier-bar-track">
+                    <div
+                      className="tier-bar-fill"
+                      style={{
+                        height: `${Math.max(heightPct, 6)}%`,
+                        background: bucket.color,
+                      }}
+                    />
+                  </div>
+                  <span className="tier-bar-label">{bucket.range}</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {(insightFilter === 'all' || insightFilter === 'sectors') && (
+        <div className="insight-section">
+          <h3 className="insight-section-title">🌐 Sector Breakdown</h3>
+          <div className="sector-breakdown-grid">
+            {analytics.sectorBreakdown.map((s) => (
+              <div key={s.sector} className="sector-bar-row">
+                <div className="sector-label-wrap">
+                  <span className="sector-name">{s.sector}</span>
+                  <span className="sector-pct font-mono">{s.pctOfOffers}%</span>
+                </div>
+                <div className="sector-bar-track">
+                  <div
+                    className="sector-bar-fill"
+                    style={{ width: `${Math.min(parseFloat(s.pctOfOffers) * 2.2, 100)}%` }}
+                  />
+                </div>
+                <span className="sector-hires-count">{s.offers} offers • {s.companies} companies</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {(insightFilter === 'all' || insightFilter === 'overview') && (
+        <div className="insight-columns-duo">
+          <div className="insight-panel">
+            <h4 className="panel-title">🏆 Top Paying Recruiters</h4>
+            <div className="panel-list">
               {analytics.topPayingCompanies.map((c, i) => (
                 <div
                   key={c.id}
-                  className="leaderboard-row clickable"
+                  className="leaderboard-row"
                   onClick={() => onSelectCompany(c)}
                 >
-                  <span className="lb-rank">{i + 1}</span>
-                  <span className="lb-name">{c.name}</span>
-                  <span className="lb-sector-tag">{c.sector}</span>
+                  <span className="lb-rank font-mono">{i + 1}</span>
+                  <div className="lb-company-info">
+                    <span className="lb-name">{c.name}</span>
+                    <span className="lb-role">{c.role}</span>
+                  </div>
                   <span className="lb-ctc font-mono">₹{c.ctc} LPA</span>
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="insight-section insight-half">
-            <h3 className="insight-section-title">📋 Top 10 Mass Hiring Recruiters</h3>
-            <div className="leaderboard-list">
+          <div className="insight-panel">
+            <h4 className="panel-title">👥 Mass Recruiters (Highest Hires)</h4>
+            <div className="panel-list">
               {analytics.topHiringCompanies.map((c, i) => (
                 <div
                   key={c.id}
-                  className="leaderboard-row clickable"
+                  className="leaderboard-row"
                   onClick={() => onSelectCompany(c)}
                 >
-                  <span className="lb-rank">{i + 1}</span>
-                  <span className="lb-name">{c.name}</span>
+                  <span className="lb-rank font-mono">{i + 1}</span>
+                  <div className="lb-company-info">
+                    <span className="lb-name">{c.name}</span>
+                    <span className="lb-role">{c.role}</span>
+                  </div>
                   <span className="lb-sector-tag">{c.sector}</span>
                   <span className="lb-ctc font-mono">{c.studentsHired} hires</span>
                 </div>
@@ -300,6 +350,31 @@ export default function App() {
   const [isCopyrightOpen, setIsCopyrightOpen] = useState(false);
   const [comingSoonModal, setComingSoonModal] = useState(null);
 
+  // Theme toggle state
+  const [theme, setTheme] = useState(() => {
+    try {
+      return localStorage.getItem('iitb_portal_theme') || 'dark';
+    } catch {
+      return 'dark';
+    }
+  });
+
+  const handleToggleTheme = useCallback(() => {
+    setTheme((prev) => {
+      const next = prev === 'dark' ? 'light' : 'dark';
+      try {
+        localStorage.setItem('iitb_portal_theme', next);
+      } catch {}
+      document.documentElement.setAttribute('data-theme', next);
+      return next;
+    });
+  }, []);
+
+  // Apply theme on mount
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [theme]);
+
   const [shortlisted, setShortlisted] = useState(() => {
     try {
       const saved = localStorage.getItem('iitb_shortlisted_recruiters');
@@ -318,8 +393,7 @@ export default function App() {
   useEffect(() => {
     try {
       localStorage.setItem('iitb_shortlisted_recruiters', JSON.stringify(shortlisted));
-    } catch {
-    }
+    } catch {}
   }, [shortlisted]);
 
   useEffect(() => {
@@ -379,6 +453,8 @@ export default function App() {
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         shortlistedCount={shortlisted.length}
+        theme={theme}
+        onToggleTheme={handleToggleTheme}
         onChangeCollege={() =>
           setComingSoonModal({
             title: 'Change College',
@@ -399,11 +475,33 @@ export default function App() {
       />
 
       <HeroSection
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
-        filterType={filterType}
-        setFilterType={setFilterType}
-        shortlistedCount={shortlisted.length}
+        onExploreRecruiters={() => {
+          setActiveTab('recruiters');
+          setTimeout(() => {
+            document.getElementById('placement-table-section')?.scrollIntoView({ behavior: 'smooth' });
+          }, 50);
+        }}
+        onSelectBranch={() => {
+          setActiveTab('branches');
+          setTimeout(() => {
+            document.querySelector('.branch-analytics-section, .main-portal-content')?.scrollIntoView({ behavior: 'smooth' });
+          }, 50);
+        }}
+      />
+
+      <ScrollShowcase
+        onExploreRecruiters={() => {
+          setActiveTab('recruiters');
+          setTimeout(() => {
+            document.getElementById('placement-table-section')?.scrollIntoView({ behavior: 'smooth' });
+          }, 50);
+        }}
+        onSelectBranch={() => {
+          setActiveTab('branches');
+          setTimeout(() => {
+            document.querySelector('.branch-analytics-section, .main-portal-content')?.scrollIntoView({ behavior: 'smooth' });
+          }, 50);
+        }}
       />
 
       <main className="main-portal-content" role="main">
