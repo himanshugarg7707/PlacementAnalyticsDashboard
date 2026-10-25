@@ -5,12 +5,16 @@ export default function Navbar({
   shortlistedCount = 0,
   onChangeCollege,
   onLogin,
+  theme,
+  onToggleTheme,
   tabs = [
     { id: 'recruiters', label: 'Recruiters Directory', icon: '🏢' },
     { id: 'branches', label: 'Branch Analytics', icon: '🎓' },
     { id: 'insights', label: 'Placement Insights', icon: '📊' },
   ],
 }) {
+  const isLight = theme === 'light';
+
   return (
     <header className="navbar" role="banner">
       <div className="navbar-inner">
@@ -45,6 +49,23 @@ export default function Navbar({
         </nav>
 
         <div className="nav-right">
+          {onToggleTheme && (
+            <button
+              type="button"
+              className="btn-theme-toggle"
+              onClick={onToggleTheme}
+              title={isLight ? 'Switch to Dark Mode' : 'Switch to Light Mode'}
+              aria-label={isLight ? 'Switch to dark mode' : 'Switch to light mode'}
+            >
+              <span className="theme-toggle-icon">
+                {isLight ? '☀️' : '🌙'}
+              </span>
+              <span className="theme-toggle-label">
+                {isLight ? 'Light' : 'Dark'}
+              </span>
+            </button>
+          )}
+
           {onChangeCollege && (
             <button
               type="button"

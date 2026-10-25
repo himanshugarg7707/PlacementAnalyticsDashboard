@@ -368,7 +368,7 @@ export default function BranchWise() {
                     </div>
                     <div className="branch-metric-cell">
                       <span className="b-label">Highest Package</span>
-                      <span className="b-val font-mono" style={{ color: '#34d399' }}>
+                      <span className="b-val font-mono" style={{ color: 'var(--emerald-accent)' }}>
                         ₹{b.highestPackage} LPA
                       </span>
                     </div>
@@ -600,7 +600,7 @@ export default function BranchWise() {
                         <ul className="roadmap-subject-list">
                           {phase.resources.map((r, ri) => (
                             <li key={ri} className="roadmap-subject-item roadmap-resource-item">
-                              <span className="roadmap-item-dot" style={{ background: '#34d399' }}></span>
+                              <span className="roadmap-item-dot" style={{ background: 'var(--emerald-accent)' }}></span>
                               {r}
                             </li>
                           ))}

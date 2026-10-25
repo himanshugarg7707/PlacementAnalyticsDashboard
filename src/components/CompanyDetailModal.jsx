@@ -51,10 +51,10 @@ export default function CompanyDetailModal({
         <div className="modal-body">
           <div className="coming-soon-card" style={{ textAlign: 'center', padding: '36px 20px' }}>
             <div style={{ fontSize: '2.5rem', marginBottom: '12px' }}>✨</div>
-            <h3 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '8px', color: 'var(--text-primary, #ffffff)' }}>
+            <h3 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '8px', color: 'var(--text-main)' }}>
               Feature Coming Soon
             </h3>
-            <p style={{ color: 'var(--text-secondary, #94a3b8)', fontSize: '0.9rem', maxWidth: '360px', margin: '0 auto', lineHeight: '1.5' }}>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', maxWidth: '360px', margin: '0 auto', lineHeight: '1.5' }}>
               Detailed company analytics, recruitment history, and interview insights for {company.name} will be available soon.
             </p>
           </div>

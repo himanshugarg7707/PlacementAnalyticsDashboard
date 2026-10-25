@@ -300,6 +300,34 @@ export default function App() {
   const [isCopyrightOpen, setIsCopyrightOpen] = useState(false);
   const [comingSoonModal, setComingSoonModal] = useState(null);
 
+  // ── Theme state ──────────────────────────────────────────────────────────
+  const [theme, setTheme] = useState(() => {
+    try {
+      return localStorage.getItem('iitb_theme_v2') || 'light';
+    } catch {
+      return 'light';
+    }
+  });
+
+  useEffect(() => {
+    const root = document.documentElement;
+    if (theme === 'light') {
+      root.classList.add('light-theme');
+    } else {
+      root.classList.remove('light-theme');
+    }
+    try {
+      localStorage.setItem('iitb_theme_v2', theme);
+    } catch {
+      // ignore
+    }
+  }, [theme]);
+
+  const toggleTheme = useCallback(() => {
+    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
+  }, []);
+  // ─────────────────────────────────────────────────────────────────────────
+
   const [shortlisted, setShortlisted] = useState(() => {
     try {
       const saved = localStorage.getItem('iitb_shortlisted_recruiters');
@@ -379,6 +407,8 @@ export default function App() {
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         shortlistedCount={shortlisted.length}
+        theme={theme}
+        onToggleTheme={toggleTheme}
         onChangeCollege={() =>
           setComingSoonModal({
             title: 'Change College',
