@@ -11,6 +11,8 @@ export default function PlacementTable({
   shortlisted = [],
   onToggleShortlist,
   showToast,
+  onSelectCompany,
+  onOpenQuestions,
 }) {
   const [selectedSector, setSelectedSector] = useState('All');
   const [selectedBranch, setSelectedBranch] = useState('All');
@@ -258,8 +260,10 @@ export default function PlacementTable({
                     <tr
                       key={c.id}
                       onClick={() => {
-                        if (showToast) {
-                          showToast(`Company details for ${c.name} coming soon! ✨`, 'info');
+                        if (onSelectCompany) {
+                          onSelectCompany(c);
+                        } else if (showToast) {
+                          showToast(`Opened ${c.name} details & questions! 💡`, 'info');
                         }
                       }}
                       className="clickable-row"
@@ -284,7 +288,22 @@ export default function PlacementTable({
                       <td>
                         <div className="company-name-cell">
                           <CompanyLogo company={c} size={36} />
-                          <span className="company-title-text">{c.name}</span>
+                          <div className="company-title-wrap">
+                            <span className="company-title-text">{c.name}</span>
+                            {onOpenQuestions && (
+                              <button
+                                type="button"
+                                className="row-questions-chip"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  onOpenQuestions(c.name);
+                                }}
+                                title={`View mostly asked questions for ${c.name}`}
+                              >
+                                💡 Qs
+                              </button>
+                            )}
+                          </div>
                         </div>
                       </td>
                       <td className="sector-text">{c.sector}</td>

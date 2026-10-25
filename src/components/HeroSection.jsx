@@ -8,6 +8,7 @@ export default function HeroSection({
   filterType,
   setFilterType,
   shortlistedCount = 0,
+  onOpenQuestions,
 }) {
   const [animatedHighest, setAnimatedHighest] = useState(0);
   const [animatedAvg, setAnimatedAvg] = useState(0);
@@ -152,6 +153,17 @@ export default function HeroSection({
             >
               ⭐ Shortlisted {shortlistedCount > 0 && <span className="shortlist-count-badge">{shortlistedCount}</span>}
             </button>
+
+            {onOpenQuestions && (
+              <button
+                type="button"
+                className="tier-pill questions-hero-pill"
+                onClick={onOpenQuestions}
+                title="Top Companies Mostly Asked Questions"
+              >
+                💡 Mostly Asked Questions
+              </button>
+            )}
           </div>
         </div>
       </div>

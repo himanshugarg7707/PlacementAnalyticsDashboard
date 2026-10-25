@@ -9,6 +9,7 @@ import Toast from './components/Toast';
 import CompanyDetailModal from './components/CompanyDetailModal';
 import CopyrightModal from './components/CopyrightModal';
 import ChangeCollegeModal from './components/ChangeCollegeModal';
+import TopQuestionsModal from './components/TopQuestionsModal';
 import {
   companies,
   branches,
@@ -23,7 +24,7 @@ const TAB_CONFIG = [
   { id: 'insights', label: 'Placement Insights', icon: '📊', shortcut: '3' },
 ];
 
-function PlacementInsights({ onSelectCompany, showToast }) {
+function PlacementInsights({ onSelectCompany, onOpenQuestions, showToast }) {
   const [insightFilter, setInsightFilter] = useState('all');
   const [expandedInsight, setExpandedInsight] = useState(null);
 
@@ -172,6 +173,25 @@ function PlacementInsights({ onSelectCompany, showToast }) {
         </div>
       </div>
 
+      {onOpenQuestions && (
+        <div className="insights-tq-callout-card">
+          <div className="tq-callout-left">
+            <span className="tq-callout-badge">Interview Preparation</span>
+            <h3 className="tq-callout-title">Top Companies Mostly Asked Questions</h3>
+            <p className="tq-callout-sub">
+              Frequently asked interview questions, system designs, and core concepts from top recruiters.
+            </p>
+          </div>
+          <button
+            type="button"
+            className="btn-primary tq-callout-btn"
+            onClick={() => onOpenQuestions('All')}
+          >
+            💡 View Questions
+          </button>
+        </div>
+      )}
+
       <div className="insight-kpi-grid">
         {analytics.keyInsights.map((card) => (
           <div
@@ -299,6 +319,13 @@ export default function App() {
   const [activeModalCompany, setActiveModalCompany] = useState(null);
   const [isCopyrightOpen, setIsCopyrightOpen] = useState(false);
   const [comingSoonModal, setComingSoonModal] = useState(null);
+  const [isTopQuestionsOpen, setIsTopQuestionsOpen] = useState(false);
+  const [questionsInitialCompany, setQuestionsInitialCompany] = useState('All');
+
+  const handleOpenQuestions = useCallback((companyName = 'All') => {
+    setQuestionsInitialCompany(typeof companyName === 'string' ? companyName : 'All');
+    setIsTopQuestionsOpen(true);
+  }, []);
 
   const [shortlisted, setShortlisted] = useState(() => {
     try {
@@ -328,8 +355,15 @@ export default function App() {
         ['INPUT', 'SELECT', 'TEXTAREA'].includes(document.activeElement?.tagName) ||
         activeModalCompany ||
         isCopyrightOpen ||
-        comingSoonModal
+        comingSoonModal ||
+        isTopQuestionsOpen
       ) {
+        return;
+      }
+
+      if (e.key === 'q' || e.key === 'Q') {
+        e.preventDefault();
+        handleOpenQuestions('All');
         return;
       }
 
@@ -344,7 +378,7 @@ export default function App() {
 
     window.addEventListener('keydown', handleGlobalKeyDown);
     return () => window.removeEventListener('keydown', handleGlobalKeyDown);
-  }, [activeModalCompany, isCopyrightOpen, comingSoonModal, showToast]);
+  }, [activeModalCompany, isCopyrightOpen, comingSoonModal, isTopQuestionsOpen, handleOpenQuestions, showToast]);
 
   const toggleShortlist = useCallback(
     (companyId) => {
@@ -379,6 +413,7 @@ export default function App() {
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         shortlistedCount={shortlisted.length}
+        onOpenQuestions={() => handleOpenQuestions('All')}
         onChangeCollege={() =>
           setComingSoonModal({
             title: 'Change College',
@@ -404,6 +439,7 @@ export default function App() {
         filterType={filterType}
         setFilterType={setFilterType}
         shortlistedCount={shortlisted.length}
+        onOpenQuestions={() => handleOpenQuestions('All')}
       />
 
       <main className="main-portal-content" role="main">
@@ -416,6 +452,8 @@ export default function App() {
             shortlisted={shortlisted}
             onToggleShortlist={toggleShortlist}
             showToast={showToast}
+            onSelectCompany={setActiveModalCompany}
+            onOpenQuestions={handleOpenQuestions}
           />
         )}
 
@@ -424,6 +462,7 @@ export default function App() {
         {activeTab === 'insights' && (
           <PlacementInsights
             onSelectCompany={setActiveModalCompany}
+            onOpenQuestions={handleOpenQuestions}
             showToast={showToast}
           />
         )}
@@ -435,6 +474,16 @@ export default function App() {
           onClose={() => setActiveModalCompany(null)}
           isShortlisted={shortlisted.includes(activeModalCompany.id)}
           onToggleShortlist={toggleShortlist}
+          onOpenAllQuestions={handleOpenQuestions}
+          showToast={showToast}
+        />
+      )}
+
+      {isTopQuestionsOpen && (
+        <TopQuestionsModal
+          isOpen={isTopQuestionsOpen}
+          onClose={() => setIsTopQuestionsOpen(false)}
+          initialCompany={questionsInitialCompany}
           showToast={showToast}
         />
       )}

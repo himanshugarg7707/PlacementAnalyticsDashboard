@@ -5,6 +5,7 @@ export default function Navbar({
   shortlistedCount = 0,
   onChangeCollege,
   onLogin,
+  onOpenQuestions,
   tabs = [
     { id: 'recruiters', label: 'Recruiters Directory', icon: '🏢' },
     { id: 'branches', label: 'Branch Analytics', icon: '🎓' },
@@ -45,6 +46,19 @@ export default function Navbar({
         </nav>
 
         <div className="nav-right">
+          {onOpenQuestions && (
+            <button
+              type="button"
+              className="btn-top-questions"
+              onClick={onOpenQuestions}
+              title="Top Companies Mostly Asked Interview Questions"
+              aria-label="Top Companies Mostly Asked Questions"
+            >
+              <span className="btn-tq-icon">💡</span>
+              <span className="btn-tq-label">Top Questions</span>
+            </button>
+          )}
+
           {onChangeCollege && (
             <button
               type="button"
