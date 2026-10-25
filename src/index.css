@@ -2994,3 +2994,64 @@ html {
     display: none;
   }
 }
+
+
+/* ==========================================================================
+   Tab Hash Linking, Anchor Targets, & Smooth Scroll Margins
+   ========================================================================== */
+#recruiters,
+#branches,
+#branchwise,
+#branch-analytics,
+#insights,
+#placement-insights,
+#placement-table-section,
+.tab-section-content {
+  scroll-margin-top: 88px;
+}
+
+@media (max-width: 768px) {
+  #recruiters,
+  #branches,
+  #branchwise,
+  #branch-analytics,
+  #insights,
+  #placement-insights,
+  #placement-table-section,
+  .tab-section-content {
+    scroll-margin-top: 130px;
+  }
+}
+
+.tab-anchor-alias {
+  display: block;
+  position: relative;
+  top: -88px;
+  visibility: hidden;
+  height: 0;
+  pointer-events: none;
+}
+
+.records-section-header {
+  margin-bottom: 8px;
+  padding: 0 4px;
+}
+
+.records-title-clean,
+.section-title-clean {
+  font-size: 24px;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.3px;
+  margin-top: 4px;
+  margin-bottom: 6px;
+}
+
+.records-subtitle-clean,
+.section-subtitle-clean {
+  font-size: 13.5px;
+  color: var(--text-muted);
+  max-width: 680px;
+  line-height: 1.55;
+  margin-bottom: 6px;
+}

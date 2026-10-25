@@ -151,7 +151,23 @@ export default function PlacementTable({
     ctcRange !== 'All';
 
   return (
-    <section id="placement-table-section" className="records-section">
+    <section
+      id="recruiters"
+      data-section="placement-table-section"
+      className="records-section"
+      data-tab-section="recruiters"
+    >
+      <span id="placement-table-section" className="tab-anchor-alias" aria-hidden="true" />
+      <span id="recruiters-directory" className="tab-anchor-alias" aria-hidden="true" />
+
+      <div className="records-section-header">
+        <span className="section-badge-pill">Recruitment Directory</span>
+        <h2 className="records-title-clean">Recruiter Placement Directory</h2>
+        <p className="records-subtitle-clean">
+          Official recruitment directory, CTC packages, eligibility criteria, and interview resources for 2024–25.
+        </p>
+      </div>
+
       <div className="table-controls-bar">
         <div className="table-meta-info">
           <span className="results-count">

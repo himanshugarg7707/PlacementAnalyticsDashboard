@@ -2,6 +2,7 @@
 export default function Navbar({
   activeTab,
   setActiveTab,
+  onTabSelect,
   shortlistedCount = 0,
   onChangeCollege,
   onLogin,
@@ -12,12 +13,33 @@ export default function Navbar({
     { id: 'insights', label: 'Placement Insights', icon: '📊' },
   ],
 }) {
+  const handleTabClick = (tabId, e) => {
+    if (e) {
+      e.preventDefault();
+    }
+    if (onTabSelect) {
+      onTabSelect(tabId);
+    } else if (setActiveTab) {
+      setActiveTab(tabId);
+    }
+  };
+
   return (
     <header className="navbar" role="banner">
       <div className="navbar-inner">
         <div
           className="nav-brand"
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          onClick={() => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            if (window.location.hash) {
+              try {
+                window.history.pushState(null, '', window.location.pathname + window.location.search);
+              } catch {
+                window.location.hash = '';
+              }
+            }
+          }}
+          title="Return to top of page"
         >
           <div className="nav-logo">IITB</div>
           <div className="nav-title-group">
@@ -30,17 +52,20 @@ export default function Navbar({
           {tabs.map((tab) => {
             const isActive = activeTab === tab.id;
             return (
-              <button
+              <a
                 key={tab.id}
+                href={`#${tab.id}`}
                 className={`nav-tab-btn ${isActive ? 'active' : ''}`}
-                onClick={() => setActiveTab(tab.id)}
+                onClick={(e) => handleTabClick(tab.id, e)}
+                role="tab"
+                aria-selected={isActive}
               >
                 <span className="nav-tab-icon">{tab.icon}</span>
                 <span className="nav-tab-label">{tab.label}</span>
                 {tab.id === 'recruiters' && shortlistedCount > 0 && (
                   <span className="nav-shortlist-badge">{shortlistedCount}</span>
                 )}
-              </button>
+              </a>
             );
           })}
         </nav>

@@ -34,7 +34,15 @@ export default function BranchWise() {
   }, [searchTerm, sortBy]);
 
   return (
-    <section className="branch-section" aria-labelledby="branches-heading">
+    <section
+      id="branches"
+      className="branch-section"
+      data-tab-section="branches"
+      aria-labelledby="branches-heading"
+    >
+      <span id="branchwise" className="tab-anchor-alias" aria-hidden="true" />
+      <span id="branch-analytics" className="tab-anchor-alias" aria-hidden="true" />
+
       <div className="insights-view-switcher">
         <button
           className={`insight-switch-btn ${activeSubTab === 'departments' ? 'active' : ''}`}

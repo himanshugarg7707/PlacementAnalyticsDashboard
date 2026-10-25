@@ -1,5 +1,5 @@
 // Contributors: Alankrit Narang (App & Insights), Diya Arora (Hero & Table), Himanshu Garg (Branches & Data), Yuvraj Yadav (Logos & Toast)
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import Navbar from './components/Navbar';
 import HeroSection from './components/HeroSection';
 import PlacementTable from './components/PlacementTable';
@@ -150,7 +150,13 @@ function PlacementInsights({ onSelectCompany, onOpenQuestions, showToast }) {
   }, []);
 
   return (
-    <div className="insights-container">
+    <div
+      id="insights"
+      className="insights-container"
+      data-tab-section="insights"
+    >
+      <span id="placement-insights" className="tab-anchor-alias" aria-hidden="true" />
+
       <div className="insights-header">
         <div>
           <span className="section-badge-pill">Analytics Intelligence</span>
@@ -312,8 +318,32 @@ function PlacementInsights({ onSelectCompany, onOpenQuestions, showToast }) {
   );
 }
 
+const HASH_MAP = {
+  recruiters: 'recruiters',
+  'recruiters-directory': 'recruiters',
+  directory: 'recruiters',
+  branches: 'branches',
+  branchwise: 'branches',
+  'branch-analytics': 'branches',
+  'branch-wise': 'branches',
+  insights: 'insights',
+  'placement-insights': 'insights',
+  analytics: 'insights',
+};
+
+const getTabFromHash = (hash) => {
+  const clean = (hash || '').replace(/^#\/?/, '').toLowerCase().trim();
+  return HASH_MAP[clean] || null;
+};
+
 export default function App() {
-  const [activeTab, setActiveTab] = useState('recruiters');
+  const [activeTab, setActiveTab] = useState(() => {
+    if (typeof window !== 'undefined' && window.location.hash) {
+      const tab = getTabFromHash(window.location.hash);
+      if (tab) return tab;
+    }
+    return 'recruiters';
+  });
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState('All');
   const [activeModalCompany, setActiveModalCompany] = useState(null);
@@ -321,6 +351,79 @@ export default function App() {
   const [comingSoonModal, setComingSoonModal] = useState(null);
   const [isTopQuestionsOpen, setIsTopQuestionsOpen] = useState(false);
   const [questionsInitialCompany, setQuestionsInitialCompany] = useState('All');
+
+  const scrollToTargetSection = useCallback((targetTabId) => {
+    const targetElement =
+      document.getElementById(targetTabId) ||
+      document.querySelector(`[data-tab-section="${targetTabId}"]`) ||
+      document.getElementById('main-portal-content') ||
+      document.querySelector('.main-portal-content');
+
+    if (!targetElement) return;
+
+    try {
+      targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } catch {
+      const navbar = document.querySelector('.navbar');
+      const navHeight = navbar ? navbar.offsetHeight : 70;
+      const currentScrollY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || 0;
+      const elementPosition = targetElement.getBoundingClientRect().top + currentScrollY;
+      window.scrollTo({
+        top: Math.max(0, elementPosition - navHeight - 16),
+        behavior: 'smooth',
+      });
+    }
+  }, []);
+
+  const handleSelectTab = useCallback(
+    (tabId, shouldScroll = true) => {
+      if (activeTab === tabId && shouldScroll) {
+        scrollToTargetSection(tabId);
+      } else {
+        setActiveTab(tabId);
+      }
+
+      const targetHash = `#${tabId}`;
+      if (window.location.hash !== targetHash) {
+        try {
+          window.history.pushState(null, '', targetHash);
+        } catch {
+          window.location.hash = targetHash;
+        }
+      }
+
+      if (shouldScroll) {
+        requestAnimationFrame(() => {
+          setTimeout(() => {
+            scrollToTargetSection(tabId);
+          }, 40);
+        });
+      }
+    },
+    [activeTab, scrollToTargetSection]
+  );
+
+  const isInitialMount = useRef(true);
+
+  // Automatically scroll down to the content when activeTab changes
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      const initialTab = getTabFromHash(window.location.hash);
+      if (initialTab && initialTab !== 'recruiters') {
+        setTimeout(() => {
+          scrollToTargetSection(initialTab);
+        }, 140);
+      }
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      scrollToTargetSection(activeTab);
+    }, 50);
+
+    return () => clearTimeout(timer);
+  }, [activeTab, scrollToTargetSection]);
 
   const handleOpenQuestions = useCallback((companyName = 'All') => {
     setQuestionsInitialCompany(typeof companyName === 'string' ? companyName : 'All');
@@ -349,6 +452,22 @@ export default function App() {
     }
   }, [shortlisted]);
 
+  // Synchronize URL hash with active tab on browser back/forward history navigation
+  useEffect(() => {
+    const handleHashSync = () => {
+      const tabFromHash = getTabFromHash(window.location.hash);
+      if (tabFromHash) {
+        setActiveTab(tabFromHash);
+        setTimeout(() => {
+          scrollToTargetSection(tabFromHash);
+        }, 60);
+      }
+    };
+
+    window.addEventListener('hashchange', handleHashSync);
+    return () => window.removeEventListener('hashchange', handleHashSync);
+  }, [scrollToTargetSection]);
+
   useEffect(() => {
     const handleGlobalKeyDown = (e) => {
       if (
@@ -370,7 +489,7 @@ export default function App() {
       if (e.key >= '1' && e.key <= '3') {
         const tabIdx = parseInt(e.key, 10) - 1;
         if (TAB_CONFIG[tabIdx]) {
-          setActiveTab(TAB_CONFIG[tabIdx].id);
+          handleSelectTab(TAB_CONFIG[tabIdx].id, true);
           showToast(`Switched to ${TAB_CONFIG[tabIdx].label}`, 'info');
         }
       }
@@ -378,7 +497,7 @@ export default function App() {
 
     window.addEventListener('keydown', handleGlobalKeyDown);
     return () => window.removeEventListener('keydown', handleGlobalKeyDown);
-  }, [activeModalCompany, isCopyrightOpen, comingSoonModal, isTopQuestionsOpen, handleOpenQuestions, showToast]);
+  }, [activeModalCompany, isCopyrightOpen, comingSoonModal, isTopQuestionsOpen, handleOpenQuestions, handleSelectTab, showToast]);
 
   const toggleShortlist = useCallback(
     (companyId) => {
@@ -412,6 +531,7 @@ export default function App() {
       <Navbar
         activeTab={activeTab}
         setActiveTab={setActiveTab}
+        onTabSelect={handleSelectTab}
         shortlistedCount={shortlisted.length}
         onOpenQuestions={() => handleOpenQuestions('All')}
         onChangeCollege={() =>
@@ -434,15 +554,17 @@ export default function App() {
       />
 
       <HeroSection
+        activeTab={activeTab}
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
         filterType={filterType}
         setFilterType={setFilterType}
         shortlistedCount={shortlisted.length}
         onOpenQuestions={() => handleOpenQuestions('All')}
+        onScrollToSection={scrollToTargetSection}
       />
 
-      <main className="main-portal-content" role="main">
+      <main id="main-portal-content" className="main-portal-content" role="main">
         {activeTab === 'recruiters' && (
           <PlacementTable
             searchTerm={searchTerm}
