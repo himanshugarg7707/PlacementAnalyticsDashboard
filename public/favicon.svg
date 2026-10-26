@@ -1,11 +1,38 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="PlacementRecords logo">
   <defs>
-    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#6366f1"/>
-      <stop offset="50%" style="stop-color:#a855f7"/>
-      <stop offset="100%" style="stop-color:#06b6d4"/>
+    <linearGradient id="blue" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0" stop-color="#0756E8"/>
+      <stop offset="1" stop-color="#06C5F7"/>
+    </linearGradient>
+    <linearGradient id="navy" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#071B3D"/>
+      <stop offset="1" stop-color="#063D86"/>
     </linearGradient>
   </defs>
-  <rect width="32" height="32" rx="6" fill="url(#g)"/>
-  <text x="16" y="22" text-anchor="middle" font-family="Arial,sans-serif" font-weight="800" font-size="14" fill="white">NK</text>
+  <g>
+    <!-- P monogram -->
+    <path fill="url(#navy)" fill-rule="evenodd" d="
+      M70 106 H238
+      C302 106 337 142 337 193
+      C337 245 300 278 240 278
+      H145 V407 L70 454 Z
+      M145 166 V218 H231
+      C251 218 263 207 263 192
+      C263 176 251 166 231 166 Z"/>
+    <!-- R monogram -->
+    <path fill="url(#blue)" d="
+      M246 106 H343
+      C403 106 438 139 438 190
+      C438 222 422 247 394 261
+      L470 365 H385 L324 276 H298
+      L269 305 L238 270
+      C281 257 313 235 313 192
+      C313 176 305 166 290 166 H246 Z"/>
+    <!-- Rising bars -->
+    <rect x="171" y="222" width="19" height="34" rx="4" fill="url(#blue)"/>
+    <rect x="198" y="204" width="19" height="52" rx="4" fill="url(#blue)"/>
+    <rect x="225" y="184" width="19" height="72" rx="4" fill="url(#blue)"/>
+    <!-- Growth swoosh -->
+    <path d="M113 327 C219 314 325 257 408 167 L389 164 L446 135 L431 198 L419 181 C330 275 227 326 113 327Z" fill="url(#blue)"/>
+  </g>
 </svg>

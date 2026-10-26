@@ -5,6 +5,7 @@ import { collegeInfo } from '../data/placementData';
 export default function HeroSection({
   onExploreRecruiters,
   onSelectBranch,
+  onOpenQuestions,
 }) {
   const [animatedHighest, setAnimatedHighest] = useState(0);
   const [animatedAvg, setAnimatedAvg] = useState(0);
@@ -104,8 +105,18 @@ export default function HeroSection({
             className="hero-btn-secondary"
             onClick={onSelectBranch}
           >
-            <span>Branch Analytics &amp; Cutoffs</span>
+            <span>Branch Analytics &amp; Roadmaps</span>
           </button>
+          {onOpenQuestions && (
+            <button
+              type="button"
+              className="hero-btn-secondary hero-btn-tq"
+              onClick={() => onOpenQuestions('All')}
+              title="Top Companies Mostly Asked Interview Questions"
+            >
+              <span>💡 Question Bank</span>
+            </button>
+          )}
         </div>
       </div>
     </div>

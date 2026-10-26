@@ -11,6 +11,8 @@ export default function PlacementTable({
   shortlisted = [],
   onToggleShortlist,
   showToast,
+  onSelectCompany,
+  onOpenQuestions,
 }) {
   const [selectedSector, setSelectedSector] = useState('All');
   const [selectedBranch, setSelectedBranch] = useState('All');
@@ -156,7 +158,14 @@ export default function PlacementTable({
   ];
 
   return (
-    <section id="placement-table-section" className="records-section">
+    <section
+      id="recruiters"
+      data-section="placement-table-section"
+      className="records-section"
+      data-tab-section="recruiters"
+    >
+      <span id="placement-table-section" className="tab-anchor-alias" aria-hidden="true" />
+      <span id="recruiters-directory" className="tab-anchor-alias" aria-hidden="true" />
       {/* Search Bar & Tier Filter Pills directly attached to Table */}
       <div className="table-search-header">
         <div className="hero-search-input-wrap">
@@ -319,8 +328,10 @@ export default function PlacementTable({
                     <tr
                       key={c.id}
                       onClick={() => {
-                        if (showToast) {
-                          showToast(`Company details for ${c.name} coming soon! ✨`, 'info');
+                        if (onSelectCompany) {
+                          onSelectCompany(c);
+                        } else if (showToast) {
+                          showToast(`Opened ${c.name} details & questions! 💡`, 'info');
                         }
                       }}
                       className="clickable-row"
@@ -345,7 +356,22 @@ export default function PlacementTable({
                       <td>
                         <div className="company-name-cell">
                           <CompanyLogo company={c} size={36} />
-                          <span className="company-title-text">{c.name}</span>
+                          <div className="company-title-wrap">
+                            <span className="company-title-text">{c.name}</span>
+                            {onOpenQuestions && (
+                              <button
+                                type="button"
+                                className="row-questions-chip"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  onOpenQuestions(c.name);
+                                }}
+                                title={`View mostly asked questions for ${c.name}`}
+                              >
+                                💡 Qs
+                              </button>
+                            )}
+                          </div>
                         </div>
                       </td>
                       <td className="sector-text">{c.sector}</td>

@@ -5,9 +5,11 @@ import { useState, useEffect } from 'react';
 export default function Navbar({
   activeTab,
   setActiveTab,
+  onTabSelect,
   shortlistedCount = 0,
   onChangeCollege,
   onLogin,
+  onOpenQuestions,
   user = null,
   onLogout = null,
   theme = 'dark',
@@ -39,7 +41,16 @@ export default function Navbar({
         {/* Brand Group */}
         <div
           className="nav-brand"
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          onClick={() => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            if (window.location.hash) {
+              try {
+                window.history.pushState(null, '', window.location.pathname + window.location.search);
+              } catch {
+                window.location.hash = '';
+              }
+            }
+          }}
           title="IIT Bombay Placement Records"
         >
           <div className="nav-logo">IITB</div>
@@ -57,8 +68,16 @@ export default function Navbar({
               <button
                 key={tab.id}
                 className={`nav-tab-btn ${isActive ? 'active' : ''}`}
-                onClick={() => setActiveTab(tab.id)}
+                onClick={() => {
+                  if (onTabSelect) {
+                    onTabSelect(tab.id);
+                  } else {
+                    setActiveTab(tab.id);
+                  }
+                }}
                 type="button"
+                role="tab"
+                aria-selected={isActive}
               >
                 <span className="nav-tab-icon">{tab.icon}</span>
                 <span className="nav-tab-label">{tab.label}</span>
@@ -72,6 +91,20 @@ export default function Navbar({
 
         {/* Right Actions */}
         <div className="nav-right">
+          {/* Top Questions Bank Button */}
+          {onOpenQuestions && (
+            <button
+              type="button"
+              className="btn-top-questions"
+              onClick={() => onOpenQuestions('All')}
+              title="Top Companies Mostly Asked Interview Questions"
+              aria-label="Top Companies Mostly Asked Questions"
+            >
+              <span className="btn-tq-icon">💡</span>
+              <span className="btn-tq-label">Question Bank</span>
+            </button>
+          )}
+
           {/* Theme Toggle Capsule */}
           {onToggleTheme && (
             <button
