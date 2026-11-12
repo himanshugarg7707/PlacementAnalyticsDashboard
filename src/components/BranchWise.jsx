@@ -1,11 +1,239 @@
-// Contributor: Himanshu Garg - Branch-Wise Analytics Component
+// Contributors: Himanshu Garg (Analytics & Data), Yuvraj Yadav (Branch Roadmap), Diya Arora (Navigation & Anchors)
 import { useState, useMemo } from 'react';
 import { branches, yearWiseTrend, sectorWiseData } from '../data/placementData';
+import { getPlacementRate, getPercentChange } from '../utils/placementCalculations';
+
+// Branch-specific roadmap data
+const branchRoadmaps = {
+  cse: {
+    label: 'Computer Science & Engineering',
+    icon: '💻',
+    color: '#6366f1',
+    phases: [
+      {
+        phase: 'Phase 1 — Foundation',
+        semester: 'Sem 1–2',
+        subjects: ['Programming in C/C++', 'Discrete Mathematics', 'Digital Logic Design', 'Data Structures'],
+        skills: ['Problem Solving', 'Git Basics', 'Linux CLI'],
+        resources: ['CLRS Book', 'CS50 Harvard', 'GeeksForGeeks'],
+      },
+      {
+        phase: 'Phase 2 — Core CS',
+        semester: 'Sem 3–4',
+        subjects: ['Algorithms & Complexity', 'Operating Systems', 'Database Systems', 'Computer Networks', 'OOP (Java/Python)'],
+        skills: ['SQL', 'REST APIs', 'System Design basics'],
+        resources: ['Striver A-Z DSA Sheet', 'OSTEP (OS book)', 'Neetcode.io'],
+      },
+      {
+        phase: 'Phase 3 — Specialisation',
+        semester: 'Sem 5–6',
+        subjects: ['Compiler Design', 'Computer Architecture', 'Machine Learning', 'Web Technologies', 'Cloud Computing'],
+        skills: ['React/Node.js', 'ML with sklearn', 'Docker basics'],
+        resources: ['Andrew Ng ML', 'The Odin Project', 'AWS Free Tier'],
+      },
+      {
+        phase: 'Phase 4 — Placement Prep',
+        semester: 'Sem 7–8',
+        subjects: ['System Design', 'Advanced DBMS', 'Distributed Systems'],
+        skills: ['LeetCode (300+ problems)', 'Mock Interviews', 'Behavioral Rounds', 'Resume Building'],
+        resources: ['Grokking System Design', 'InterviewBit', 'Blind 75 List'],
+      },
+    ],
+  },
+  ece: {
+    label: 'Electronics & Communication Engineering',
+    icon: '📡',
+    color: '#f59e0b',
+    phases: [
+      {
+        phase: 'Phase 1 — Foundation',
+        semester: 'Sem 1–2',
+        subjects: ['Basic Electronics', 'Engineering Mathematics', 'Circuit Theory', 'Programming (C)'],
+        skills: ['Circuit Simulation (Multisim)', 'Basic Python'],
+        resources: ['Sedra/Smith Microelectronics', 'NPTEL Electronics'],
+      },
+      {
+        phase: 'Phase 2 — Core ECE',
+        semester: 'Sem 3–4',
+        subjects: ['Signals & Systems', 'Analog Circuits', 'Digital Electronics', 'Electromagnetic Theory', 'Microprocessors'],
+        skills: ['MATLAB', 'VHDL/Verilog basics', 'PCB Design'],
+        resources: ['Oppenheim S&S', 'Razavi Circuits', 'NPTEL VLSI'],
+      },
+      {
+        phase: 'Phase 3 — Specialisation',
+        semester: 'Sem 5–6',
+        subjects: ['Communication Systems', 'VLSI Design', 'Digital Signal Processing', 'Embedded Systems', 'Wireless Networks'],
+        skills: ['FPGA Programming', 'Arduino/STM32', 'RF Design'],
+        resources: ['Haykin Communication', 'Cormen DSP', 'Keil IDE'],
+      },
+      {
+        phase: 'Phase 4 — Placement Prep',
+        semester: 'Sem 7–8',
+        subjects: ['IoT & Industry 4.0', 'VLSI Verification', 'Mixed Signal Design'],
+        skills: ['Core ECE MCQs', 'Aptitude & Reasoning', 'Python/DSA for software roles', 'Cadence/Synopsys tools'],
+        resources: ['GATEoverflow', 'Made Easy ECE', 'VLSI System Design courses'],
+      },
+    ],
+  },
+  me: {
+    label: 'Mechanical Engineering',
+    icon: '⚙️',
+    color: '#ef4444',
+    phases: [
+      {
+        phase: 'Phase 1 — Foundation',
+        semester: 'Sem 1–2',
+        subjects: ['Engineering Graphics', 'Engineering Mechanics', 'Thermodynamics', 'Mathematics'],
+        skills: ['AutoCAD 2D', 'Excel', 'Basic programming'],
+        resources: ['Shigley Machine Design', 'NPTEL ME'],
+      },
+      {
+        phase: 'Phase 2 — Core ME',
+        semester: 'Sem 3–4',
+        subjects: ['Fluid Mechanics', 'Manufacturing Processes', 'Strength of Materials', 'Kinematics of Machines', 'Material Science'],
+        skills: ['SolidWorks / CATIA', 'ANSYS FEA basics'],
+        resources: ['R.K. Bansal FM', 'Khurmi Theory of Machines'],
+      },
+      {
+        phase: 'Phase 3 — Specialisation',
+        semester: 'Sem 5–6',
+        subjects: ['Heat Transfer', 'IC Engines', 'Machine Design', 'Robotics', 'CAD/CAM'],
+        skills: ['ANSYS Simulation', 'Python for Engineering', 'GD&T'],
+        resources: ['Cengel Heat Transfer', 'Autodesk Fusion 360'],
+      },
+      {
+        phase: 'Phase 4 — Placement Prep',
+        semester: 'Sem 7–8',
+        subjects: ['Industrial Engineering', 'Quality Control', 'Operations Research'],
+        skills: ['Core ME Interview Prep', 'Six Sigma basics', 'Aptitude & Reasoning', 'GATE prep'],
+        resources: ['Made Easy GATE ME', 'GATEOverflow', 'Coursera ME electives'],
+      },
+    ],
+  },
+  ee: {
+    label: 'Electrical Engineering',
+    icon: '⚡',
+    color: '#10b981',
+    phases: [
+      {
+        phase: 'Phase 1 — Foundation',
+        semester: 'Sem 1–2',
+        subjects: ['Electrical Circuits', 'Engineering Mathematics', 'Physics (Electricity)', 'Programming (C)'],
+        skills: ['MATLAB basics', 'Circuit Lab'],
+        resources: ['Hayt Engineering Circuits', 'NPTEL EE'],
+      },
+      {
+        phase: 'Phase 2 — Core EE',
+        semester: 'Sem 3–4',
+        subjects: ['Electrical Machines', 'Power Systems', 'Control Systems', 'Signals & Systems', 'Electromagnetic Fields'],
+        skills: ['MATLAB/Simulink', 'AutoCAD Electrical'],
+        resources: ['Nagrath & Kothari', 'Ogata Control Sys'],
+      },
+      {
+        phase: 'Phase 3 — Specialisation',
+        semester: 'Sem 5–6',
+        subjects: ['Power Electronics', 'High Voltage Engineering', 'Microcontrollers', 'Renewable Energy', 'Electric Drives'],
+        skills: ['PLC Programming', 'MATLAB Simulink advanced', 'Proteus'],
+        resources: ['Mohan Power Electronics', 'Arduino Projects'],
+      },
+      {
+        phase: 'Phase 4 — Placement Prep',
+        semester: 'Sem 7–8',
+        subjects: ['Smart Grid Technology', 'Energy Management', 'EV Technology'],
+        skills: ['Core EE Interview MCQs', 'GATE preparation', 'Aptitude', 'Python for Data Analysis'],
+        resources: ['Made Easy GATE EE', 'IES Materials', 'Udemy PLC Courses'],
+      },
+    ],
+  },
+  ce: {
+    label: 'Civil Engineering',
+    icon: '🏗️',
+    color: '#8b5cf6',
+    phases: [
+      {
+        phase: 'Phase 1 — Foundation',
+        semester: 'Sem 1–2',
+        subjects: ['Engineering Drawing', 'Surveying', 'Building Materials', 'Fluid Mechanics basics'],
+        skills: ['AutoCAD', 'SketchUp'],
+        resources: ['IS Codes', 'NPTEL Civil'],
+      },
+      {
+        phase: 'Phase 2 — Core CE',
+        semester: 'Sem 3–4',
+        subjects: ['Structural Analysis', 'Concrete Technology', 'Soil Mechanics', 'Transportation Engineering', 'Environmental Engineering'],
+        skills: ['STAAD.Pro', 'ETABS basics'],
+        resources: ['R.C. Hibbeler Structures', 'Gopal Ranjan Soil Mech'],
+      },
+      {
+        phase: 'Phase 3 — Specialisation',
+        semester: 'Sem 5–6',
+        subjects: ['Foundation Engineering', 'Water Resources', 'Estimation & Costing', 'Construction Management', 'Pre-stressed Concrete'],
+        skills: ['BIM / Revit', 'Primavera Project Planner', 'GIS basics'],
+        resources: ['IS 456 for RCC', 'Autodesk Revit Tutorials'],
+      },
+      {
+        phase: 'Phase 4 — Placement Prep',
+        semester: 'Sem 7–8',
+        subjects: ['Smart Infrastructure', 'Quality & Safety Management'],
+        skills: ['GATE Civil prep', 'Core Interview MCQs', 'Aptitude', 'MS Project'],
+        resources: ['Made Easy GATE CE', 'TNPSC / UPSC ESE prep', 'LinkedIn Learning PM'],
+      },
+    ],
+  },
+  it: {
+    label: 'Information Technology',
+    icon: '🌐',
+    color: '#06b6d4',
+    phases: [
+      {
+        phase: 'Phase 1 — Foundation',
+        semester: 'Sem 1–2',
+        subjects: ['Programming (Python/C)', 'Discrete Math', 'Digital Electronics', 'IT Fundamentals'],
+        skills: ['Git & GitHub', 'HTML/CSS basics', 'Linux Shell'],
+        resources: ['Automate with Python', 'The Odin Project'],
+      },
+      {
+        phase: 'Phase 2 — Core IT',
+        semester: 'Sem 3–4',
+        subjects: ['Data Structures', 'DBMS', 'Computer Networks', 'Web Development', 'OOP'],
+        skills: ['JavaScript', 'MySQL', 'REST API', 'React basics'],
+        resources: ['Striver DSA Sheet', 'MDN Web Docs', 'freeCodeCamp'],
+      },
+      {
+        phase: 'Phase 3 — Specialisation',
+        semester: 'Sem 5–6',
+        subjects: ['Cybersecurity', 'Cloud Computing (AWS/GCP)', 'Data Science', 'Mobile App Dev', 'DevOps'],
+        skills: ['Docker & Kubernetes', 'TensorFlow basics', 'React Native'],
+        resources: ['AWS Certified Solutions Architect', 'TryHackMe', 'Kaggle'],
+      },
+      {
+        phase: 'Phase 4 — Placement Prep',
+        semester: 'Sem 7–8',
+        subjects: ['System Design', 'Advanced Algorithms', 'Microservices Architecture'],
+        skills: ['LeetCode 300+', 'Mock Interviews', 'Full-Stack Project Portfolio', 'Behavioral STAR prep'],
+        resources: ['Grokking System Design', 'Neetcode.io', 'Pramp Mock Interviews'],
+      },
+    ],
+  },
+};
+
+// Fallback generic roadmap for branches without specific custom data
+const genericRoadmap = (branchName) => ({
+  label: branchName,
+  icon: '📚',
+  color: '#94a3b8',
+  phases: [
+    { phase: 'Phase 1 — Foundation', semester: 'Sem 1–2', subjects: ['Engineering Mathematics', 'Physics / Chemistry', 'Programming Basics', 'Communication Skills'], skills: ['MS Office', 'Report Writing'], resources: ['NPTEL Courses', 'Coursera Specializations'] },
+    { phase: 'Phase 2 — Core Subjects', semester: 'Sem 3–4', subjects: ['Branch-Specific Core 1', 'Branch-Specific Core 2', 'Data Structures', 'Project Work I'], skills: ['Domain Software Tools', 'Python basics'], resources: ['Standard Textbooks', 'YouTube Lectures'] },
+    { phase: 'Phase 3 — Specialisation', semester: 'Sem 5–6', subjects: ['Elective Specialisation', 'Lab Work', 'Mini Project', 'Internship'], skills: ['Industry Tools', 'Problem Solving'], resources: ['Research Papers', 'LinkedIn Learning'] },
+    { phase: 'Phase 4 — Placement Prep', semester: 'Sem 7–8', subjects: ['Final Year Project', 'Seminar'], skills: ['Aptitude & Reasoning', 'Domain Core MCQs', 'Resume Building', 'Mock GDs & Interviews'], resources: ['Made Easy / Gate Materials', 'InterviewBit', 'Glassdoor Reviews'] },
+  ],
+});
 
 export default function BranchWise() {
-  const [activeSubTab, setActiveSubTab] = useState('departments');
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('rate');
+  const [selectedRoadmapBranch, setSelectedRoadmapBranch] = useState('cse');
 
   const filteredBranches = useMemo(() => {
     let list = branches.filter(
@@ -43,49 +271,35 @@ export default function BranchWise() {
       <span id="branchwise" className="tab-anchor-alias" aria-hidden="true" />
       <span id="branch-analytics" className="tab-anchor-alias" aria-hidden="true" />
 
-      <div className="insights-view-switcher">
-        <button
-          className={`insight-switch-btn ${activeSubTab === 'departments' ? 'active' : ''}`}
-          onClick={() => setActiveSubTab('departments')}
-        >
-          🎓 Engineering Departments
-        </button>
-        <button
-          className={`insight-switch-btn ${activeSubTab === 'trends' ? 'active' : ''}`}
-          onClick={() => setActiveSubTab('trends')}
-        >
-          📈 5-Year Growth Trajectory
-        </button>
-        <button
-          className={`insight-switch-btn ${activeSubTab === 'sectors' ? 'active' : ''}`}
-          onClick={() => setActiveSubTab('sectors')}
-        >
-          🌐 Sector-Wise Analytics
-        </button>
-      </div>
 
-      {activeSubTab === 'departments' && (
-        <div className="tab-pane-content">
+      <section id="department-analytics" className="tab-pane-content branch-feature-section" aria-labelledby="branches-heading">
           <div className="branch-header-row">
             <div>
               <div className="section-badge-pill">Departmental Analytics</div>
               <h2 id="branches-heading" className="branch-title">
-                Branch-Wise Placement Breakdown
+                Engineering Departments
               </h2>
               <p className="branch-desc">
-                Detailed placement rates, salary distribution, and cohort statistics across engineering departments.
+                Compare placement rates and package outcomes across available departments and programmes.
               </p>
             </div>
 
-            <div className="branch-controls">
+            <div className="branch-controls-wrap">
               <div className="branch-search-box">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <circle cx="11" cy="11" r="8"></circle>
-                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <circle cx="11" cy="11" r="8" />
+                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
                 </svg>
                 <input
                   type="text"
-                  placeholder="Search branch (CSE, ECE)..."
+                  placeholder="Search branch name..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="branch-search-input"
@@ -117,7 +331,7 @@ export default function BranchWise() {
 
           <div className="branch-grid-layout">
             {filteredBranches.map((b) => {
-              const placementRate = ((b.placed / b.totalStudents) * 100).toFixed(1);
+              const placementRate = getPlacementRate(b.placed, b.totalStudents);
               return (
                 <div className="branch-glass-card" key={b.id}>
                   <div className="branch-card-top">
@@ -142,7 +356,7 @@ export default function BranchWise() {
                     </div>
                     <div className="branch-metric-cell">
                       <span className="b-label">Highest Package</span>
-                      <span className="b-val font-mono" style={{ color: '#34d399' }}>
+                      <span className="b-val font-mono b-val-highest">
                         ₹{b.highestPackage} LPA
                       </span>
                     </div>
@@ -159,15 +373,144 @@ export default function BranchWise() {
               );
             })}
           </div>
-        </div>
-      )}
+      </section>
 
-      {activeSubTab === 'trends' && (
-        <div className="tab-pane-content">
+      {(() => {
+        const roadmapBranches = branches.filter((b) =>
+          ['cse', 'ece', 'me', 'ee', 'ce', 'it'].includes(b.id)
+        );
+        const allBranches = [
+          ...roadmapBranches,
+          ...branches.filter((b) => !['cse', 'ece', 'me', 'ee', 'ce', 'it'].includes(b.id)),
+        ];
+        const selected = branchRoadmaps[selectedRoadmapBranch];
+        const branchMeta = branches.find((b) => b.id === selectedRoadmapBranch);
+        const roadmapData = selected || genericRoadmap(branchMeta?.name || selectedRoadmapBranch.toUpperCase());
+
+        return (
+          <section id="branch-roadmap" className="tab-pane-content branch-feature-section" aria-labelledby="roadmap-heading">
+            <div className="branch-header-row">
+              <div>
+                <div className="section-badge-pill">Career Blueprint</div>
+                <h2 id="roadmap-heading" className="branch-title">Branch Roadmap</h2>
+                <p className="branch-desc">
+                  A phase-wise guide covering subjects, skills, and resources for each engineering branch to maximise placement outcomes.
+                </p>
+              </div>
+            </div>
+
+            {/* Branch Selector */}
+            <div className="roadmap-branch-selector">
+              {allBranches.map((b) => (
+                <button
+                  key={b.id}
+                  className={`roadmap-branch-pill ${
+                    selectedRoadmapBranch === b.id ? 'active' : ''
+                  }`}
+                  style={selectedRoadmapBranch === b.id ? { '--pill-color': b.color } : {}}
+                  onClick={() => setSelectedRoadmapBranch(b.id)}
+                >
+                  <span className="roadmap-pill-dot" style={{ background: b.color }}></span>
+                  {b.shortName}
+                </button>
+              ))}
+            </div>
+
+            {/* Roadmap Header */}
+            <div className="roadmap-hero-bar" style={{ '--hero-color': roadmapData.color }}>
+              <span className="roadmap-hero-icon">{roadmapData.icon}</span>
+              <div>
+                <div className="roadmap-hero-title">{roadmapData.label}</div>
+                {branchMeta && (
+                  <div className="roadmap-hero-stats">
+                    <span>📊 Avg Package: <strong>₹{branchMeta.avgPackage} LPA</strong></span>
+                    <span>🏆 Highest: <strong>₹{branchMeta.highestPackage} LPA</strong></span>
+                    <span>👥 Students: <strong>{branchMeta.totalStudents}</strong></span>
+                    <span>✅ Placed: <strong>{branchMeta.placed}</strong></span>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Phase Timeline */}
+            <div className="roadmap-timeline">
+              {roadmapData.phases.map((phase, idx) => (
+                <div className="roadmap-phase-card" key={idx} style={{ '--phase-color': roadmapData.color }}>
+                  <div className="roadmap-phase-connector">
+                    <div className="roadmap-phase-node" style={{ background: roadmapData.color }}>
+                      <span>{idx + 1}</span>
+                    </div>
+                    {idx < roadmapData.phases.length - 1 && (
+                      <div className="roadmap-connector-line" style={{ background: `linear-gradient(to bottom, ${roadmapData.color}60, transparent)` }}></div>
+                    )}
+                  </div>
+
+                  <div className="roadmap-phase-body">
+                    <div className="roadmap-phase-header">
+                      <div>
+                        <h3 className="roadmap-phase-title">{phase.phase}</h3>
+                        <span className="roadmap-semester-badge">{phase.semester}</span>
+                      </div>
+                    </div>
+
+                    <div className="roadmap-phase-content-grid">
+                      {/* Subjects */}
+                      <div className="roadmap-content-block">
+                        <div className="roadmap-block-heading">
+                          <span className="roadmap-block-icon">📖</span> Core Subjects
+                        </div>
+                        <ul className="roadmap-subject-list">
+                          {phase.subjects.map((s, si) => (
+                            <li key={si} className="roadmap-subject-item">
+                              <span className="roadmap-item-dot" style={{ background: roadmapData.color }}></span>
+                              {s}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      {/* Skills */}
+                      <div className="roadmap-content-block">
+                        <div className="roadmap-block-heading">
+                          <span className="roadmap-block-icon">🛠️</span> Skills to Build
+                        </div>
+                        <div className="roadmap-skills-tags">
+                          {phase.skills.map((sk, ski) => (
+                            <span key={ski} className="roadmap-skill-tag" style={{ '--tag-color': roadmapData.color }}>
+                              {sk}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Resources */}
+                      <div className="roadmap-content-block">
+                        <div className="roadmap-block-heading">
+                          <span className="roadmap-block-icon">🔗</span> Resources
+                        </div>
+                        <ul className="roadmap-subject-list">
+                          {phase.resources.map((r, ri) => (
+                            <li key={ri} className="roadmap-subject-item roadmap-resource-item">
+                              <span className="roadmap-item-dot" style={{ background: 'var(--emerald-accent)' }}></span>
+                              {r}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        );
+      })()}
+
+      <section id="placement-trends" className="tab-pane-content branch-feature-section" aria-labelledby="trends-heading">
           <div className="branch-header-row">
             <div>
               <div className="section-badge-pill">Historical Growth</div>
-              <h2 className="branch-title">5-Year Institutional Placement Trend</h2>
+              <h2 id="trends-heading" className="branch-title">5-Year Growth Trajectory</h2>
               <p className="branch-desc">
                 Consistent year-on-year expansion in recruiting partners, student placements, and peak compensation.
               </p>
@@ -177,9 +520,7 @@ export default function BranchWise() {
           <div className="trends-grid-cards">
             {yearWiseTrend.map((t, idx) => {
               const prev = idx > 0 ? yearWiseTrend[idx - 1] : null;
-              const growth = prev
-                ? (((t.totalPlaced - prev.totalPlaced) / prev.totalPlaced) * 100).toFixed(1)
-                : null;
+              const growth = prev ? getPercentChange(t.totalPlaced, prev.totalPlaced) : null;
               const isCurrent = idx === yearWiseTrend.length - 1;
 
               return (
@@ -216,15 +557,13 @@ export default function BranchWise() {
               );
             })}
           </div>
-        </div>
-      )}
+      </section>
 
-      {activeSubTab === 'sectors' && (
-        <div className="tab-pane-content">
-          <div className="branch-header-row">
+      <section id="sector-analytics" className="tab-pane-content branch-feature-section" aria-labelledby="sectors-heading">
+        <div className="branch-header-row">
             <div>
               <div className="section-badge-pill">Market Sector Breakdown</div>
-              <h2 className="branch-title">Industry Sector Distribution</h2>
+              <h2 id="sectors-heading" className="branch-title">Sector-Wise Analytics</h2>
               <p className="branch-desc">
                 Hiring volume, company participation, and average package dynamics across primary industrial verticals.
               </p>
@@ -256,8 +595,7 @@ export default function BranchWise() {
               );
             })}
           </div>
-        </div>
-      )}
+      </section>
     </section>
   );
 }
