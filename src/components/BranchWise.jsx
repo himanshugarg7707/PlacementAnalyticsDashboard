@@ -1,6 +1,7 @@
 // Contributors: Himanshu Garg (Analytics & Data), Yuvraj Yadav (Branch Roadmap), Diya Arora (Navigation & Anchors)
 import { useState, useMemo } from 'react';
 import { branches, yearWiseTrend, sectorWiseData } from '../data/placementData';
+import { getPlacementRate, getPercentChange } from '../utils/placementCalculations';
 
 // Branch-specific roadmap data
 const branchRoadmaps = {
@@ -230,7 +231,6 @@ const genericRoadmap = (branchName) => ({
 });
 
 export default function BranchWise() {
-  const [activeSubTab, setActiveSubTab] = useState('departments');
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('rate');
   const [selectedRoadmapBranch, setSelectedRoadmapBranch] = useState('cse');
@@ -271,43 +271,16 @@ export default function BranchWise() {
       <span id="branchwise" className="tab-anchor-alias" aria-hidden="true" />
       <span id="branch-analytics" className="tab-anchor-alias" aria-hidden="true" />
 
-      <div className="insights-view-switcher">
-        <button
-          className={`insight-switch-btn ${activeSubTab === 'departments' ? 'active' : ''}`}
-          onClick={() => setActiveSubTab('departments')}
-        >
-          🎓 Engineering Departments
-        </button>
-        <button
-          className={`insight-switch-btn ${activeSubTab === 'roadmap' ? 'active' : ''}`}
-          onClick={() => setActiveSubTab('roadmap')}
-        >
-          🗺️ Branch RoadMap
-        </button>
-        <button
-          className={`insight-switch-btn ${activeSubTab === 'trends' ? 'active' : ''}`}
-          onClick={() => setActiveSubTab('trends')}
-        >
-          📈 5-Year Growth Trajectory
-        </button>
-        <button
-          className={`insight-switch-btn ${activeSubTab === 'sectors' ? 'active' : ''}`}
-          onClick={() => setActiveSubTab('sectors')}
-        >
-          🌐 Sector-Wise Analytics
-        </button>
-      </div>
 
-      {activeSubTab === 'departments' && (
-        <div className="tab-pane-content">
+      <section id="department-analytics" className="tab-pane-content branch-feature-section" aria-labelledby="branches-heading">
           <div className="branch-header-row">
             <div>
               <div className="section-badge-pill">Departmental Analytics</div>
               <h2 id="branches-heading" className="branch-title">
-                Branch-Wise Placement Breakdown
+                Engineering Departments
               </h2>
               <p className="branch-desc">
-                Placement performance, median/average packages, and conversion rates across 12 engineering disciplines.
+                Compare placement rates and package outcomes across available departments and programmes.
               </p>
             </div>
 
@@ -358,7 +331,7 @@ export default function BranchWise() {
 
           <div className="branch-grid-layout">
             {filteredBranches.map((b) => {
-              const placementRate = ((b.placed / b.totalStudents) * 100).toFixed(1);
+              const placementRate = getPlacementRate(b.placed, b.totalStudents);
               return (
                 <div className="branch-glass-card" key={b.id}>
                   <div className="branch-card-top">
@@ -400,10 +373,9 @@ export default function BranchWise() {
               );
             })}
           </div>
-        </div>
-      )}
+      </section>
 
-      {activeSubTab === 'roadmap' && (() => {
+      {(() => {
         const roadmapBranches = branches.filter((b) =>
           ['cse', 'ece', 'me', 'ee', 'ce', 'it'].includes(b.id)
         );
@@ -416,11 +388,11 @@ export default function BranchWise() {
         const roadmapData = selected || genericRoadmap(branchMeta?.name || selectedRoadmapBranch.toUpperCase());
 
         return (
-          <div className="tab-pane-content">
+          <section id="branch-roadmap" className="tab-pane-content branch-feature-section" aria-labelledby="roadmap-heading">
             <div className="branch-header-row">
               <div>
                 <div className="section-badge-pill">Career Blueprint</div>
-                <h2 className="branch-title">Branch-Wise Academic RoadMap</h2>
+                <h2 id="roadmap-heading" className="branch-title">Branch Roadmap</h2>
                 <p className="branch-desc">
                   A phase-wise guide covering subjects, skills, and resources for each engineering branch to maximise placement outcomes.
                 </p>
@@ -530,16 +502,15 @@ export default function BranchWise() {
                 </div>
               ))}
             </div>
-          </div>
+          </section>
         );
       })()}
 
-      {activeSubTab === 'trends' && (
-        <div className="tab-pane-content">
+      <section id="placement-trends" className="tab-pane-content branch-feature-section" aria-labelledby="trends-heading">
           <div className="branch-header-row">
             <div>
               <div className="section-badge-pill">Historical Growth</div>
-              <h2 className="branch-title">5-Year Institutional Placement Trend</h2>
+              <h2 id="trends-heading" className="branch-title">5-Year Growth Trajectory</h2>
               <p className="branch-desc">
                 Consistent year-on-year expansion in recruiting partners, student placements, and peak compensation.
               </p>
@@ -549,9 +520,7 @@ export default function BranchWise() {
           <div className="trends-grid-cards">
             {yearWiseTrend.map((t, idx) => {
               const prev = idx > 0 ? yearWiseTrend[idx - 1] : null;
-              const growth = prev
-                ? (((t.totalPlaced - prev.totalPlaced) / prev.totalPlaced) * 100).toFixed(1)
-                : null;
+              const growth = prev ? getPercentChange(t.totalPlaced, prev.totalPlaced) : null;
               const isCurrent = idx === yearWiseTrend.length - 1;
 
               return (
@@ -588,15 +557,13 @@ export default function BranchWise() {
               );
             })}
           </div>
-        </div>
-      )}
+      </section>
 
-      {activeSubTab === 'sectors' && (
-        <div className="tab-pane-content">
-          <div className="branch-header-row">
+      <section id="sector-analytics" className="tab-pane-content branch-feature-section" aria-labelledby="sectors-heading">
+        <div className="branch-header-row">
             <div>
               <div className="section-badge-pill">Market Sector Breakdown</div>
-              <h2 className="branch-title">Industry Sector Distribution</h2>
+              <h2 id="sectors-heading" className="branch-title">Sector-Wise Analytics</h2>
               <p className="branch-desc">
                 Hiring volume, company participation, and average package dynamics across primary industrial verticals.
               </p>
@@ -628,8 +595,7 @@ export default function BranchWise() {
               );
             })}
           </div>
-        </div>
-      )}
+      </section>
     </section>
   );
 }

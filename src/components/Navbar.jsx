@@ -15,9 +15,9 @@ export default function Navbar({
   theme = 'dark',
   onToggleTheme = null,
   tabs = [
-    { id: 'recruiters', label: 'Recruiters Directory', icon: '🏢' },
-    { id: 'branches', label: 'Branch Analytics', icon: '🎓' },
-    { id: 'insights', label: 'Placement Insights', icon: '📊' },
+    { id: 'recruiters', label: 'Recruiters' },
+    { id: 'branches', label: 'Branches' },
+    { id: 'insights', label: 'Insights' },
   ],
 }) {
   const [scrolled, setScrolled] = useState(false);
@@ -39,7 +39,8 @@ export default function Navbar({
     >
       <div className="navbar-inner">
         {/* Brand Group */}
-        <div
+        <button
+          type="button"
           className="nav-brand"
           onClick={() => {
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -51,19 +52,23 @@ export default function Navbar({
               }
             }
           }}
-          title="IIT Bombay Placement Records"
+          title="Placement Analytics"
+          aria-label="Placement Analytics, go to the top of the page"
         >
-          <div className="nav-logo">IITB</div>
-          <div className="nav-title-group">
-            <span className="inst-name">IIT Bombay</span>
-            <span className="portal-sub">Placement Records 2024–25</span>
-          </div>
-        </div>
+          <svg className="nav-brand-mark" viewBox="0 0 28 28" aria-hidden="true">
+            <path d="M4 23h20" />
+            <path d="M7 20v-5M13 20v-9M19 20V7" />
+            <path d="m5 12 6-4 5 2 7-6" />
+            <path d="M18 4h5v5" />
+          </svg>
+          <span className="nav-brand-wordmark">Placement <strong>Analytics</strong></span>
+        </button>
 
         {/* Center Navigation Tabs */}
         <nav className="nav-center-tabs" aria-label="Main Navigation">
           {tabs.map((tab) => {
             const isActive = activeTab === tab.id;
+            const shortLabels = { recruiters: 'Directory', branches: 'Branches', insights: 'Insights' };
             return (
               <button
                 key={tab.id}
@@ -78,9 +83,9 @@ export default function Navbar({
                 type="button"
                 role="tab"
                 aria-selected={isActive}
+                aria-label={tab.label}
               >
-                <span className="nav-tab-icon">{tab.icon}</span>
-                <span className="nav-tab-label">{tab.label}</span>
+                <span className="nav-tab-label">{shortLabels[tab.id] || tab.label}</span>
                 {tab.id === 'recruiters' && shortlistedCount > 0 && (
                   <span className="nav-shortlist-badge">{shortlistedCount}</span>
                 )}
@@ -100,8 +105,7 @@ export default function Navbar({
               title="Top Companies Mostly Asked Interview Questions"
               aria-label="Top Companies Mostly Asked Questions"
             >
-              <span className="btn-tq-icon">💡</span>
-              <span className="btn-tq-label">Question Bank</span>
+              <span className="btn-tq-label">Interview questions</span>
             </button>
           )}
 
@@ -139,9 +143,8 @@ export default function Navbar({
               title="Switch College / Campus"
               aria-label="Change College"
             >
-              <span className="btn-change-college-icon">🏛️</span>
-              <span className="btn-change-college-label">Change College</span>
-              <span className="btn-change-college-badge">Beta</span>
+              <span className="btn-change-college-label">Change campus</span>
+              <span className="btn-change-college-badge">Preview</span>
             </button>
           )}
 
@@ -170,8 +173,7 @@ export default function Navbar({
                 title="Sign In / Register"
                 aria-label="Login"
               >
-                <span className="btn-login-icon">👤</span>
-                <span>Login</span>
+                <span>Sign in</span>
               </button>
             )
           )}

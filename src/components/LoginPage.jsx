@@ -4,10 +4,8 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getRegisteredUsers, saveRegisteredUsers } from '../services/authStorage';
 import './LoginPage.css';
-
-const USERS_STORAGE_KEY = 'iitb_portal_registered_users';
-const SESSION_STORAGE_KEY = 'iitb_placement_auth_session';
 
 export default function LoginPage({ onLoginSuccess }) {
   const navigate = useNavigate();
@@ -57,15 +55,6 @@ export default function LoginPage({ onLoginSuccess }) {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [navigate]);
-
-  const getStoredUsers = () => {
-    try {
-      const data = localStorage.getItem(USERS_STORAGE_KEY);
-      return data ? JSON.parse(data) : [];
-    } catch {
-      return [];
-    }
-  };
 
   const handleInputChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -131,7 +120,7 @@ export default function LoginPage({ onLoginSuccess }) {
     setStatusMessage(null);
 
     const emailKey = formData.email.trim().toLowerCase();
-    const storedUsers = getStoredUsers();
+    const storedUsers = getRegisteredUsers();
 
     setTimeout(() => {
       setIsSubmitting(false);
@@ -157,7 +146,7 @@ export default function LoginPage({ onLoginSuccess }) {
         };
 
         const updatedUsers = [...storedUsers, newUser];
-        localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(updatedUsers));
+        saveRegisteredUsers(updatedUsers);
 
         setStatusMessage({
           type: 'success',
@@ -197,8 +186,6 @@ export default function LoginPage({ onLoginSuccess }) {
           department: matchedUser.department,
           loggedInAt: new Date().toISOString(),
         };
-
-        localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(authSession));
 
         if (onLoginSuccess) {
           onLoginSuccess(authSession);

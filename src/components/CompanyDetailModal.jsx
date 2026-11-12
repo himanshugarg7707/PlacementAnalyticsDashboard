@@ -1,8 +1,10 @@
 // Contributor: Himanshu Garg - Company Detail Modal & Interview Questions
 import { useEffect, useState, useMemo } from 'react';
 import CompanyLogo from './CompanyLogo';
-import { detailedRecruiterProfiles } from '../data/placementData';
+import { collegeInfo, detailedRecruiterProfiles } from '../data/placementData';
 import { TOP_COMPANY_QUESTIONS } from '../data/topCompanyQuestions';
+
+const MASS_HIRING_OFFER_THRESHOLD = 25;
 
 export default function CompanyDetailModal({
   company,
@@ -12,7 +14,7 @@ export default function CompanyDetailModal({
   onOpenAllQuestions,
   showToast,
 }) {
-  const [activeTab, setActiveTab] = useState('questions'); // 'questions' | 'overview' | 'rounds'
+  const [activeTab, setActiveTab] = useState('overview'); // 'overview' | 'questions' | 'rounds'
   const [expandedQuestionId, setExpandedQuestionId] = useState(null);
 
   useEffect(() => {
@@ -32,6 +34,7 @@ export default function CompanyDetailModal({
     if (!company) return null;
     return detailedRecruiterProfiles.find(
       (p) =>
+        p.companyId === company.id ||
         p.name.toLowerCase().includes(company.name.toLowerCase()) ||
         company.name.toLowerCase().includes(p.name.toLowerCase())
     );
@@ -48,6 +51,26 @@ export default function CompanyDetailModal({
   }, [company]);
 
   if (!company) return null;
+
+  const currentHiringStatus = company.currentHiringStatus ?? company.hiringStatus
+    ?? profile?.currentHiringStatus ?? profile?.hiringStatus;
+  const currentHiringLabel = currentHiringStatus === true
+    ? 'Hiring'
+    : currentHiringStatus === false
+      ? 'Not hiring'
+      : currentHiringStatus || 'Not tracked';
+  const ceoName = company.ceoName || company.ceo || profile?.ceoName || profile?.ceo;
+  const hrContactName = company.hrContactName || company.hrName
+    || profile?.hrContactName || profile?.hrName || profile?.recruiterContact;
+  const campusOffers = Number(company.studentsHired) || 0;
+  const isMassRecruiter = campusOffers >= MASS_HIRING_OFFER_THRESHOLD;
+  const hiringHistory = Object.entries(profile?.historicalHiring || {}).sort(
+    ([firstYear], [secondYear]) => firstYear.localeCompare(secondYear)
+  );
+  const maxHistoricalOffers = Math.max(1, ...hiringHistory.map(([, data]) => data.offers || 0));
+  const driveDate = company.visitDate
+    ? new Intl.DateTimeFormat('en-IN', { dateStyle: 'medium' }).format(new Date(`${company.visitDate}T00:00:00`))
+    : `Session ${collegeInfo.session}`;
 
   const defaultEvaluationStages = profile?.evaluationStages || [
     { round: 1, name: 'Online Coding / Technical Assessment', durationMins: 90, focus: 'Data Structures, Aptitude & CS Core MCQs' },
@@ -112,9 +135,18 @@ export default function CompanyDetailModal({
         </div>
 
         {/* Sub Navigation Tabs */}
-        <div className="modal-sub-tabs">
+        <div className="modal-sub-tabs" aria-label={`${company.name} information`}>
           <button
             type="button"
+            aria-pressed={activeTab === 'overview'}
+            className={`modal-sub-tab-btn ${activeTab === 'overview' ? 'active' : ''}`}
+            onClick={() => setActiveTab('overview')}
+          >
+            Company Profile
+          </button>
+          <button
+            type="button"
+            aria-pressed={activeTab === 'questions'}
             className={`modal-sub-tab-btn ${activeTab === 'questions' ? 'active' : ''}`}
             onClick={() => setActiveTab('questions')}
           >
@@ -122,17 +154,11 @@ export default function CompanyDetailModal({
           </button>
           <button
             type="button"
+            aria-pressed={activeTab === 'rounds'}
             className={`modal-sub-tab-btn ${activeTab === 'rounds' ? 'active' : ''}`}
             onClick={() => setActiveTab('rounds')}
           >
             ⏱️ Hiring Rounds
-          </button>
-          <button
-            type="button"
-            className={`modal-sub-tab-btn ${activeTab === 'overview' ? 'active' : ''}`}
-            onClick={() => setActiveTab('overview')}
-          >
-            📊 Recruiter Stats
           </button>
         </div>
 
@@ -268,14 +294,11 @@ export default function CompanyDetailModal({
               </h3>
               <div className="rounds-timeline-card">
                 <span className="rounds-label">Hiring Stages Sequence:</span>
-                <div className="rounds-steps-row">
+                <div className="rounds-steps-row" aria-label="Hiring stage order">
                   {defaultEvaluationStages.map((st, i) => (
                     <div key={st.round || i} className="round-step-item">
                       <span className="round-index-pill">{i + 1}</span>
                       <span className="round-name-text">{st.name}</span>
-                      {i < defaultEvaluationStages.length - 1 && (
-                        <span className="round-arrow">→</span>
-                      )}
                     </div>
                   ))}
                 </div>
@@ -302,6 +325,94 @@ export default function CompanyDetailModal({
 
           {activeTab === 'overview' && (
             <div className="company-modal-overview-group">
+              <div className="company-intel-grid">
+                <div className="company-intel-card">
+                  <span className="company-intel-label">Campus drive · {collegeInfo.session}</span>
+                  <strong className="company-intel-value">{company.status || 'Not recorded'}</strong>
+                  <small className="company-intel-note">{driveDate}</small>
+                </div>
+                <div className="company-intel-card">
+                  <span className="company-intel-label">Current openings</span>
+                  <strong className="company-intel-value">{currentHiringLabel}</strong>
+                  <small className="company-intel-note">
+                    {currentHiringStatus == null ? 'Live careers data is not connected.' : 'Status from the available company profile.'}
+                  </small>
+                </div>
+                <div className="company-intel-card">
+                  <span className="company-intel-label">Mass campus hiring</span>
+                  <strong className={`company-intel-value ${isMassRecruiter ? 'positive' : ''}`}>
+                    {isMassRecruiter ? 'Yes' : 'No'}
+                  </strong>
+                  <small className="company-intel-note">
+                    Portal rule: {MASS_HIRING_OFFER_THRESHOLD}+ offers in {collegeInfo.session}.
+                  </small>
+                </div>
+                <div className="company-intel-card">
+                  <span className="company-intel-label">CEO</span>
+                  <strong className="company-intel-value">{ceoName || 'Not listed'}</strong>
+                  <small className="company-intel-note">No leadership contact in this dataset.</small>
+                </div>
+                <div className="company-intel-card">
+                  <span className="company-intel-label">HR / recruiter contact</span>
+                  <strong className="company-intel-value">{hrContactName || 'Not listed'}</strong>
+                  <small className="company-intel-note">No recruiter contact in this dataset.</small>
+                </div>
+              </div>
+
+              <section className="modal-section-card company-market-card">
+                <div className="company-market-heading">
+                  <h4 className="modal-section-title">Company &amp; sector snapshot</h4>
+                  <span className="company-market-source">Placement profile</span>
+                </div>
+                <p className="company-market-summary">
+                  {profile?.marketSummary || `${company.name} is listed in the ${company.sector} sector in the placement records.`}
+                </p>
+                <dl className="company-market-facts">
+                  <div>
+                    <dt>Sector</dt>
+                    <dd>{company.sector || 'Not listed'}</dd>
+                  </div>
+                  <div>
+                    <dt>Global headquarters</dt>
+                    <dd>{profile?.globalHq || 'Not included in this dataset'}</dd>
+                  </div>
+                  <div>
+                    <dt>India offices</dt>
+                    <dd>{profile?.indiaOffices?.join(', ') || 'Not included in this dataset'}</dd>
+                  </div>
+                </dl>
+
+                {profile?.primaryDomains?.length > 0 && (
+                  <div className="company-market-domains">
+                    <span className="company-intel-label">Business and technology areas</span>
+                    <div className="modal-branch-tags">
+                      {profile.primaryDomains.map((domain) => (
+                        <span key={domain} className="modal-branch-pill">{domain}</span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {hiringHistory.length > 0 && (
+                  <div className="company-hiring-history">
+                    <h5>Historical campus hiring</h5>
+                    {hiringHistory.map(([year, data]) => (
+                      <div className="company-hiring-history-row" key={year}>
+                        <span>{year}</span>
+                        <div
+                          className="company-hiring-history-track"
+                          role="img"
+                          aria-label={`${data.offers} offers in ${year}`}
+                        >
+                          <span style={{ width: `${((data.offers || 0) / maxHistoricalOffers) * 100}%` }} />
+                        </div>
+                        <strong>{data.offers || 0} offers</strong>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </section>
+
               <div className="modal-stats-grid">
                 <div className="modal-stat-box">
                   <span className="m-label">CTC Package</span>
@@ -310,13 +421,13 @@ export default function CompanyDetailModal({
                 </div>
                 <div className="modal-stat-box">
                   <span className="m-label">Campus Hires</span>
-                  <span className="m-value font-mono">{company.studentsHired}</span>
+                  <span className="m-value font-mono">{campusOffers}</span>
                   <span className="m-sub">Total Offers Extended</span>
                 </div>
                 <div className="modal-stat-box">
                   <span className="m-label">Drive Date</span>
                   <span className="m-value font-mono" style={{ fontSize: '13px' }}>
-                    {company.visitDate || 'Session 2024–25'}
+                    {driveDate}
                   </span>
                   <span className="m-sub">{company.status}</span>
                 </div>
@@ -333,18 +444,6 @@ export default function CompanyDetailModal({
                 </div>
               </div>
 
-              {profile && (
-                <div className="modal-section-card" style={{ marginTop: '12px' }}>
-                  <h4 className="modal-section-title">Core Engineering Domains</h4>
-                  <div className="tq-concepts-row" style={{ marginTop: '8px' }}>
-                    {profile.primaryDomains?.map((d) => (
-                      <span key={d} className="tq-concept-pill">
-                        {d}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
             </div>
           )}
         </div>
